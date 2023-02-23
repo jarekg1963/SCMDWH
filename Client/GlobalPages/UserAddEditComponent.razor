@@ -1,0 +1,233 @@
+﻿@page "/UserAddEditPage/{UserName}"
+@inject NavigationManager navigationManager
+@inject HttpClient httpClient
+@inject ISnackbar Snackbar
+@using SCMDWH.Shared.Models;
+
+
+@if (UserName != "0")
+{
+    <h2>Edit User: @globalAppUser.UserName</h2>
+}
+else
+{
+    <h2>Add User</h2>
+}
+<hr />
+
+<EditForm Model="@globalAppUser" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+   
+<MudGrid>
+    <MudItem xs="6">
+            <MudTextField @bind-Value="@globalAppUser.UserName" For="@(() => globalAppUser.UserName)"
+                      Label="User Name"
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Filled.Search"
+                      ReadOnly=@readonlyUserName  />
+    </MudItem>
+</MudGrid>
+<MudGrid>
+    <MudItem xs="3">
+        <MudTextField @bind-Value="@globalAppUser.Email"
+                      Label="Email"
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Filled.Search" />
+    </MudItem>
+    <MudItem xs="3">
+        <MudTextField @bind-Value="@globalAppUser.Mobile" For="@(() => globalAppUser.Mobile)"
+                      Label="mobile"
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Filled.Search" />
+    </MudItem>
+    <MudItem xs="5">
+            <MudTextField @bind-Value="@globalAppUser.Remark" For="@(() => globalAppUser.Remark)"
+                      Label="Remark"
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Filled.Search" />
+    </MudItem>
+    <MudItem xs="1">
+        <MudCheckBox @bind-Checked="@globalAppUser.Active" Label="Active"></MudCheckBox>
+    </MudItem>
+</MudGrid>
+<hr />
+
+<MudGrid>
+        <MudItem xs="1">
+            <MudButton Variant="Variant.Filled" Color="Color.Inherit" OnClick="resetPassword" FullWidth="true">Reset pass</MudButton>
+        </MudItem>
+    <MudItem xs="3">
+            <MudTextField @bind-Value="@globalAppUser.Password" For="@(() => globalAppUser.Password)"
+                      Label="Password"
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Filled.Search" InputType=InputType.Password
+                      ReadOnly = "@readOnlyPassword"/>
+    </MudItem>
+    <MudItem xs="3">
+        <MudTextField @bind-Value="@passwordConf"
+                      Label="Re. Password"
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Filled.Search" InputType=InputType.Password ReadOnly="@readOnlyPassword" />
+    </MudItem>
+    <MudItem xs="1">
+        <MudCheckBox @bind-Checked="@globalAppUser.External" Label="External"></MudCheckBox>
+    </MudItem>
+</MudGrid>
+<hr />
+
+<MudGrid>
+    <MudItem xs="8">
+    </MudItem>
+    <MudItem xs="2">
+        <MudButton Variant="Variant.Filled" Color="Color.Inherit" OnClick="Back" FullWidth="true">Back</MudButton>
+    </MudItem>
+    <MudItem xs="2">
+        @if (UserName == "0")
+        {
+                <MudButton Variant="Variant.Filled" Color="Color.Inherit" OnClick="HandleValidSubmit" FullWidth="true">Add</MudButton>
+        }
+        else
+        {
+                <MudButton Variant="Variant.Filled" Color="Color.Inherit" OnClick="HandleValidSubmit" FullWidth="true">Update</MudButton>
+        }
+    </MudItem>
+</MudGrid>
+</EditForm>
+
+@code {
+    bool readOnlyPassword = true;
+    private string passwordConf = "";
+    private bool readonlyUserName = false;
+    private string LogonUserName = "Nieznany";
+    GlobalAppUsers globalAppUser = new GlobalAppUsers();
+    [Parameter]
+    public string UserName { get; set; }
+
+
+    private void resetPassword()
+    {
+        if (globalAppUser.External)
+        {
+            readOnlyPassword = false;
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Pass reset only of external user", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+        }
+    }
+
+    private void Back()
+    {
+        navigationManager.NavigateTo("/UserListPage");
+    }
+
+
+    private async void HandleValidSubmit()
+    {
+        if (passwordConf == globalAppUser.Password)
+        {
+
+            if (!string.IsNullOrEmpty(globalAppUser.Password))
+                globalAppUser.Password = BCrypt.Net.BCrypt.HashPassword(globalAppUser.Password);
+
+
+            if (UserName == "0")
+            {
+                await Add();
+            }
+            else
+            {
+                await Update();
+            }
+        }
+        else
+        {
+            Snackbar.Add($"Error password are not the same !!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1000; });
+        }
+    }
+
+    private async Task Add()
+    {
+        globalAppUser.Active = true;
+        globalAppUser.CreatedBy = LogonUserName;
+        globalAppUser.CreatedTime = DateTime.Now;
+         //globalAppUser.GlobalAppUserRoles[] = null;
+        if (globalAppUser.Remark == null) globalAppUser.Remark = "";
+        string link = "/api/GlobalAppUsers/";
+        var Response = await httpClient.PostAsJsonAsync<GlobalAppUsers>(link, globalAppUser);
+
+        LogAppUserActivity ilo = new LogAppUserActivity()
+            {
+                AppActivityType = "User created" + globalAppUser.Email,
+                AppActivityDetails = "Success",
+                ActivityTime = DateTime.Now,
+                ActivityTriggeredByUser = LogonUserName
+            };
+        await httpClient.PostAsJsonAsync("/api/LogAppUserActivities", ilo);
+
+
+        @if (Response.StatusCode == System.Net.HttpStatusCode.Created)
+        {
+            
+            navigationManager.NavigateTo("/UserListPage");
+            StateHasChanged();
+        }
+        else
+        {
+            if (Response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                Snackbar.Add($"Error User: {globalAppUser.UserName} already exist", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1000; });
+            }
+            else
+            {
+                Snackbar.Add($"Error: {Response.StatusCode.ToString()}", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1000; });
+            }
+        }
+    }
+    private async Task Update()
+    {
+        string link = "/api/GlobalAppUsers/" + UserName;
+        var Response = await httpClient.PutAsJsonAsync<GlobalAppUsers>(link, globalAppUser);
+
+        LogAppUserActivity ilo = new LogAppUserActivity()
+            {
+                AppActivityType = "User updated" + globalAppUser.UserName,
+                AppActivityDetails = "Success",
+                ActivityTime = DateTime.Now,
+                ActivityTriggeredByUser = LogonUserName
+            };
+        await httpClient.PostAsJsonAsync("/api/LogAppUserActivities", ilo);
+
+        @if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
+        {
+            navigationManager.NavigateTo("/UserListPage");
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Error !!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+      
+        if (UserName != "0")
+        {
+            readonlyUserName = true;
+            string link = "/api/GlobalAppUsers/" + UserName;
+            globalAppUser = await httpClient.GetFromJsonAsync<GlobalAppUsers>(link);
+            globalAppUser.Password = "";
+        }
+       
+    }
+
+
+}

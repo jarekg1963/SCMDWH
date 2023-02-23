@@ -1,0 +1,91 @@
+﻿@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient;
+@inject NavigationManager navigationManager
+@inject ISnackbar Snackbar
+
+<EditForm Model="@customer" OnValidSubmit="HandleValidSubmit">
+<MudCard style="width:600px">
+    <MudCardContent>
+        <MudGrid>
+            <MudItem xs="12">
+                    <MudTextField @bind-Value="@customer.Customer" Label="Currier" Variant="Variant.Text" For="@(() => customer.Customer)"></MudTextField>
+            </MudItem>
+             <MudItem xs="12">
+                <MudCheckBox @bind-Checked="@customer.ActiveFlag" Size="Size.Medium"  Label="Active"></MudCheckBox>
+            </MudItem>
+            <MudItem xs="12">
+                    <MudTextField @bind-Value="@customer.AddByUser" Label="Currier" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+            <MudItem xs="12">
+                    <MudTextField @bind-Value="@customer.AddTime" Label="Currier" Variant="Variant.Text"></MudTextField>
+            </MudItem>    
+        </MudGrid>
+    </MudCardContent>
+    <MudCardActions>
+        <MudItem xs="8">
+        </MudItem>
+        <MudItem xs="2">
+        <MudButton Variant="Variant.Filled" OnClick="Close">Cancel</MudButton>
+        </MudItem>
+            <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">Save</MudButton>
+    </MudCardActions>
+    </MudCard>
+</EditForm>
+
+@code {
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string Id { get; set; }
+    string userName = "";
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+
+    CarAdviceDictionaryCustomers customer = new CarAdviceDictionaryCustomers();
+
+
+    private async void HandleValidSubmit()
+    {
+        MudDialog.Close(DialogResult.Ok(customer));
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            userName = user.Identity.Name;
+        }
+
+        if (Id != "XXX")
+        {
+            await ReadData();
+        }
+        else
+        {
+            customer.Customer = "";
+            customer.ActiveFlag = false;
+            customer.AddByUser = userName;
+            customer.AddTime = DateTime.Now;
+        }
+
+    }
+
+    private async Task ReadData()
+    {
+        string link = "/api/CarAdviceDictionaryCustomers/" + Id;
+        customer = await httpClient.GetFromJsonAsync<CarAdviceDictionaryCustomers>(link);
+        StateHasChanged();
+    }
+
+    void Close() => MudDialog.Close(DialogResult.Cancel());
+
+}

@@ -1,0 +1,598 @@
+﻿@page "/caradvice"
+@using System.Net.Http.Json
+@using System.Text.Json.Serialization;
+@using SCMDWH.Shared.Models;
+@using System.Security.Claims;
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IDialogService DialogService;
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<CultureExample2> Loc
+
+
+
+<style>
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+    }
+</style>
+
+
+@if (ListCAMainTable is null)
+{
+    <p>Loading </p>
+}
+else
+{
+    <MudTabs  Elevation="2" Rounded="true"  Centered="true" Class="my-6" Color="Color.Dark" @ref="tabs" >
+        <MudTabPanel Icon="@Icons.Material.Filled.Api" Style="width:550px" Text=@Loc["lbCarAdvice"] BadgeData='"!"' BadgeColor="Color.Error" @ref="panel01" ID="@("pn_one")"
+                 OnClick="Tab0Active">
+            <MudDataGrid  T="CarAdviceMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+                     Height="35em" RowsPerPage="30" MultiSelection="false" Items="@ListCAMainTable" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+                     Hideable="true" RowClick="@RowClicked" RowStyleFunc="@_rowStyleFunc">
+                <ToolBarContent >
+                    <MudGrid >
+                        <MudItem xs="1">
+                            <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Filled.ViewColumn" 
+                            Style="text-transform:none ; margin-top:25px!important" OnClick="ShowColumsForSelection" Size="Size.Small">
+                                Columns
+                            </MudButton>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Filled.ImportExport"
+                                   Style="text-transform:none ; margin-top:25px!important" OnClick="ImportFromExcel" Size="Size.Small">
+                                Excel
+                            </MudButton>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Filled.AddToDrive"
+                                   Style="text-transform:none ; margin-top:25px!important" OnClick="NewItemsCarAdviceMain" Size="Size.Small">
+                               New 
+                            </MudButton>
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudDateRangePicker DisableToolbar="true" IconSize="Size.Small" @ref="_picker"  @bind-DateRange="_dateRange" AutoClose="@_autoClose">
+                                <PickerActions>
+                                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
+                                    <MudButton OnClick="@(() => _picker.Close(false))">Cancel</MudButton>
+                                    <MudButton Color="Color.Primary" OnClick="SelectTimeFrameFromPicker" >Ok</MudButton>
+                                </PickerActions>
+                            </MudDateRangePicker>
+                        </MudItem>
+                   
+                        <MudItem xs="4">
+                            <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        </MudItem>
+                    </MudGrid>
+                </ToolBarContent>
+                <ColGroup>
+                </ColGroup>
+                <Columns>
+
+                    <Column T="CarAdviceMainTable" Field="Id">
+                        <CellTemplate>
+                            <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.Edit" OnClick="@(() => this.Click(context.Item))">
+                               @context.Item.Id
+                            </MudButton>
+                        </CellTemplate>
+                    </Column>
+     
+                    @foreach (var ii in listGridColums)
+                    {
+                      <Column T="CarAdviceMainTable" Style="width:10px!important" Field="@ii.fieldName" Title="@ii.fieldTitle" Sortable="ii.filedSortable" Filterable="ii.filedfirterable" Hidden="ii.filedHiden"  />
+                    }
+                </Columns>
+                <PagerContent>
+                    <MudDataGridPager T="CarAdviceMainTable" />
+                </PagerContent>
+            </MudDataGrid>
+
+</MudTabPanel>
+
+        @if (rolaWh)
+        {
+            <MudTabPanel Icon="@Icons.Material.Filled.AccessTime" Style="width:550px" Text=@Loc["lbWarehouse"] BadgeDot="true" BadgeColor="Color.Error" @ref="panel03" ID="@("three")"
+                 OnClick="Tab2Active">
+
+            <CarAdviceMainWHComponent Id="@selectedRow" DeleteItemWH="@ReturnFromWH"></CarAdviceMainWHComponent>
+        </MudTabPanel>
+        }
+        @if(rolaSecurity)
+        {
+            <MudTabPanel Icon="@Icons.Material.Filled.AccessTime" Style="width:550px" Text=@Loc["lbSecurity"] BadgeDot="true" BadgeColor="Color.Error" OnClick="Tab3Active">
+          
+            <CarAdviceMainSecurityComponent Id="@selectedRow" DeleteItem="@ReturnFromSecurity"></CarAdviceMainSecurityComponent>
+        </MudTabPanel>
+        }
+     
+    </MudTabs>
+}
+
+
+@code {
+    private DateTime ldStart;
+    private DateTime ldEnd;
+    GlobalAppUsersParameters userParametersDates = new();
+    GlobalAppUsersParameters userParametersDatesForSave = new();
+
+    private bool rolaAdmin = false;
+    private bool rolaWh = false;
+    private bool rolaSecurity = false; 
+    private string UserName = "";
+    private string _searchString;
+    private bool _sortNameByLength;
+    private bool _autoClose;
+    private string selectedRow = "";
+    int clickCounter = 0;
+    DateTime firstClickTime;
+
+    List<gridColums> listGridColums = new();
+    List<string> listColumnsWidth = new();
+
+    private MudDateRangePicker _picker;
+    // private DateRange _dateRange = new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(5).Date);
+
+    private DateRange _dateRange = new DateRange();
+
+    MudTabs tabs;
+    MudTabPanel panel01;
+    MudTabPanel panel02;
+    MudTabPanel panel03;
+
+    [CascadingParameter]
+    public Error Error { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    #region hiddedcolumsdefinision
+
+    private bool hiddenId = false;
+    private bool hiddenAdviceDate = false;
+    private bool hiddenFG_DelayReason = false;
+    private bool hiddenPickingStatus = false;
+    private bool hiddenClient = false;
+    private bool hiddenShipment = false;
+    private bool hiddenReference = false;
+    private bool hiddenDestination = false;
+    private bool hiddenDriverWh = false;
+    private bool hiddenTruckPlatesWh = false;
+    private bool hiddenForwarder = false;
+    private bool hiddenForwarderInfo = false;
+    private bool hiddenEtd = false;
+    private bool hiddenEntryByWh = false;
+    private bool hiddenRemarksWh = false;
+    private bool hiddenAta = false;
+    private bool hiddenQuality = false;
+    private bool hiddenTruckType = false;
+    private bool hiddenDriverS = false;
+    private bool hiddenTruckPlatesS = false;
+    private bool hiddenTpvEnterTime = false;
+    private bool hiddenTpvExitTime = false;
+    private bool hiddenLoadingDock = false;
+    private bool hiddenCallBy = false;
+    private bool hiddenRemarksS = false;
+    private bool hiddenEntryByS = false;
+    private bool hiddenLeftTheDockTime = false;
+    private bool hiddenPickingTime = false;
+    private bool hiddenScannedTime = false;
+
+    #endregion hiddedcolumsdefinision
+
+    List<CarAdviceMainPlanColumn> columsForDisplayListDb = new List<CarAdviceMainPlanColumn>();
+    List<CarAdviceMainTable> ListCAMainTable = new List<CarAdviceMainTable>();
+    List<clickInterval> clickVerification = new List<clickInterval>();
+
+    private List<string> _events = new();
+
+    private void Click(CarAdviceMainTable element)
+    {
+        Console.WriteLine($"Clicked: {element.Id}");
+
+        if (rolaAdmin) tabs.ActivatePanel(1);
+        if (rolaSecurity) tabs.ActivatePanel(1);
+        if (rolaWh) tabs.ActivatePanel(1);
+        //_events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        selectedRow = element.Id.ToString();
+    }
+
+    private void ImportFromExcel()
+    {
+        navigationManager.NavigateTo("/NewCAfromExcel");
+    }
+
+
+    private Func<CarAdviceMainTable, int, string> _rowStyleFunc => (x, i) =>
+      {
+          // Skan OK
+          if (x.PickingStatus == "Skan OK")
+              return "background-color:#83f752";
+
+          //Picking
+          if (x.PickingStatus == "Picking")
+              return "background-color:#fcba03"; 
+
+          //Picking
+          if (x.PickingStatus == "Loading")
+              return "background-color:#52d1f7";
+
+          // Szaey -- Paper work
+
+          // Ciemno zielony - sent
+          if (x.PickingStatus == "Sent")
+              return "background-color:#22c738";
+
+          // Cancelled - czerwony 
+          if (x.PickingStatus == "Cancelled")
+              return "background-color:#e65e69";
+         
+              return "";
+
+      };
+
+
+    public async void ReturnFromWH(string returnedWHAction)
+    {   
+        tabs.ActivatePanel(0);
+        if (returnedWHAction == "Deleted")
+        {
+            await ReadData();
+            StateHasChanged();
+        }
+
+        if (returnedWHAction == "Save")
+        {
+            await ReadData();
+            //   navigationManager.NavigateTo("/caradvice", true);
+            StateHasChanged();
+        }
+
+
+    }
+
+
+    public void ReturnFromSecurity(string returnedSecurityAction)
+    {
+        tabs.ActivatePanel(0);
+        StateHasChanged();
+        Console.WriteLine("Security close action " + returnedSecurityAction);
+    }
+
+
+    public async void ReturnFromAdmin(string returnedAdminAction)
+    {
+        tabs.ActivatePanel(0);
+        StateHasChanged();
+
+    }
+
+
+    private async void Tab0Active()
+    {
+
+        await ReadData();
+
+        StateHasChanged();
+    }
+
+    private void Tab1Active()
+    {
+        if (selectedRow== "") 
+        {
+            tabs.ActivatePanel(0);
+            Snackbar.Add("Please select row" , Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+        }
+
+        if (!rolaAdmin) 
+        {
+            tabs.ActivatePanel(0);
+            Snackbar.Add("You must be Admin", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+        }
+    }
+    private void Tab2Active()
+    {
+
+        if (!rolaWh)
+        {
+            tabs.ActivatePanel(0);
+            Snackbar.Add("You must be WH", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+        }
+
+        if (selectedRow == "")
+        {
+            tabs.ActivatePanel(0);
+            Snackbar.Add("Please select row", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+        }
+
+
+    }
+    private void Tab3Active()
+    {
+        if (!rolaSecurity)
+        {
+            tabs.ActivatePanel(0);
+            Snackbar.Add("You must be SECURITY", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+        }
+        if (selectedRow == "")
+        {
+            tabs.ActivatePanel(0);
+            Snackbar.Add("Please select row", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+        }
+    }
+
+
+    private async Task NewItemsCarAdviceMain()
+    {
+        CarAdviceMainTable CarAdviceMainTableNewForSave = new CarAdviceMainTable();
+        var parameters = new DialogParameters { ["Id"] = "XXX" };
+        var dialog = DialogService.Show<NewCarAdviceMainComponent>("", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            CarAdviceMainTableNewForSave = (CarAdviceMainTable)result.Data;
+
+            string linkAddNew = "/api/CarAdviceMainTables";
+            var response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkAddNew, CarAdviceMainTableNewForSave);
+
+
+            // write in log table 
+            LogAppReportingAction ilo = new LogAppReportingAction()
+                {
+                       ActionType = "New item added" ,
+                    ActionDetails = CarAdviceMainTableNewForSave.AdviceDate.ToString() + "  " + CarAdviceMainTableNewForSave.Shipment,
+                    ActionResult = "Success",
+                    ActionTime = DateTime.Now,
+                    ActrionTriggeredByUser = UserName
+                };
+            await httpClient.PostAsJsonAsync("/api/LogAppReportingActions", ilo);
+
+            // koniec log
+
+            await ReadData();
+            StateHasChanged();
+        }
+
+    }
+    private async Task SelectTimeFrameFromPicker()
+    {
+
+        _picker.Close();
+
+        // Save dates in table GlobalAppUsersParameters
+
+        userParametersDates.DateMainCAFrom = (DateTime)_dateRange.Start;
+        userParametersDates.DateMainCATo = (DateTime)_dateRange.End;
+        userParametersDates.UserName = UserName;
+
+        // Action in Controller update table above class coltroller check if excist -> put if not post 
+
+        // POST api/GlobalAppUsersParameters
+
+        string linkForPost = "api/GlobalAppUsersParameters";
+        await httpClient.PostAsJsonAsync<GlobalAppUsersParameters>(linkForPost, userParametersDates);
+
+
+        DateTime dStart = (DateTime)_dateRange.Start;
+        DateTime dEnd = (DateTime)_dateRange.End;
+        string linkzDates = "/api/CarAdviceMainTables/GetbyDate/" + Helpers.ChangeDateToString(dStart) + "/" +  Helpers.ChangeDateToString(dEnd);
+        ListCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceMainTable>>(linkzDates);
+        StateHasChanged();
+    }
+
+
+
+    private async Task ShowColumsForSelection()
+    {
+        var parameters = new DialogParameters { ["Username"] = UserName };
+        var dialog = DialogService.Show<DialogColumnsSelectionMainV1>("",parameters);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            navigationManager.NavigateTo("/caradvice",true);
+            StateHasChanged();
+        }
+    }
+
+
+    void RowClicked(DataGridRowClickEventArgs<CarAdviceMainTable> args)
+    {
+        clickCounter++;
+        firstClickTime = DateTime.Now;
+        clickVerification.Add(new clickInterval { clickCount = clickCounter, clickTime = firstClickTime });
+        TimeSpan operationDuration = clickVerification.Last().clickTime - clickVerification[0].clickTime;
+        if (clickVerification.Count() >= 2)
+        {
+            clickVerification.Clear();
+        }
+        double ileczasu = (double)operationDuration.TotalSeconds;
+        if ( ileczasu > 0 &&   ileczasu < 1)
+        {
+            if (rolaAdmin) tabs.ActivatePanel(1);
+            if (rolaSecurity) tabs.ActivatePanel(1);
+            if (rolaWh) tabs.ActivatePanel(1);
+            _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+            selectedRow = args.Item.Id.ToString();
+        }
+        selectedRow = args.Item.Id.ToString();
+    }
+
+
+
+    private Func<CarAdviceMainTable, bool> _quickFilter => x =>
+      {
+          if (string.IsNullOrWhiteSpace(_searchString))
+              return true;
+
+          if (x.Id.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+              return true;
+
+          //if (x.TruckPlatesS.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+          //    return true;
+
+          //if (x.Shipment.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+          //    return true;
+
+          if (x.Forwarder.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+              return true;
+
+          //if (x.Quality.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+          //    return true;
+
+          //if (x.PickingStatus.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+          //    return true;
+
+          //if (x.Reference.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+          //    return true;
+          return false;
+      };
+
+    private Func<CarAdviceMainTable, object> _sortBy => x =>
+    {
+        if (_sortNameByLength)
+            return x.Id;
+        else
+            return x.AdviceDate;
+    };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ReadData();
+            StateHasChanged();
+        }
+        catch(Exception ex)
+        {
+            Error.ProcessError(ex);
+        }
+
+
+    }
+
+
+    private async Task ReadData()
+    {
+        IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+            claims = user.Claims;
+            string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+            if (wszystkieRole.Contains("ADMIN")) rolaAdmin = true;
+            if (wszystkieRole.Contains("SECURITY")) rolaSecurity = true;
+            if (wszystkieRole.Contains("WH")) rolaWh = true;
+        }
+
+        // read data for datepicker from MSQl Table GlobalAppUsersParameters
+
+        string linkUserParameters = "/api/GlobalAppUsersParameters/" + UserName;
+
+      
+        userParametersDates = await httpClient.GetFromJsonAsync<GlobalAppUsersParameters>(linkUserParameters);
+
+        if (userParametersDates == null)
+        {           
+            ldStart = DateTime.Now.AddMonths(-3);
+            ldEnd = DateTime.Now;
+        }
+        else
+        {
+            ldStart = userParametersDates.DateMainCAFrom;
+            ldEnd = userParametersDates.DateMainCATo;
+        }
+
+        _dateRange = new DateRange(ldStart, ldEnd);
+        
+        string linkLoad = "/api/CarAdviceMainTables/GetbyDate/" + Helpers.ChangeDateToString(ldStart) + "/" + Helpers.ChangeDateToString(ldEnd);
+        ListCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceMainTable>>(linkLoad);
+        string linkcoluser = "/api/CarAdviceMainPlanColums/MainPlanComumByUser/" + UserName;
+
+        /// read colums for display main plan screen
+
+        columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<CarAdviceMainPlanColumn>>(linkcoluser);
+
+        foreach (var columienka in columsForDisplayListDb)
+        {
+            listGridColums.Add(new gridColums() { fieldName = columienka.MainScreenColumn, fieldTitle = columienka.MainScreenColumn, filedfirterable = true, filedSortable = true, filedHiden = columienka.Hidden });    
+
+        }
+
+  
+        #region setupColumsVisibility
+        hiddenId = verificationColumsVisibility("Id");
+        hiddenAdviceDate = verificationColumsVisibility("AdviceDate");
+        hiddenFG_DelayReason = verificationColumsVisibility("FG_DelayReason");
+        hiddenPickingStatus = verificationColumsVisibility("PickingStatus");
+        hiddenClient = verificationColumsVisibility("Client");
+        hiddenShipment = verificationColumsVisibility("Shipment");
+        hiddenReference = verificationColumsVisibility("Reference");
+        hiddenDestination = verificationColumsVisibility("Destination");
+        hiddenDriverWh = verificationColumsVisibility("DriverWh");
+        hiddenTruckPlatesWh = verificationColumsVisibility("TruckPlatesWh");
+        hiddenForwarder = verificationColumsVisibility("Forwarder");
+        hiddenForwarderInfo = verificationColumsVisibility("ForwarderInfo");
+        hiddenEtd = verificationColumsVisibility("Etd");
+        hiddenEntryByWh = verificationColumsVisibility("EntryByWh");
+        hiddenRemarksWh = verificationColumsVisibility("RemarksWh");
+        hiddenAta = verificationColumsVisibility("Ata");
+        hiddenQuality = verificationColumsVisibility("Quality");
+        hiddenTruckType = verificationColumsVisibility("TruckType");
+        hiddenDriverS = verificationColumsVisibility("DriverS");
+        hiddenTruckPlatesS = verificationColumsVisibility("TruckPlatesS");
+        hiddenTpvEnterTime = verificationColumsVisibility("TpvEnterTime");
+        hiddenTpvExitTime = verificationColumsVisibility("TpvExitTime");
+        hiddenLoadingDock = verificationColumsVisibility("LoadingDock");
+        hiddenCallBy = verificationColumsVisibility("CallBy");
+        hiddenRemarksS = verificationColumsVisibility("RemarksS");
+        hiddenEntryByS = verificationColumsVisibility("EntryByS");
+        hiddenLeftTheDockTime = verificationColumsVisibility("LeftTheDockTime");
+        hiddenPickingTime = verificationColumsVisibility("PickingTime");
+        hiddenScannedTime = verificationColumsVisibility("ScannedTime");
+        #endregion setupColumsVisibility
+    
+        
+    }
+
+    private bool verificationColumsVisibility(string comumnName)
+    {
+        if (columsForDisplayListDb.Count(c => c.MainScreenColumn == comumnName && c.Hidden == true) != 0)
+        {
+            return true;
+        } 
+        else
+        {
+            return false;
+        }
+    }
+
+
+    public class clickInterval
+    {
+        public int clickCount { get; set; }
+        public DateTime clickTime { get; set; }
+    }
+
+    public class gridColums
+    {
+        public string fieldName { get; set; }
+        public string fieldTitle { get; set; }
+        public bool filedSortable { get; set; }
+        public bool filedfirterable { get; set; }
+        public bool filedHiden { get; set; }
+        public int orderNumber { get; set; }
+    }
+
+}

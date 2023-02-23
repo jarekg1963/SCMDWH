@@ -1,0 +1,79 @@
+﻿@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient;
+@inject NavigationManager navigationManager
+@inject ISnackbar Snackbar
+
+
+<EditForm Model="@qty" OnValidSubmit="HandleValidSubmit">
+<MudCard style="width:600px">
+    <MudCardContent>
+        <MudGrid>
+            <MudItem xs="12">
+                    <MudTextField @bind-Value="@qty.Quality" Label="Quality" Variant="Variant.Text" ></MudTextField>
+            </MudItem>
+             
+        </MudGrid>
+    </MudCardContent>
+    <MudCardActions>
+        <MudItem xs="8">
+        </MudItem>
+        <MudItem xs="2">
+        <MudButton Variant="Variant.Filled" OnClick="Close">Cancel</MudButton>
+        </MudItem>
+            <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">Save</MudButton>
+    </MudCardActions>
+    </MudCard>
+</EditForm>
+
+
+@code {
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string Id { get; set; }
+    string userName = "";
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+
+    CarAdviceDictionaryQuality qty = new CarAdviceDictionaryQuality();
+
+    private async void HandleValidSubmit()
+    {
+        MudDialog.Close(DialogResult.Ok(qty));
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            userName = user.Identity.Name;
+        }
+
+        if (Id != "XXX")
+        {
+            await ReadData();
+        }
+        else
+        {
+            qty.Quality = "";
+           
+        }
+
+    }
+    private async Task ReadData()
+    {
+        string link = "/api/CarAdviceDictionaryQualities/" + Id;
+        qty = await httpClient.GetFromJsonAsync<CarAdviceDictionaryQuality>(link);
+        StateHasChanged();
+    }
+
+    void Close() => MudDialog.Close(DialogResult.Cancel());
+}

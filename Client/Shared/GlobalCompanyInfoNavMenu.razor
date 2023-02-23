@@ -1,0 +1,21 @@
+﻿@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient
+
+<MudNavGroup Title="App info" Icon="@Icons.Filled.DevicesOther" @bind-Expanded=_isExpanded4>
+	<MudNavLink Href="/" Icon="@Icons.Filled.Ballot">App ver: @globalInfo.AppVersion  </MudNavLink>
+	<MudNavLink Href="/" Icon="@Icons.Filled.Ballot">Author: @globalInfo.AppAuthor</MudNavLink>
+	<MudNavLink Href="/" Icon="@Icons.Filled.Ballot">DB:@globalInfo.AppDataBase </MudNavLink>
+</MudNavGroup>
+
+@code {
+	bool _isExpanded4;
+	GlobalAppInfo globalInfo = new GlobalAppInfo();
+
+	protected override async Task OnInitializedAsync()
+	{
+		string link = "/api/GlobalAppInfo";
+		globalInfo = await httpClient.GetFromJsonAsync<GlobalAppInfo>(link);
+
+	}
+
+}

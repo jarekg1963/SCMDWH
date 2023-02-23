@@ -1,0 +1,475 @@
+﻿@using System.Security.Claims;
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@using SCMDWH.Shared.Models;
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<style>
+    .mud-input {
+        height: 0.6rem !important;
+        font: 100;
+        font-size: medium;
+        font-weight: 500;
+    }
+
+    .form-control {
+        font-size: x-small !important;
+        font-weight:600;
+    }
+</style>
+
+<MudGrid Style="background-color:#faf6f5!important">
+     <MudItem xs="12">
+
+        <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">Security entry info </MudAlert>
+
+     </MudItem>
+    <MudItem xs="2">
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Id" Label="Nr" Variant="Variant.Text" ReadOnly="true"></MudTextField>
+    </MudItem>
+
+    <MudItem xs="2">
+        <MudDatePicker Label="Ata date" @bind-Date="AtaTimeDate" DisableToolbar="true" />
+
+    </MudItem>
+    <MudItem xs="2">
+        <MudTimePicker Label="Ata  time" AmPm="true" @bind-Time="AtaTimeTime" DisableToolbar="true" />
+    </MudItem>
+    <MudItem xs="2">
+        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Quality " @bind-Value="CarAdviceMainTableWHEdit.Quality" SearchFunc="@SearchQuality"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+    </MudItem>
+    <MudItem xs="2">
+        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Tuck type " @bind-Value="CarAdviceMainTableWHEdit.TruckType" SearchFunc="@SearchTuruckType"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+    </MudItem>
+@*    <MudItem xs="2">
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesWh" Label="Truck plates WH" Variant="Variant.Text"></MudTextField>
+    </MudItem>*@
+    <MudItem xs="2">
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesS" Label="Truck plates S S." Variant="Variant.Text"></MudTextField>
+    </MudItem>
+    <MudItem xs="2">
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.DriverS" Label="Driver S." Variant="Variant.Text"></MudTextField>
+    </MudItem>
+    <MudItem xs="2">
+        <MudDatePicker Label="TPV Entry date" @bind-Date="TPVEntryTimeDate" DisableToolbar="true" />
+    </MudItem>
+    <MudItem xs="2">
+        <MudTimePicker Label="TPV Entry time" AmPm="true" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" />
+    </MudItem>
+    <MudItem xs="2">
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Label="Call by" Variant="Variant.Text"></MudTextField>
+    </MudItem>
+    <MudItem xs="2">
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.EntryByS" Label="Entry by S" Variant="Variant.Text"></MudTextField>
+    </MudItem>
+    <MudItem xs="2">
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.RemarksS" Label="Remarks S." Variant="Variant.Text"></MudTextField>
+    </MudItem>
+    <MudItem xs="12">
+
+        <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">Security exit info </MudAlert>
+
+    </MudItem>
+    <MudItem xs="2">
+        <MudDatePicker Label="TPV Exit date" @bind-Date="TPVExitTimeDate" DisableToolbar="true" />
+    </MudItem>
+    <MudItem xs="2">
+        <MudTimePicker Label="TPV Exit time" AmPm="true" @bind-Time="TPVExitTimeTime" DisableToolbar="true" />
+    </MudItem>
+</MudGrid>
+<hr />
+<MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">Warehouse information </MudAlert>
+<hr />
+
+
+<div class="container-fluid">
+    <div class="row row-cols-6">
+        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Shipment: @CarAdviceMainTableWHEdit.Shipment "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Ref.  @CarAdviceMainTableWHEdit.Reference "></div>
+        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Ad.  @CarAdviceMainTableWHEdit.AdviceDate "></div>
+        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Etd:  @CarAdviceMainTableWHEdit.Etd "></div>
+        <div class="col">   <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Dest.  @CarAdviceMainTableWHEdit.Destination "></div>
+        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Forw.:  @CarAdviceMainTableWHEdit.Forwarder "></div>
+    </div>
+
+    <div class="row row-cols-6">
+        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Client:  @CarAdviceMainTableWHEdit.Client "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Plates:  @CarAdviceMainTableWHEdit.TruckPlatesWh "></div>
+        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Driver:  @CarAdviceMainTableWHEdit.DriverWh "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Status:  @CarAdviceMainTableWHEdit.PickingStatus "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="P.Time:  @CarAdviceMainTableWHEdit.PickingTime "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="S.Time:  @CarAdviceMainTableWHEdit.ScannedTime "></div>
+    </div>
+    <div class="row row-cols-6">
+        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Delay:  @CarAdviceMainTableWHEdit.FgDelayReason "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Dock:  @CarAdviceMainTableWHEdit.LoadingDock "></div>
+        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="left.Time:  @CarAdviceMainTableWHEdit.LeftTheDockTime "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Entry:  @CarAdviceMainTableWHEdit.EntryByS "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Status:  @CarAdviceMainTableWHEdit.RemarksWh "></div>
+       
+    </div>
+</div>
+<hr />
+
+<MudGrid>
+    <MudItem xs="6">
+
+    </MudItem>
+
+
+    <MudItem xs="2">
+
+    </MudItem>
+    <MudItem xs="2">
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">Cancel</MudButton>
+    </MudItem>
+
+    <MudItem xs="2">
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="SaveWh">Save</MudButton>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public EventCallback<string> DeleteItem { get; set; }
+
+    CarAdviceMainTable CarAdviceMainTableWHEdit = new CarAdviceMainTable();
+
+    private bool resetValueOnEmptyText;
+    string UserName = "";
+
+    List<CarAdviceDictionaryCustomers> customerList = new List<CarAdviceDictionaryCustomers>();
+    private List<string> customers;
+
+
+    List<CarAdviceDictionaryCountryCode> destinationList = new List<CarAdviceDictionaryCountryCode>();
+    private List<string> destination;
+
+    List<CarAdviceDictionaryCarriers> currierList = new List<CarAdviceDictionaryCarriers>();
+    private List<string> curriers;
+
+    List<CarAdviceDictionaryStatus> PickingStatusList = new List<CarAdviceDictionaryStatus>();
+    private List<string> PickingStatus;
+
+    List<CarAdviceDictionaryReason> FG_DelayReasonList = new List<CarAdviceDictionaryReason>();
+    private List<string> FG_DelayReason;
+
+    List<CarAdviceDictionaryQuality> qualityList = new List<CarAdviceDictionaryQuality>();
+    private List<string> quality;
+
+    List<CarAdviceDictionaryTruckType> truckTypeList = new List<CarAdviceDictionaryTruckType>();
+    private List<string> trucktype;
+
+    DateTime? LeftDockTimeDate;
+    TimeSpan? LeftDockTimeTime;
+
+    DateTime? EtdTimeDate;
+    TimeSpan? EtdTimeTime;
+
+    DateTime? PickingTimeDate;
+    TimeSpan? PickingTimeTime;
+
+    DateTime? ScannedTimeDate;
+    TimeSpan? ScannedTimeTime;
+
+    DateTime? AtaTimeDate;
+    TimeSpan? AtaTimeTime;
+
+    DateTime? TPVEntryTimeDate;
+    TimeSpan? TPVEntryTimeTime;
+
+    DateTime? TPVExitTimeDate;
+    TimeSpan? TPVExitTimeTime;
+
+    private async Task SaveWh()
+    {
+
+        await DeleteItem.InvokeAsync("Save");
+
+        // Picking date
+        if (PickingTimeDate != null)
+        {
+            DateTime PickingTimeDateNotNulable = (DateTime)PickingTimeDate;
+            TimeSpan PickingTimeTimeNotNulable = (TimeSpan)PickingTimeTime;
+            CarAdviceMainTableWHEdit.PickingTime = PickingTimeDateNotNulable.Add(PickingTimeTimeNotNulable);
+        }
+        // Scanned Time
+        if (ScannedTimeDate != null)
+        {
+            DateTime ScannedTimeDateNotNulable = (DateTime)ScannedTimeDate;
+            TimeSpan ScannedTimeTimeNotNulable = (TimeSpan)ScannedTimeTime;
+            CarAdviceMainTableWHEdit.ScannedTime = ScannedTimeDateNotNulable.Add(ScannedTimeTimeNotNulable);
+        }
+
+        //  LeftTheDockTime
+
+        if (LeftDockTimeDate != null)
+        {
+            DateTime LeftDockTimeDateNotNulable = (DateTime)LeftDockTimeDate;
+            TimeSpan LeftDockTimeTimeNotNulable = (TimeSpan)LeftDockTimeTime;
+            CarAdviceMainTableWHEdit.LeftTheDockTime = LeftDockTimeDateNotNulable.Add(LeftDockTimeTimeNotNulable);
+        }
+
+
+        if (EtdTimeDate != null)
+        {
+            DateTime EtdTimeDateNotNulable = (DateTime)EtdTimeDate;
+            TimeSpan EtdTimeTimeNotNulable = (TimeSpan)EtdTimeTime;
+            CarAdviceMainTableWHEdit.Etd = EtdTimeDateNotNulable.Add(EtdTimeTimeNotNulable);
+
+        }
+
+        if (AtaTimeDate != null)
+        {
+            DateTime AtaTimeDateNotNulable = (DateTime)AtaTimeDate;
+            TimeSpan AtaTimeTimeNotNulable = (TimeSpan)AtaTimeTime;
+            CarAdviceMainTableWHEdit.Ata = AtaTimeDateNotNulable.Add(AtaTimeTimeNotNulable);
+        }
+
+        if (TPVEntryTimeDate != null)
+        {
+            DateTime TPVEntryTimeDateNotNulable = (DateTime)TPVEntryTimeDate;
+            TimeSpan TPVEntryTimeTimeNotNulable = (TimeSpan)TPVEntryTimeTime;
+            CarAdviceMainTableWHEdit.TpvEnterTime = TPVEntryTimeDateNotNulable.Add(TPVEntryTimeTimeNotNulable);
+        }
+
+        if (TPVExitTimeDate != null)
+        {
+            DateTime TPVExitTimeDateNotNulable = (DateTime)TPVExitTimeDate;
+            TimeSpan TPVExitTimeTimeNotNulable = (TimeSpan)TPVExitTimeTime;
+            CarAdviceMainTableWHEdit.TpvExitTime = TPVExitTimeDateNotNulable.Add(TPVExitTimeTimeNotNulable);
+        }
+
+        string linkSave = "/api/CarAdviceMainTables/" + CarAdviceMainTableWHEdit.Id;
+        var Response = await httpClient.PutAsJsonAsync<CarAdviceMainTable>(linkSave, CarAdviceMainTableWHEdit);
+
+        await ReadData();
+        StateHasChanged();
+    }
+
+    private async Task CancelButton()
+    {
+        await DeleteItem.InvokeAsync("Cancel");
+    }
+
+  
+
+    protected async override void OnInitialized()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+        }
+
+
+        // truck type
+
+        string linktt = "/api/CarAdviceDictionaryTruckTypes/GetCarAdviceDictionaryActiveTruckType";
+        truckTypeList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryTruckType>>(linktt);
+        trucktype = truckTypeList.Select(c => c.Truck).ToList();
+
+        // quality
+
+        string linkq = "/api/CarAdviceDictionaryQualities";
+        qualityList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryQuality>>(linkq);
+        quality = qualityList.Select(c => c.Quality).ToList();
+
+        // FG_reason for delay
+
+        string linkRu = "/api/CarAdviceDictionaryReasons/GetCarAdviceDictionaryActiveReason";
+        FG_DelayReasonList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryReason>>(linkRu);
+        FG_DelayReason = FG_DelayReasonList.Select(c => c.Code).ToList();
+
+        // picking status
+
+        string linkstat = "/api/CarAdviceDictionaryStatus/GetCarAdviceDictionaryActiveStatus";
+        PickingStatusList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryStatus>>(linkstat);
+        PickingStatus = PickingStatusList.Select(c => c.Status).ToList();
+
+
+        // curriers - forwarder
+
+        string linkFo = "/api/CarAdviceDictionaryCarriers/GetCarAdviceActiveDictionaryCarriers";
+        currierList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCarriers>>(linkFo);
+        curriers = currierList.Select(c => c.Carrier).ToList();
+
+        // destination - country code
+
+        string linkDe = "/api/CarAdviceDictionaryCountryCodes";
+        destinationList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCountryCode>>(linkDe);
+        destination = destinationList.Select(c => c.Country).ToList();
+
+        // Customers
+
+        string linkCu = "/api/CarAdviceDictionaryCustomers/GetCarAdviceDictionaryActiveCustomer";
+        customerList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCustomers>>(linkCu);
+        customers = customerList.Select(c => c.Customer).ToList();
+
+
+        await ReadData();
+
+
+        if (CarAdviceMainTableWHEdit.Etd == null)
+        {
+            EtdTimeDate = null;
+            EtdTimeTime = null;
+        }
+        else
+        {
+            EtdTimeDate = CarAdviceMainTableWHEdit.Etd;
+            EtdTimeTime = Convert.ToDateTime(CarAdviceMainTableWHEdit.Etd).TimeOfDay;
+        }
+
+        // scnned time
+
+        if (CarAdviceMainTableWHEdit.ScannedTime == null)
+        {
+            ScannedTimeDate = null;
+            ScannedTimeTime = null;
+        }
+        else
+        {
+            ScannedTimeDate = CarAdviceMainTableWHEdit.ScannedTime;
+            ScannedTimeTime = Convert.ToDateTime(CarAdviceMainTableWHEdit.ScannedTime).TimeOfDay;
+        }
+
+        // picking time
+
+        if (CarAdviceMainTableWHEdit.PickingTime == null)
+        {
+            PickingTimeDate = null;
+            PickingTimeTime = null;
+        }
+        else
+        {
+            PickingTimeDate = CarAdviceMainTableWHEdit.PickingTime;
+            PickingTimeTime = Convert.ToDateTime(CarAdviceMainTableWHEdit.PickingTime).TimeOfDay;
+        }
+
+        // ledt dock time
+
+        if (CarAdviceMainTableWHEdit.LeftTheDockTime == null)
+        {
+            LeftDockTimeDate = null;
+            LeftDockTimeTime = null;
+        }
+        else
+        {
+            LeftDockTimeDate = CarAdviceMainTableWHEdit.LeftTheDockTime;
+            LeftDockTimeTime = Convert.ToDateTime(CarAdviceMainTableWHEdit.LeftTheDockTime).TimeOfDay;
+        }
+
+        if (CarAdviceMainTableWHEdit.Ata == null)
+        {
+            AtaTimeDate = null;
+            AtaTimeTime = null;
+        }
+        else
+        {
+            AtaTimeDate = CarAdviceMainTableWHEdit.Ata;
+            AtaTimeTime = Convert.ToDateTime(CarAdviceMainTableWHEdit.Ata).TimeOfDay;
+        }
+
+        // TPV Entry Time
+
+        if (CarAdviceMainTableWHEdit.TpvEnterTime == null)
+        {
+            TPVEntryTimeDate = null;
+            TPVEntryTimeTime = null;
+        }
+        else
+        {
+            TPVEntryTimeDate = CarAdviceMainTableWHEdit.TpvEnterTime;
+            TPVEntryTimeTime = Convert.ToDateTime(CarAdviceMainTableWHEdit.TpvEnterTime).TimeOfDay;
+        }
+
+        // TPV exit time
+
+        if (CarAdviceMainTableWHEdit.TpvExitTime == null)
+        {
+            TPVExitTimeDate = null;
+            TPVExitTimeTime = null;
+        }
+        else
+        {
+            TPVExitTimeDate = CarAdviceMainTableWHEdit.TpvExitTime;
+            TPVExitTimeTime = Convert.ToDateTime(CarAdviceMainTableWHEdit.TpvExitTime).TimeOfDay;
+        }
+        StateHasChanged();
+
+    }
+
+
+    private async Task ReadData()
+    {
+
+
+
+        string linkForEdit = "/api/CarAdviceMainTables/" + Id;
+        CarAdviceMainTableWHEdit = await httpClient.GetFromJsonAsync<CarAdviceMainTable>(linkForEdit);
+    }
+
+
+    private async Task<IEnumerable<string>> SearchClient(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return customers;
+        return customers.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchDestination(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return destination;
+        return destination.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+    private async Task<IEnumerable<string>> SearchCurriers(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return curriers;
+        return curriers.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchPickingStatus(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return PickingStatus;
+        return PickingStatus.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+    private async Task<IEnumerable<string>> SearchFGDelayReason(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return FG_DelayReason;
+        return FG_DelayReason.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchQuality(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return quality;
+        return quality.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchTuruckType(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return trucktype;
+        return trucktype.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+}

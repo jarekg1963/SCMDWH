@@ -1,0 +1,55 @@
+﻿@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient;
+
+
+<EditForm Model="@updateColum" OnValidSubmit="HandleValidSubmit">
+    <MudCard style="width:600px">
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@updateColum.MainScreenColumn" Label="Colums name" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudCheckBox @bind-Checked="@updateColum.Hidden" Size="Size.Medium" Label="Active"></MudCheckBox>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@updateColum.OrderColumn" Label="Order" Variant="Variant.Text"></MudTextField>
+                </MudItem>            
+            </MudGrid>
+        </MudCardContent>
+        <MudCardActions>
+            <MudItem xs="8">
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton Variant="Variant.Filled" OnClick="Close">Cancel</MudButton>
+            </MudItem>
+            <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">Save</MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string Id { get; set; }
+
+    CarAdviceMainPlanColumn updateColum = new CarAdviceMainPlanColumn();
+
+    private async void HandleValidSubmit()
+    {
+        MudDialog.Close(DialogResult.Ok(updateColum));
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReadData();
+    }
+
+    private async Task ReadData()
+    {
+        string link = "/api/CarAdviceMainPlanColums/" + Id;
+        updateColum = await httpClient.GetFromJsonAsync<CarAdviceMainPlanColumn>(link);
+        StateHasChanged();
+    }
+
+    void Close() => MudDialog.Close(DialogResult.Cancel());
+}

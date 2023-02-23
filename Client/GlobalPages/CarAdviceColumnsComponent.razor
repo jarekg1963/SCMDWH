@@ -1,0 +1,140 @@
+﻿@page "/ColumnsMainGrid";
+@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient
+@inject IDialogService DialogService;
+
+
+<MudTable Items="@ColumsList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
+          FixedHeader="true" Height="38em" RowsPerPage="15" Filter="new Func<CarAdviceMainPlanColumn,bool>(FilterFunc)">
+    <ToolBarContent>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="AddNew">New user</MudButton>
+        <MudSpacer />
+        <MudText Typo="Typo.h6">Users </MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 1%;" />
+        <col style="width: 15%; " />
+        <col style="width: 15%;" />
+        <col style="width: 2%;" />
+        <col style="width: 2%;" />
+        <col style="width: 2%;" />
+        <col style="width: 2%;" />
+
+    </ColGroup>
+    <HeaderContent>
+        <MudTh class="thcs">Id</MudTh>
+        <MudTh class="thcs">User name</MudTh>
+        <MudTh class="thcs">Column name</MudTh>
+        <MudTh class="thcs">Hidden </MudTh>
+        <MudTh class="thcs">Order Time</MudTh>
+        <MudTh class="thcs">Width</MudTh>
+        <MudTh class="thcs">Operations</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="UserName ">@context.UserName</MudTd>
+        <MudTd DataLabel="Column name">@context.MainScreenColumn</MudTd>
+
+      
+        <MudTd DataLabel="Hiden">
+            <MudCheckBox ReadOnly="true" @bind-Checked="@context.Hidden"></MudCheckBox>
+        </MudTd>
+        <MudTd DataLabel="Order">@context.OrderColumn</MudTd>
+        <MudTd DataLabel="Remark">@context.ColumnWidth</MudTd>
+        <MudTd DataLabel="Methods">
+            <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+          @*  <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />*@
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private string searchString = "";
+    private List<CarAdviceMainPlanColumn> ColumsList = new List<CarAdviceMainPlanColumn>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReadData();
+    }
+
+    private bool FilterFunc(CarAdviceMainPlanColumn element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.UserName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task ReadData()
+    {
+        string link = "/api/CarAdviceMainPlanColums";
+        ColumsList = await httpClient.GetFromJsonAsync<List<CarAdviceMainPlanColumn>>(link);
+    }
+
+    private async void Edit(CarAdviceMainPlanColumn column)
+    {
+       
+        CarAdviceMainPlanColumn updateColums = new CarAdviceMainPlanColumn();
+            var parameters = new DialogParameters { ["Id"] = column.Id.ToString() };
+        var dialog = DialogService.Show<CarAdviceEditNewColumsComponent>("Edit column ", parameters);
+            var result = await dialog.Result;
+            if (!result.Cancelled)
+            {
+            updateColums = (CarAdviceMainPlanColumn)result.Data;
+            string link = "/api/CarAdviceMainPlanColums/" + column.Id;
+            var Response = await httpClient.PutAsJsonAsync<CarAdviceMainPlanColumn>(link, updateColums);
+             await ReadData();
+                StateHasChanged();
+            }
+           await ReadData();
+        
+    }
+
+    private async void Delete(CarAdviceMainPlanColumn user)
+    {
+        
+    }
+
+    private void AddNew()
+    {
+       // navigationManager.NavigateTo($"/UserAddEditPage/0");
+    }
+}
+
+
+<style>
+
+
+
+
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+        /* font-weight: bold;*/
+    }
+
+    .thcs {
+        height: 1.6em !important;
+        border: 1px solid;
+        background-color: #c7c7c7 !important;
+        font-size: small !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        font-family: sans-serif;
+    }
+</style>

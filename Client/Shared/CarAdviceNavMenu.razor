@@ -1,0 +1,53 @@
+﻿@attribute [Authorize(Roles = "Dictionary")]
+@inject NavigationManager navigationManager
+@using System.Security.Claims
+@inject IStringLocalizer<CultureExample2> Loc
+
+<MudNavGroup Title=@Loc["lbCarAdvice"] Icon="@Icons.Filled.EmojiTransportation" @bind-Expanded=_isExpanded>
+	<MudNavLink Href="/caradvice" Icon="@Icons.Filled.LibraryBooks">@Loc["lbPlan"]</MudNavLink>
+	
+	@if (rolaAdministratora)
+	{
+		<MudNavGroup Title=@Loc["lbDictionary"] Icon="@Icons.Filled.Settings" Expanded="false">
+			<MudNavLink Href="CADCarriersPage" Icon="@Icons.Filled.TimeToLeave">@Loc["lbCarriers"]</MudNavLink>
+			<MudNavLink Href="CADTrackTypes" Icon="@Icons.Filled.LocalShipping">Truck types</MudNavLink>
+			<MudNavLink Href="CADCustomersPage" Icon="@Icons.Filled.Payments">Customers</MudNavLink>
+			<MudNavLink Href="CADLoadingPlacePage" Icon="@Icons.Filled.Domain">Loading places</MudNavLink>
+			<MudNavLink Href="CADStatuCode" Icon="@Icons.Filled.FactCheck">Status codes</MudNavLink>
+			<MudNavLink Href="CADReasonsPage" Icon="@Icons.Filled.Feedback">Reason codes</MudNavLink>
+			<MudNavLink Href="CADSecurityPersonsPage" Icon="@Icons.Filled.Feedback">Security persons</MudNavLink>
+			<MudNavLink Href="CADQualityPage" Icon="@Icons.Filled.Feedback">Quality</MudNavLink>
+			<MudNavLink Href="#" Icon="@Icons.Filled.Flag">Countries</MudNavLink>
+		</MudNavGroup>
+	}
+</MudNavGroup>
+
+@code {
+	bool _isExpanded = false;
+	private bool rolaAdministratora = true;
+	
+
+	[CascadingParameter]
+	public Task<AuthenticationState> AuthState { get; set; }
+
+	private IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+
+	protected async override void OnAfterRender(bool firstRender)
+	{
+		var authState = await AuthState;
+		var user = authState.User;
+
+		if (!user.Identity.IsAuthenticated)
+		{
+			//Console.WriteLine("Komunikat z nav meny  not authenticated ");
+			navigationManager.NavigateTo("/login");
+		}
+		else
+		{
+			claims = user.Claims;
+			string rolesForDisplay = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+			rolaAdministratora = rolesForDisplay.Contains("Administrator");
+		}
+	}
+}
+

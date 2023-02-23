@@ -1,0 +1,56 @@
+﻿@page "/TestPage"
+@using System.Text.Json.Serialization;
+@using static MudBlazor.CategoryTypes;
+@inject HttpClient httpClient
+
+<h3>Ilosc elementow -> @elementList.Count</h3>
+
+@code {
+
+    [CascadingParameter]
+    public Error Error { get; set; }
+
+    List<ElementClient> elementList = new List<ElementClient>();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+       // throw new NullReferenceException();
+
+        string link = "/api/Test/";
+        try
+        {
+           
+            
+
+            elementList = await httpClient.GetFromJsonAsync<List<ElementClient>>(link);
+            
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex);
+        }
+
+    }
+
+   
+
+public class ElementClient
+{
+    public string Group { get; set; }
+    public int Position { get; set; }
+    public string Name { get; set; }
+    public int Number { get; set; }
+
+    [JsonPropertyName("small")]
+    public string Sign { get; set; }
+    public double Molar { get; set; }
+    public IList<int> Electrons { get; set; }
+
+    public override string ToString()
+    {
+    return $"{Sign} - {Name}";
+    }
+}
+
+}

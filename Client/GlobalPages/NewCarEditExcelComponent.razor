@@ -1,0 +1,244 @@
+﻿@using SCMDWH.Shared.Models;
+@using System.Text.Json;
+@inject HttpClient httpClient;
+@inject ISnackbar Snackbar
+
+
+<MudDialog Style="min-width: 1400px;">
+    <DialogContent>
+        <MudCard Outlined="true" Elevation="20">
+            <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Center" Elevation="1">Add new item</MudAlert>
+        <MudGrid>
+            <MudItem xs="2">
+                    <MudDatePicker Label="Ad. Date" @bind-Date="PacaForEdit.AdviceDate" DisableToolbar="true" />
+            </MudItem>
+            <MudItem xs="2">
+                    <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Client" @bind-Value="PacaForEdit.Client" SearchFunc="@SearchClient"
+                                 ResetValueOnEmptyText="@resetValueOnEmptyText"/>
+            </MudItem>
+                 <MudItem xs="1">
+                    <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Dest." @bind-Value="PacaForEdit.Destination" SearchFunc="@SearchCountry"
+                                 ResetValueOnEmptyText="@resetValueOnEmptyText"/>
+            </MudItem>                           
+            <MudItem xs="2">
+                    <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Currier" @bind-Value="PacaForEdit.Forwarder" SearchFunc="@SearchCarrier"
+                                 ResetValueOnEmptyText="@resetValueOnEmptyText" />
+            </MudItem>
+            <MudItem xs="2">
+                    <MudTextField @bind-Value="@PacaForEdit.Shipment" Label="Shipment" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+            <MudItem xs="3">
+                    <MudTextField @bind-Value="@PacaForEdit.Reference" Label="Reference" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+          
+             </MudGrid>
+               <MudGrid>
+                     <MudItem xs="2">
+                <MudDatePicker Label="Etd date" @bind-Date="newEtadate"  />
+            </MudItem>
+            <MudItem xs="2">
+                    <MudTimePicker Label="Etd time" AmPm="true" @bind-Time="newEtatime"   />
+            </MudItem>
+        </MudGrid>
+          <MudGrid>
+           <MudItem xs="4">
+                    <MudTextField @bind-Value="@PacaForEdit.DriverWh" Label="Driver WH" Variant="Variant.Text"></MudTextField>
+           </MudItem>
+            <MudItem xs="4">
+                    <MudTextField @bind-Value="@PacaForEdit.TruckPlatesWh" Label="Truck plates WH" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+            <MudItem xs="4">
+                    <MudTextField @bind-Value="@PacaForEdit.RemarksWh" Label="Remarks WH" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+        </MudGrid>
+        </MudCard>
+    </DialogContent>
+    <DialogActions>
+
+        <MudGrid>
+            <MudItem xs="6">
+
+            </MudItem>
+
+
+            <MudItem xs="2">
+
+            </MudItem>
+
+            <MudItem xs="2">
+                <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">Cancel</MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                    <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">Save</MudButton>
+            </MudItem>
+        </MudGrid>
+    </DialogActions>
+</MudDialog>
+
+
+
+
+@code {
+
+
+    DateTime? newEtadate;
+    TimeSpan? newEtatime;
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] 
+    public CarAdviceMainTable PacaForEdit { get; set; }
+    
+    string userName = "";
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    //List<CarAdviceMainTable> ListCAMainTableNew = new List<CarAdviceMainTable>();
+    //CarAdviceMainTable CarAdviceMainTableNew = new CarAdviceMainTable();
+
+
+    private bool resetValueOnEmptyText;
+    private bool coerceText;
+    private bool coerceValue;
+    private string value1, value2;
+    private List<string> customers;
+    private List<string> countryCode;
+    private List<string> carriers;
+
+    List<CarAdviceDictionaryCustomers> customerList = new List<CarAdviceDictionaryCustomers>();
+    List<CarAdviceDictionaryCountryCode> countryList = new List<CarAdviceDictionaryCountryCode>();
+    List<CarAdviceDictionaryCarriers> carriersList = new List<CarAdviceDictionaryCarriers>();
+
+
+    protected async override void OnInitialized()
+    {
+       
+         newEtadate = (DateTime)PacaForEdit.Etd;
+         newEtatime = Convert.ToDateTime(PacaForEdit.Etd).TimeOfDay;
+     
+        // Customers
+       
+        string linkCu = "/api/CarAdviceDictionaryCustomers/GetCarAdviceDictionaryActiveCustomer";
+        customerList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCustomers>>(linkCu);
+        customers =  customerList.Select(c => c.Customer).ToList();
+        // country code 
+        string linkCountry = "/api/CarAdviceDictionaryCountryCodes";
+        countryList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCountryCode>>(linkCountry);
+        countryCode = countryList.Select(c => c.Country).ToList();
+        // Curriers
+        string linkCarriers = "/api/CarAdviceDictionaryCarriers/GetCarAdviceActiveDictionaryCarriers";
+        carriersList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCarriers>>(linkCarriers);
+        carriers = carriersList.Select(c => c.Carrier).ToList();
+
+        // CarAdviceMainTableNew.AdviceDate = DateTime.Now;
+
+
+
+    }
+
+
+    private async Task<IEnumerable<string>> SearchClient(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return customers;
+        return customers.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchCountry(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return countryCode;
+        return countryCode.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchCarrier(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return carriers;
+        return carriers.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    void CloseCancel() => MudDialog.Close(DialogResult.Cancel());
+
+    private async void CloseSave()
+    {
+
+        if (PacaForEdit.AdviceDate == null)
+        {
+            Snackbar.Add($" Please add advice date !!!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            return;
+        }
+        if (PacaForEdit.Client == null)
+        {
+            Snackbar.Add($" Please add client !!!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            return;
+        }
+        if (PacaForEdit.Destination == null)
+        {
+            Snackbar.Add($" Please add destination !!!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            return;
+        }
+        if (PacaForEdit.Forwarder == null)
+        {
+            Snackbar.Add($" Please add currier !!!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            return;
+        }
+
+        if (PacaForEdit.Shipment == null)
+        {
+            Snackbar.Add($" Please add shipment !!!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            return;
+        }
+        if (PacaForEdit.Reference == null)
+        {
+            Snackbar.Add($" Please add refernces !!!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            return;
+        }
+
+        if (newEtadate == null )
+        {
+            Snackbar.Add($" Please add Eta date !!!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            return;
+        }
+
+
+        if (newEtatime == null)
+        {
+            Snackbar.Add($" Please add Eta time !!!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            return;
+        }
+
+       
+        PacaForEdit.Quality = "N/A";
+        PacaForEdit.EntryByS = "N/A";
+        PacaForEdit.TruckType = "N/A";
+        PacaForEdit.FgDelayReason = "N/A";
+        PacaForEdit.PickingStatus = "N/A";
+
+        PacaForEdit.ClientNavigation = null;
+        // CarAdviceMainTableNew.QualityNavigation = null;
+        PacaForEdit.EntryBySNavigation = null;
+        PacaForEdit.TruckTypeNavigation = null;
+        PacaForEdit.DestinationNavigation = null;
+        PacaForEdit.FgDelayReasonNavigation = null;
+        PacaForEdit.PickingStatusNavigation = null;
+
+
+        DateTime EtaDateNotNulable = (DateTime)newEtadate;
+        TimeSpan EtaTimeNotNulable = (TimeSpan)newEtatime;
+
+
+
+        PacaForEdit.Etd = EtaDateNotNulable.Add(EtaTimeNotNulable);
+
+        //var response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkAddNew, CarAdviceMainTableNew);
+
+        MudDialog.Close(DialogResult.Ok(PacaForEdit));
+
+
+       
+    }
+
+}

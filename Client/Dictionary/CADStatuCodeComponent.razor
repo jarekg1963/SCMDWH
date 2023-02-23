@@ -1,0 +1,171 @@
+﻿@page "/CADStatuCode"
+@inject HttpClient httpClient;
+@inject NavigationManager navigationManager;
+@inject IDialogService DialogService;
+@inject ISnackbar Snackbar;
+@using SCMDWH.Shared.Models;
+
+<style>
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+        /* font-weight: bold;*/
+    }
+
+    .thcs {
+        height: 1.6em !important;
+        border: 1px solid;
+        background-color: #c7c7c7 !important;
+        font-size: small !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        font-family: sans-serif;
+    }
+</style>
+
+<MudTable Items="@statusesList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
+          FixedHeader="true" Height="38em" RowsPerPage="18" Filter="new Func<CarAdviceDictionaryStatus,bool>(FilterFunc)">
+    <ToolBarContent>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" OnClick="AddNew" Size="Size.Small">New item</MudButton>
+        <MudSpacer />
+        <MudText Typo="Typo.h6">Status code </MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 2%; " />
+        <col style="width: 40%;" />
+        <col style="width: 2%;" />
+        <col style="width: 10%;" />
+        <col style="width: 10%;" />
+        <col style="width: 1%;" />
+        <col style="width: 1%;" />
+    </ColGroup>
+    <HeaderContent>
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<CarAdviceDictionaryStatus, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
+        <MudTh class="thcs">Status</MudTh>
+        <MudTh class="thcs">Active</MudTh>
+        <MudTh class="thcs">Added by user</MudTh>
+        <MudTh class="thcs">Add time</MudTh>
+        <MudTh class="thcs">Edit</MudTh>
+        <MudTh class="thcs">Delete</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="User Name">@context.Id</MudTd>
+        <MudTd DataLabel="Email">@context.Status</MudTd>
+        <MudTd DataLabel="Active">
+            <MudCheckBox ReadOnly="true" @bind-Checked="@context.ActiveFlag"></MudCheckBox>
+        </MudTd>
+        <MudTd DataLabel="Created Time">@context.AddByUser</MudTd>     
+        <MudTd DataLabel="Remark">@context.AddTime</MudTd>
+        <MudTd DataLabel="Edit">
+            <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+        <MudTd DataLabel="Delete">
+            <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    List<CarAdviceDictionaryStatus> statusesList = new List<CarAdviceDictionaryStatus>();
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private string searchString = "";
+    private bool _sortNameByLength;
+    private List<string> _events = new();
+
+    private async Task readData()
+    {
+        string link = "/api/CarAdviceDictionaryStatus";
+        try
+        {
+            statusesList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryStatus>>(link);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add("Error " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await readData();
+    }
+
+    private async void Delete(CarAdviceDictionaryStatus stStatus)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", $"Do you really want to delete ststus {stStatus.Status}? This process cannot be undone.");
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+        var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
+        var dialog = DialogService.Show<DialogDictionaryDeleteComponent>("Delete", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            string link = "/api/CarAdviceDictionaryStatus/" + stStatus.Id;
+            var Response = await httpClient.DeleteAsync(link);
+            await readData();
+            StateHasChanged();
+            if (Response.IsSuccessStatusCode)
+            {
+                statusesList = statusesList.Where(u => u.Status != stStatus.Status).ToList();
+                StateHasChanged();
+             //   Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+            }
+            else
+            {
+                Snackbar.Add("Error !!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+            }
+        }
+    }
+
+    private async void AddNew()
+    {
+        CarAdviceDictionaryStatus newStatusCode = new CarAdviceDictionaryStatus();
+        var parameters = new DialogParameters { ["Id"] = "XXX" };
+        var dialog = DialogService.Show<CADStatusDialogAddEdit>("Add new ststus", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            newStatusCode = (CarAdviceDictionaryStatus)result.Data;
+            string link = "/api/CarAdviceDictionaryStatus/";
+            var Response = await httpClient.PostAsJsonAsync<CarAdviceDictionaryStatus>(link, newStatusCode);
+            await readData();
+            StateHasChanged();
+        }
+    }
+
+    private async void Edit(CarAdviceDictionaryStatus carrier)
+    {
+        CarAdviceDictionaryStatus updateStatus = new CarAdviceDictionaryStatus();
+        var parameters = new DialogParameters { ["Id"] = carrier.Id.ToString() };
+        var dialog = DialogService.Show<CADStatusDialogAddEdit>("Edit carrier ", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            updateStatus = (CarAdviceDictionaryStatus)result.Data;
+            string link = "/api/CarAdviceDictionaryStatus/" + carrier.Id;
+            var Response = await httpClient.PutAsJsonAsync<CarAdviceDictionaryStatus>(link, updateStatus);
+            await readData();
+            StateHasChanged();
+        }
+        await readData();
+    }
+    private bool FilterFunc(CarAdviceDictionaryStatus element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Status.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}

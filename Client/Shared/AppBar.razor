@@ -1,0 +1,143 @@
+﻿@using SCMDWH.Client.Services;
+@using System.Security.Claims;
+@using SCMDWH.Shared.Models;
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+@inject HttpClient httpClient
+@inject IStringLocalizer<CultureExample2> Loc
+
+<MudAppBar Elevation="3">
+	<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" 
+				   OnClick="async () => await OnSidebarToggled.InvokeAsync()" />
+	<MudSpacer />
+	<MudSpacer />
+	<MudSpacer />
+	<MudSpacer />
+	<MudSpacer />
+	<MudSpacer />
+	<MudSpacer />
+	<MudSpacer />
+	<MudSpacer />        
+        <MudSpacer />
+	<MudText Align=Align.Right Typo="Typo.subtitle1"> @Loc["lbLoggeduser"]: @UserName</MudText>
+        <MudSpacer />
+	    <MudSpacer />
+	       <MudText Align=Align.Right Typo="Typo.subtitle1">@rolesForDisplay</MudText>
+	    <MudSpacer />
+	<MudSpacer />
+	<MudSpacer/>
+	<MudSpacer />
+	<article class="bottom-row px-4">
+		<CultureSelector />
+	</article>
+	@if (_isLightMode)
+	{
+			<MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="ToggleTheme" />
+	}
+	else
+	{
+			<MudIconButton Icon="@Icons.Material.Filled.Brightness5" Color="Color.Inherit" OnClick="ToggleTheme" />
+	}
+
+	<MudIconButton Icon="@Icons.Filled.Logout" Color="Color.Inherit" OnClick="LogoutWithLog" />
+	
+</MudAppBar>
+
+@code {
+
+	private string rolesForDisplay= "";
+	private bool _isLightMode = true;
+	private MudTheme _currentTheme = new MudTheme()
+		{
+			Palette = new Palette()
+			{
+				Black = "#272c34",
+				AppbarBackground = "#708090"
+				//AppbarBackground = "#0484d9"
+			}
+		};
+	private string UserName = "";
+
+
+	[CascadingParameter]
+	public Task<AuthenticationState> AuthState { get; set; }
+
+	[Parameter]
+	public EventCallback OnSidebarToggled { get; set; }
+	[Parameter]
+	public EventCallback<MudTheme> OnThemeToggled { get; set; }
+
+
+	private async Task LogoutWithLog()
+	{
+		LogAppUserActivity ilo = new LogAppUserActivity()
+			{
+				AppActivityType = "logout",
+				AppActivityDetails = "Success",
+				ActivityTime = DateTime.Now,
+				ActivityTriggeredByUser = UserName
+			};
+		await httpClient.PostAsJsonAsync("/api/LogAppUserActivities", ilo);
+		rolesForDisplay = "";
+		await AuthenticationService.Logout();
+	}
+
+
+	protected async override void OnAfterRender(bool firstRender)
+	{
+
+		IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+		var authState = await AuthState;
+		var user = authState.User;
+		if (!user.Identity.IsAuthenticated)
+		{
+			UserName = "";
+		}
+		else
+		{
+			string srole = Loc["lbRoles"] + " :";
+			UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+			claims = user.Claims;
+			rolesForDisplay = srole + $"{ user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value}".Replace("[", "").Replace("]", "").Replace("\"", "");
+		}
+
+	}
+
+
+
+	private async Task ToggleTheme()
+	{
+		_isLightMode = !_isLightMode;
+
+		_currentTheme = !_isLightMode ? GenerateDarkTheme() : new MudTheme()
+			{
+				Palette = new Palette()
+				{
+					Black = "#272c34",
+					AppbarBackground = "#708090"
+					// AppbarBackground = "#0484d9"
+				}
+			};
+
+		await OnThemeToggled.InvokeAsync(_currentTheme);
+	}
+
+	private MudTheme GenerateDarkTheme() =>
+		new MudTheme
+			{
+				Palette = new Palette()
+				{
+					Black = "#27272f",
+					Background = "#32333d",
+					BackgroundGrey = "#27272f",
+					Surface = "#373740",
+					TextPrimary = "#ffffffb3",
+					TextSecondary = "rgba(255,255,255, 0.50)",
+					AppbarBackground = "#27272f",
+					AppbarText = "#ffffffb3",
+					DrawerBackground = "#27272f",
+					DrawerText = "#ffffffb3",
+					DrawerIcon = "#ffffffb3"
+				}
+			};
+}

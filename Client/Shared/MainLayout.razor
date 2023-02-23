@@ -1,0 +1,47 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+<MudLayout>   
+    <AppBar OnSidebarToggled="ToggleSidebar" OnThemeToggled="ToggleTheme" />
+    <AuthorizeView>
+        <Authorized>
+        
+            <NavMenu SideBarOpen="_sidebarOpen" />
+    </Authorized>
+    </AuthorizeView>
+    <MudMainContent  Class="pt-16 px-16">
+        <MudContainer MaxWidth="MaxWidth.Large">
+                    @Body
+         </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+<MudThemeProvider Theme="_currentTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+@code {
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+ 
+    private MudTheme _currentTheme = new MudTheme()
+     {
+        Palette = new Palette()
+        {
+            Black = "#272c34",
+                AppbarBackground = "#708090"
+        }
+    };
+
+    private bool _sidebarOpen = false;
+
+
+    private void ToggleTheme(MudTheme changedTheme) => _currentTheme = changedTheme;
+
+    private void ToggleSidebar() => _sidebarOpen = !_sidebarOpen;
+}
+
+
+
+        

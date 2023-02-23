@@ -1,0 +1,164 @@
+﻿@page "/CADQualityPage"
+@inject HttpClient httpClient;
+@inject NavigationManager navigationManager;
+@inject IDialogService DialogService;
+@inject ISnackbar Snackbar;
+@using SCMDWH.Shared.Models;
+
+<style>
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left!important;
+       /* font-weight: bold;*/
+    }
+
+    .thcs {
+        height: 1.6em !important;
+        border: 1px solid;
+        background-color: #c7c7c7 !important;
+        font-size: small !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        font-family: sans-serif;
+    }
+</style>
+
+
+<MudTable Items="@qualityList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
+          FixedHeader="true" Height="38em" RowsPerPage="18" Filter="new Func<CarAdviceDictionaryQuality,bool>(FilterFunc)">
+    <ToolBarContent >
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="AddNew">New item</MudButton>
+        <MudSpacer />
+        <MudText Typo="Typo.h6">Quality  </MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 2%; " />
+        <col style="width: 40%;" />
+        <col style="width: 2%; " />
+          <col style="width: 2%; " />
+    </ColGroup>
+    <HeaderContent >
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<CarAdviceDictionaryQuality, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
+        <MudTh class="thcs">Quality</MudTh>
+   
+        <MudTh class="thcs">Edit</MudTh>
+        <MudTh class="thcs">Delete</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd  DataLabel="User Name">@context.Id</MudTd>
+        <MudTd  DataLabel="Email">@context.Quality</MudTd>
+       
+        <MudTd  DataLabel="Edit">
+            <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />       
+        </MudTd>
+        <MudTd DataLabel="Delete">
+            <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    List<CarAdviceDictionaryQuality> qualityList = new List<CarAdviceDictionaryQuality>();
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private string searchString = "";
+    private bool _sortNameByLength;
+    private List<string> _events = new();
+
+    private async Task readData()
+    {
+        string link = "/api/CarAdviceDictionaryQualities";
+        try
+        {
+            qualityList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryQuality>>(link);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add("Error " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await readData();
+    }
+
+    private async void Delete(CarAdviceDictionaryQuality qty)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", $"Do you really want to delete carrier {qty.Quality}? This process cannot be undone.");
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+        var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
+        var dialog = DialogService.Show<DialogDictionaryDeleteComponent>("Delete", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            string link = "/api/CarAdviceDictionaryQualities/" + qty.Id;
+            var Response = await httpClient.DeleteAsync(link);
+            await readData();
+            StateHasChanged();
+            if (Response.IsSuccessStatusCode)
+            {
+                qualityList = qualityList.Where(u => u.Quality != qty.Quality).ToList();
+                StateHasChanged();
+             //   Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+            }
+            else
+            {
+                Snackbar.Add("Error !!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+            }
+        }
+    }
+
+
+    private async void AddNew()
+    {
+        CarAdviceDictionaryQuality newQty = new CarAdviceDictionaryQuality();
+        var parameters = new DialogParameters { ["Id"] = "XXX" };
+        var dialog = DialogService.Show<CADQualityAddEditComponent>("Add new qty", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            newQty = (CarAdviceDictionaryQuality)result.Data;
+            string link = "/api/CarAdviceDictionaryQualities/";
+            var Response = await httpClient.PostAsJsonAsync<CarAdviceDictionaryQuality>(link, newQty);
+            await readData();
+            StateHasChanged();
+        }
+    }
+
+    private async void Edit(CarAdviceDictionaryQuality qty)
+    {
+        CarAdviceDictionaryQuality updateQty = new CarAdviceDictionaryQuality();
+        var parameters = new DialogParameters { ["Id"] = qty.Id.ToString() };
+        var dialog = DialogService.Show<CADQualityAddEditComponent>("Edit qty ", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            updateQty = (CarAdviceDictionaryQuality)result.Data;
+            string link = "/api/CarAdviceDictionaryQualities/" + qty.Id;
+            var Response = await httpClient.PutAsJsonAsync<CarAdviceDictionaryQuality>(link, updateQty);
+            await readData();
+            StateHasChanged();
+        }
+        await readData();
+    }
+    private bool FilterFunc(CarAdviceDictionaryQuality element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Quality.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}

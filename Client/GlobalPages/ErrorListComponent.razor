@@ -1,0 +1,116 @@
+﻿@page "/ErroListpage"
+@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient
+
+
+<MudTable Items="@ErrorAppList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
+          FixedHeader="true" Height="38em" RowsPerPage="15" Filter="new Func<ErrorDataLog,bool>(FilterFunc)">
+    <ToolBarContent>
+     
+        <MudSpacer />
+        <MudText Typo="Typo.h6">Errors </MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 1%;" />
+        <col style="width: 1%;" />
+        <col style="width: 1%; " />
+        <col style="width: 1%;" />
+        <col style="width: 5%;" />
+        <col style="width: 8%;" />
+        <col style="width: 80%;" />
+        <col style="width: 1%;" />
+
+    </ColGroup>
+    <HeaderContent>
+        <MudTh class="thcs">Del</MudTh>
+        <MudTh class="thcs">LogId</MudTh>
+        <MudTh class="thcs">LogLevel</MudTh>
+        <MudTh class="thcs">EventName</MudTh>
+        <MudTh class="thcs">Source</MudTh>
+        <MudTh class="thcs">ExceptionMessage</MudTh>
+        <MudTh class="thcs">StackTrace</MudTh>
+        <MudTh class="thcs">CreatedDate</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Methods">
+            <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+        <MudTd DataLabel="User Name">@context.LogId</MudTd>
+        <MudTd DataLabel="Email">@context.LogLevel</MudTd>
+        <MudTd DataLabel="Mobile">@context.EventName</MudTd>
+
+        <MudTd DataLabel="Created Time">@context.Source</MudTd>
+       
+        <MudTd DataLabel="Remark">@context.ExceptionMessage</MudTd>
+        <MudTd DataLabel="Remark">@context.StackTrace</MudTd>
+        <MudTd DataLabel="Remark">@context.CreatedDate</MudTd>
+    
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private string searchString = "";
+    private List<ErrorDataLog> ErrorAppList = new List<ErrorDataLog>();
+    private string UserName = "";
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+
+    [CascadingParameter]
+    public Error Error { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+        UserName = user.Identity.Name;
+
+        await ReadData();
+
+    }
+
+    private async Task ReadData()
+    {
+        string link = "/api/ErrorDataLog/";
+        try
+        {
+            ErrorAppList = await httpClient.GetFromJsonAsync<List<ErrorDataLog>>(link);
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex);
+        }
+        StateHasChanged();
+    }
+
+    private bool FilterFunc(ErrorDataLog element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.EventName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async void Delete(ErrorDataLog error)
+    {
+
+        
+        string link = "/api/ErrorDataLog/" + error.LogId;
+        var Response = await httpClient.DeleteAsync(link);
+        await ReadData();
+        
+    }
+
+}

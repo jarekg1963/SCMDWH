@@ -1,0 +1,144 @@
+﻿@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient
+@using System.Linq;
+@using System.Collections.Generic;
+@using System;
+
+<MudDialog Style="width:30rem">
+    <DialogContent>
+     <MudCard>
+    <MudCardContent>
+        @if (userRoleList == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <MudSimpleTable  Hover="true" Dense="true" FixedHeader="@true" Style="@(true?"height:300px;":"")">
+
+                        <thead>
+                            <tr>
+                                <th style="width:20rem">Role</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in userRoleList)
+                            {
+                                <tr>
+                                    <td>@r.RoleName</td>
+                                    <td>
+                                        <MudFab @onclick="@(()=>Delete(@r))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+            </MudSimpleTable>
+        }
+        @if (podformularzDodajRole)
+        {
+            <hr />
+            <MudGrid>
+                <MudItem xs="8" sm="6" md="9">
+                    <MudSelect T="string" Label="Roles" @bind-Value="wybranaRola">
+                        @foreach (GlobalAppRoles item in FulluserRoleList)
+                        {
+                            <MudSelectItem   Value="@item.RoleName">@item.RoleName</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="4" sm="6" md="2">
+                            <MudButton Variant="Variant.Filled" Color="Color.Inherit" OnClick="AddToList" Style="height:2rem ; margin-top:15px" FullWidth="true" Disabled=activeButton>Add</MudButton>
+                </MudItem>
+            </MudGrid>
+        }
+        <hr />
+        </MudCardContent>
+        </MudCard>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" OnClick="AddNew">New role</MudButton>   <MudButton Color="Color.Primary" OnClick="Close">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string userName { get; set; }
+
+    private List<GlobalAppUserRoles> userRoleList = new List<GlobalAppUserRoles>();
+    private GlobalAppUserRoles userRole = new GlobalAppUserRoles();
+    private List<GlobalAppRoles> FulluserRoleList = new List<GlobalAppRoles>();
+
+    private List<GlobalAppRoles> uniqueFulluserRoleList = new List<GlobalAppRoles>();
+    bool podformularzDodajRole = false;
+
+    string wybranaRola = "";
+
+    bool activeButton;
+
+
+    private async Task readRoles()
+    {
+        MudDialog.SetTitle("Roles: " + userName);
+        string link = "/api/GlobalAppUserRoles/findbyname/" + userName;
+        userRoleList = await httpClient.GetFromJsonAsync<List<GlobalAppUserRoles>>(link);
+        string link1 = "/api/GlobalAppRoles/";
+        FulluserRoleList = await httpClient.GetFromJsonAsync<List<GlobalAppRoles>>(link1);
+
+        if (userRoleList.Count > 0)
+        {
+            foreach (var gr in userRoleList)
+            {
+                FulluserRoleList.RemoveAll(c => c.RoleName == gr.RoleName);
+            }
+        }
+
+        if (FulluserRoleList.Count == 0) activeButton = true; else activeButton = false;
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await readRoles();
+
+    }
+
+
+    private async void Delete(GlobalAppUserRoles roleForDelet)
+    {
+        string linkforDelete = "/api/GlobalAppUserRoles/" + roleForDelet.Id;
+        await httpClient.DeleteAsync(linkforDelete);
+        string link = "/api/GlobalAppUserRoles/findbyname/" + userName;
+        userRoleList = await httpClient.GetFromJsonAsync<List<GlobalAppUserRoles>>(link);
+        await readRoles();
+        StateHasChanged();
+    }
+
+    private async void AddToList()
+    {
+        userRole.RoleName = wybranaRola;
+        userRole.UserName = userName;
+        userRole.AddTime = DateTime.Now;
+        userRole.AddByUser = "Jarek";
+        string link3 = "/api/GlobalAppUserRoles";
+        var Response = await httpClient.PostAsJsonAsync<GlobalAppUserRoles>(link3, userRole);
+            string link = "/api/GlobalAppUserRoles/findbyname/" + userName;
+            userRoleList = await httpClient.GetFromJsonAsync<List<GlobalAppUserRoles>>(link);
+        await readRoles();
+            StateHasChanged();
+        
+    }
+
+    private void AddNew()
+    {
+        podformularzDodajRole = true;
+
+    }
+
+    void Close() => MudDialog.Close(DialogResult.Ok(true));
+
+}

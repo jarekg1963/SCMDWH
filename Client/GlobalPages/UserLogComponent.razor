@@ -1,0 +1,95 @@
+﻿@page "/UserLogPage"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject ISnackbar Snackbar
+
+@using SCMDWH.Shared.Models;
+
+<style>
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+        /* font-weight: bold;*/
+    }
+
+    .thcs {
+        height: 1.6em !important;
+        border: 1px solid;
+        background-color: #c7c7c7 !important;
+        font-size: small !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        font-family: sans-serif;
+    }
+</style>
+
+<MudTable Items="@UserLogList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
+          FixedHeader="true" Height="38em" RowsPerPage="25" Filter="new Func<LogAppUserActivity,bool>(FilterFunc)">
+    <ToolBarContent>
+        <MudSpacer />
+        <MudText Typo="Typo.h6">Users </MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 1%;" />
+        <col style="width: 10%; " />
+        <col style="width: 10%;" />
+        <col style="width: 10%;" />
+        <col style="width: 10%;" />
+    </ColGroup>
+    <HeaderContent>  
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppUserActivity, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
+        <MudTh class="thcs">Type</MudTh>
+        <MudTh class="thcs">Dateils</MudTh>
+        <MudTh class="thcs">Time</MudTh>
+        <MudTh class="thcs">User</MudTh>      
+    </HeaderContent>
+    <RowTemplate>       
+        <MudTd DataLabel="User Name">@context.Id</MudTd>
+        <MudTd DataLabel="Email">@context.AppActivityType</MudTd>
+        <MudTd DataLabel="Mobile">@context.AppActivityDetails</MudTd>
+        <MudTd DataLabel="Created Time">@context.ActivityTime</MudTd>  
+        <MudTd DataLabel="Remark">@context.ActivityTriggeredByUser</MudTd>     
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+@code {
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private string searchString = "";
+
+    private List<LogAppUserActivity> UserLogList = new List<LogAppUserActivity>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        string link = "api/LogAppUserActivities";
+        try
+        {
+            UserLogList = await httpClient.GetFromJsonAsync<List<LogAppUserActivity>>(link);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add("Error " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+        }
+    }
+
+    private bool FilterFunc(LogAppUserActivity element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.AppActivityDetails.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+}

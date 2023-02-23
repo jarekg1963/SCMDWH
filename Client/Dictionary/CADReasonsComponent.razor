@@ -1,0 +1,178 @@
+﻿@page "/CADReasonsPage"
+
+<style>
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+        /* font-weight: bold;*/
+    }
+    .thcs {
+        height: 1.6em !important;
+        border: 1px solid;
+        background-color: #c7c7c7 !important;
+        font-size: small !important;
+        font-weight:bold !important;
+        text-align: center !important;
+        font-family: sans-serif;
+    }
+</style>
+
+@inject HttpClient httpClient;
+@inject NavigationManager navigationManager;
+@inject IDialogService DialogService;
+@inject ISnackbar Snackbar;
+@using SCMDWH.Shared.Models;
+
+<MudTable Items="@reasonsList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
+          FixedHeader="true" Height="38em" RowsPerPage="18" Filter="new Func<CarAdviceDictionaryReason,bool>(FilterFunc)">
+    <ToolBarContent>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" OnClick="AddNew" Size="Size.Small">New item</MudButton>
+        <MudSpacer />
+        <MudText Typo="Typo.h6">Reason code </MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 2%; " />
+        <col style="width: 40%;" />
+        <col style="width: 2%;" />
+        <col style="width: 10%;" />
+        <col style="width: 10%;" />
+        <col style="width: 1%;" />
+        <col style="width: 1%;" />
+    </ColGroup>
+    <HeaderContent>
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<CarAdviceDictionaryReason, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
+        <MudTh class="thcs">Code</MudTh>
+        <MudTh class="thcs">Active</MudTh>
+        <MudTh class="thcs">Added by user</MudTh>
+        <MudTh class="thcs">Add time</MudTh>
+        <MudTh class="thcs">Edit</MudTh>
+        <MudTh class="thcs">Delete</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="User Name">@context.Id</MudTd>
+        <MudTd DataLabel="Email">@context.Code</MudTd>
+        <MudTd DataLabel="Active">
+            <MudCheckBox ReadOnly="true" @bind-Checked="@context.ActiveFlag"></MudCheckBox>
+        </MudTd>
+        <MudTd DataLabel="Created Time">@context.AddByUser</MudTd>
+        <MudTd DataLabel="Remark">@context.AddTime</MudTd>
+        <MudTd DataLabel="Edit">
+            <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+        <MudTd DataLabel="Delete">
+            <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+@code {
+
+    List<CarAdviceDictionaryReason> reasonsList = new List<CarAdviceDictionaryReason>();
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private string searchString = "";
+    private bool _sortNameByLength;
+    private List<string> _events = new();
+
+
+    private async Task readData()
+    {
+        string link = "/api/CarAdviceDictionaryReasons";
+        try
+        {
+            reasonsList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryReason>>(link);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add("Error " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await readData();
+    }
+
+    private async void Delete(CarAdviceDictionaryReason rReason)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", $"Do you really want to delete reason code {rReason.Code}? This process cannot be undone.");
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+        var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
+        var dialog = DialogService.Show<DialogDictionaryDeleteComponent>("Delete", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            string link = "/api/CarAdviceDictionaryReasons/" + rReason.Id;
+            var Response = await httpClient.DeleteAsync(link);
+            await readData();
+            StateHasChanged();
+            if (Response.IsSuccessStatusCode)
+            {
+                reasonsList = reasonsList.Where(u => u.Code != rReason.Code).ToList();
+                StateHasChanged();
+              //  Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+            }
+            else
+            {
+                Snackbar.Add("Error !!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+            }
+        }
+    }
+
+    private async void AddNew()
+    {
+        CarAdviceDictionaryReason newReasonCode = new CarAdviceDictionaryReason();
+        var parameters = new DialogParameters { ["Id"] = "XXX" };
+        var dialog = DialogService.Show<CADReasonsDialogAddEdit>("Add new carrier", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            newReasonCode = (CarAdviceDictionaryReason)result.Data;
+            string link = "/api/CarAdviceDictionaryReasons/";
+            var Response = await httpClient.PostAsJsonAsync<CarAdviceDictionaryReason>(link, newReasonCode);
+            await readData();
+            StateHasChanged();
+        }
+    }
+
+
+    private async void Edit(CarAdviceDictionaryReason rReason)
+    {
+        CarAdviceDictionaryReason updateReasonCode = new CarAdviceDictionaryReason();
+        var parameters = new DialogParameters { ["Id"] = rReason.Id.ToString() };
+        var dialog = DialogService.Show<CADReasonsDialogAddEdit>("Edit carrier ", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            updateReasonCode = (CarAdviceDictionaryReason)result.Data;
+            string link = "/api/CarAdviceDictionaryReasons/" + rReason.Id;
+            var Response = await httpClient.PutAsJsonAsync<CarAdviceDictionaryReason>(link, updateReasonCode);
+            await readData();
+            StateHasChanged();
+        }
+        await readData();
+    }
+
+    private bool FilterFunc(CarAdviceDictionaryReason element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+}

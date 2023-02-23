@@ -1,0 +1,52 @@
+﻿@inject NavigationManager navigationManager
+@using System.Security.Claims
+@using SCMDWH.Shared.Models
+@inject IStringLocalizer<CultureExample2> Loc
+
+<MudDrawer @bind-Open="SideBarOpen" Elevation="1">
+	<MudDrawerHeader>
+		<MudAvatar Color="Color.Transparent" Size="Size.Large" Image="tpv-logo.png" />
+		<MudText Typo="Typo.h5" Color="Color.Primary" Style="margin-top:10px; margin-left:15px;">SCMportal</MudText>
+	</MudDrawerHeader>
+	<MudNavMenu>
+		<MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Filled.Home">@Loc["lbHome"]</MudNavLink>
+		
+		       <CarAdviceNavMenu></CarAdviceNavMenu>	
+
+			@if (rolaAdministrator)
+				{
+					<GlobalNavMenu></GlobalNavMenu>
+				}
+
+		<GlobalCompanyInfoNavMenu></GlobalCompanyInfoNavMenu>
+
+	</MudNavMenu>
+</MudDrawer>
+
+@code {
+	[Parameter]
+	public bool SideBarOpen { get; set; }
+	private bool rolaAdministrator = true;
+	private bool rolaDictionary = true;
+
+	[CascadingParameter]
+	public Task<AuthenticationState> AuthState { get; set; }
+
+	private IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+
+	protected async override void OnAfterRender(bool firstRender)
+	{
+		var authState = await AuthState;
+		var user = authState.User;
+		if (!user.Identity.IsAuthenticated)
+		{
+			navigationManager.NavigateTo("/login");
+		}
+		else
+		{
+			claims = user.Claims;
+			string rolesForDisplay = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+			rolaAdministrator = rolesForDisplay.Contains("Administrator");
+		}
+	}
+}

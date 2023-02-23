@@ -1,0 +1,103 @@
+﻿@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient;
+
+
+<style>
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: xx-small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+        /* font-weight: bold;*/
+    }
+
+    .thcs {
+        height: 1.6em !important;
+        border: 1px solid;
+        background-color: #c7c7c7 !important;
+        font-size: small !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        font-family: sans-serif;
+    }
+</style>
+
+
+ <MudCard style="width:360px">
+     <MudCardContent>
+        <MudTable Items="@columsForDisplayListDb" Hover="true" OnRowClick="RowClickEvent" T="CarAdviceMainPlanColumn">
+    <HeaderContent>
+        <MudTh class="thcs">Column</MudTh>
+        <MudTh class="thcs">Hide</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Nr">@context.MainScreenColumn</MudTd>
+        <MudTd DataLabel="Hidden">
+                    <MudCheckBox Size="Size.Small" @bind-Checked="@context.Hidden" ></MudCheckBox>
+        </MudTd>   
+    </RowTemplate>
+</MudTable>
+    </MudCardContent>
+    <MudCardActions>
+        <MudItem xs="8">
+        </MudItem>
+        <MudItem xs="2">
+            <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="Close">Save</MudButton>
+
+        </MudItem>      
+    </MudCardActions>
+</MudCard>
+
+@code {
+
+
+
+    private bool pokaz;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter]
+    public string UserName { get; set; }
+
+    List<CarAdviceMainPlanColumn> columsForDisplayListDb = new List<CarAdviceMainPlanColumn>();
+
+    string Message;
+
+    private string checkedMessage = "Not changed yet";
+
+    private void RowClickEvent(TableRowClickEventArgs<CarAdviceMainPlanColumn> tableRowClickEventArgs)
+    {
+        bool zmhidden = tableRowClickEventArgs.Item.Hidden;
+
+        if (zmhidden)
+        {
+            columsForDisplayListDb.FirstOrDefault(c => c.MainScreenColumn == tableRowClickEventArgs.Item.MainScreenColumn).Hidden = false;
+        }
+
+        if (!zmhidden)
+        {
+            columsForDisplayListDb.FirstOrDefault(c => c.MainScreenColumn == tableRowClickEventArgs.Item.MainScreenColumn).Hidden = true;
+        }
+        StateHasChanged();
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        string linkcoluser = "/api/CarAdviceMainPlanColums/MainPlanComumByUser/" + UserName;
+        columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<CarAdviceMainPlanColumn>>(linkcoluser);
+
+    }
+
+
+    private async Task Close() 
+    {
+        foreach (CarAdviceMainPlanColumn ca in columsForDisplayListDb)
+        {
+            string linkca = "/api/CarAdviceMainPlanColums/" + ca.Id;
+
+            await httpClient.PutAsJsonAsync<CarAdviceMainPlanColumn>(linkca, ca);
+        }
+
+        
+        MudDialog.Close(DialogResult.Cancel());
+    }
+}

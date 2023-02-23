@@ -1,0 +1,34 @@
+﻿@using Microsoft.Extensions.Logging
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+@inject ILogger<Error> _logger
+@inject ISnackbar Snackbar
+@inject IWebAssemblyHostEnvironment _webAssemblyHostEnvironment
+
+<CascadingValue Value=this>
+    @ChildContent
+</CascadingValue>
+
+@code {
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public void ProcessError(Exception ex)
+    {
+        if (!_webAssemblyHostEnvironment.IsDevelopment())
+        {
+            Snackbar.Add("Error please contact with IT" + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1500; });
+            
+
+        }
+        else
+        {
+            Snackbar.Add("Error please check error log " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1500; });
+            // _logger.LogError(ex, "");
+           
+        }
+
+        _logger.LogError(ex.Message,ex);
+    }
+      
+}

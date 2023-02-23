@@ -1,0 +1,212 @@
+﻿@page "/UserListPage";
+
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@using SCMDWH.Client.Services.GlobalUsers;
+@using SCMDWH.Shared.Models;
+
+@inject IGlobalUsersService globalUsersService;
+
+@attribute [Authorize]
+
+<style>
+
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+        /* font-weight: bold;*/
+    }
+
+    .thcs {
+        height: 1.6em !important;
+        border: 1px solid;
+        background-color: #c7c7c7 !important;
+        font-size: small !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        font-family: sans-serif;
+    }
+</style>
+
+<MudTable Items="@UserList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped"  FixedFooter="true"
+          FixedHeader="true" Height="38em" RowsPerPage="15" Filter="new Func<GlobalAppUsers,bool>(FilterFunc)">
+    <ToolBarContent>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="AddNew">New user</MudButton>
+        <MudSpacer />
+        <MudText Typo="Typo.h6">Users </MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 1%;" />
+        <col style="width: 10%; " />
+        <col style="width: 15%;" />
+        <col style="width: 5%;" />
+        <col style="width: 15%;" />
+        <col style="width: 1%;" />
+        <col style="width: 1%;" />
+        <col style="width: 1%;" />
+        <col style="width: 10%;" />
+       
+    </ColGroup>
+    <HeaderContent>
+        <MudTh class="thcs">Roles</MudTh>
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<GlobalAppUsers, object>(x=>x.UserName)">User Name</MudTableSortLabel></MudTh>
+        <MudTh class="thcs">Email</MudTh>
+        <MudTh class="thcs">Mobile</MudTh>              
+        <MudTh class="thcs">Created Time</MudTh>
+        <MudTh class="thcs">Ac</MudTh>
+        <MudTh class="thcs">Ext</MudTh>
+        <MudTh class="thcs">Remark</MudTh>
+        <MudTh class="thcs">Methods</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Methods">
+            <MudIconButton @onclick="@(()=>AddEditRights(@context.UserName))" Color="Color.Default" Icon="@Icons.Material.Filled.Group" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+        <MudTd DataLabel="User Name">@context.UserName</MudTd>
+        <MudTd DataLabel="Email">@context.Email</MudTd>
+        <MudTd DataLabel="Mobile">@context.Mobile</MudTd>
+      
+        <MudTd DataLabel="Created Time">@context.CreatedTime</MudTd>
+        <MudTd DataLabel="Active">
+            <MudCheckBox ReadOnly="true" @bind-Checked="@context.Active"></MudCheckBox>
+        </MudTd>
+        <MudTd DataLabel="Active">
+            <MudCheckBox ReadOnly="true" @bind-Checked="@context.External"></MudCheckBox>
+        </MudTd>
+        <MudTd DataLabel="Remark">@context.Remark</MudTd>
+        <MudTd DataLabel="Methods">
+            <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+            <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+@code {
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private string searchString = "";
+    private List<GlobalAppUsers> UserList = new List<GlobalAppUsers>();
+    private string UserName="";
+    //------------------------------------------------------------------------
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+
+    [CascadingParameter]
+    public Error Error { get; set; }
+
+    private void AddEditRights(string zmUsername)
+    {
+        var parameters = new DialogParameters { ["userName"] = zmUsername };
+        DialogService.Show<DialogUserRolesComponent>("Simple Dialog ", parameters);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        UserList = await globalUsersService.GetAllUsersAsync();
+
+
+        //var authState = await AuthState;
+        //var user = authState.User;
+        //UserName = user.Identity.Name;
+
+        //string link = "/api/GlobalAppUsers/";
+
+        //throw new NullReferenceException();
+
+        //try 
+        //{
+
+        //    UserList = await httpClient.GetFromJsonAsync<List<GlobalAppUsers>>(link);
+        //}
+        //catch (Exception ex)
+        //{
+        //    Error.ProcessError(ex);
+        //}
+    }
+    //------------------------------------------------------------------------
+    private bool FilterFunc(GlobalAppUsers element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.UserName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+    //------------------------------------------------------------------------
+    private void AddNew()
+    {
+        navigationManager.NavigateTo($"/UserAddEditPage/0");
+    }
+    //------------------------------------------------------------------------
+    private void Edit(GlobalAppUsers User)
+    {
+        navigationManager.NavigateTo($"/UserAddEditPage/{User.UserName}");
+    }
+    //------------------------------------------------------------------------
+    private async void Delete(GlobalAppUsers user)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", $"Do you really want to delete user {user.UserName}? This process cannot be undone.");
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+        var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
+        var dialog = DialogService.Show<DialogUserDeleteComponent>("Delete", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            string link = "/api/GlobalAppUsers/" + user.UserName;
+             var Response = await httpClient.DeleteAsync(link);
+
+           // await globalUsersService.DeleteUsersAsync(user);
+
+            if (Response.IsSuccessStatusCode)
+            {
+                LogAppUserActivity ilo = new LogAppUserActivity()
+                    {
+                        AppActivityType = "User deleted" + user.UserName,
+                        AppActivityDetails = "Success",
+                        ActivityTime = DateTime.Now,
+                        ActivityTriggeredByUser = UserName
+                    };
+                await httpClient.PostAsJsonAsync("/api/LogAppUserActivities", ilo);
+                     UserList = UserList.Where(u => u.UserName != user.UserName).ToList();
+                 //    Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+                     StateHasChanged();
+             }
+             else
+             {
+                     Snackbar.Add("Error !!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+             }
+        }
+    }
+}
+
+
