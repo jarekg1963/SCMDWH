@@ -268,9 +268,10 @@ else
     }
 
 
-    public void ReturnFromSecurity(string returnedSecurityAction)
+    public async void ReturnFromSecurity(string returnedSecurityAction)
     {
         tabs.ActivatePanel(0);
+        await ReadData();
         StateHasChanged();
         Console.WriteLine("Security close action " + returnedSecurityAction);
     }

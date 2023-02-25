@@ -66,7 +66,9 @@
         <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Label=@Loc["lbCallBy"] Variant="Variant.Text"></MudTextField>
+       @* <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Label=@Loc["lbCallBy"] Variant="Variant.Text"></MudTextField>*@
+        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbCallBy"] @bind-Value="CarAdviceMainTableWHEdit.CallBy" SearchFunc="@SearchCallBy"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
     <MudItem xs="2">
         <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.EntryByS" Label=@Loc["lbEntryByS"] Variant="Variant.Text"></MudTextField>
@@ -169,6 +171,8 @@
 
     List<CarAdviceDictionaryQuality> qualityList = new List<CarAdviceDictionaryQuality>();
     private List<string> quality;
+
+    List<string> callbyList = new List<string>();
 
     List<CarAdviceDictionaryTruckType> truckTypeList = new List<CarAdviceDictionaryTruckType>();
     private List<string> trucktype;
@@ -331,6 +335,10 @@
         customerList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCustomers>>(linkCu);
         customers = customerList.Select(c => c.Customer).ToList();
 
+        // WH call by
+
+        string linkWHCB = "/api/GlobalAppUserRoles/GetWHGlobalAppUserRoles";
+        callbyList = await httpClient.GetFromJsonAsync<List<string>>(linkWHCB);
 
         await ReadData();
 
@@ -433,6 +441,7 @@
 
         string linkForEdit = "/api/CarAdviceMainTables/" + Id;
         CarAdviceMainTableWHEdit = await httpClient.GetFromJsonAsync<CarAdviceMainTable>(linkForEdit);
+        CarAdviceMainTableWHEdit.EntryByS = UserName;
     }
 
 
@@ -474,6 +483,13 @@
         if (string.IsNullOrEmpty(value))
             return quality;
         return quality.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchCallBy(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return callbyList;
+        return callbyList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
     private async Task<IEnumerable<string>> SearchTuruckType(string value)

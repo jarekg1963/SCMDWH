@@ -24,8 +24,6 @@ namespace SCMDWH.Server.Controllers
             _usersRepo = usersRepo;
         }
 
-        #region repo
-
         [HttpGet("RepoGlobalAppUsers")]
         public async Task<ActionResult<IEnumerable<GlobalAppUsers>>> RepoUsers()
         {
@@ -38,11 +36,6 @@ namespace SCMDWH.Server.Controllers
         {
             return _usersRepo.GetUser(userName);
         }
-
-
-        #endregion
-
-
 
 
         // GET: api/GlobalAppUsers
