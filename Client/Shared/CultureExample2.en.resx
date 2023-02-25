@@ -144,6 +144,9 @@
   <data name="lbCallBy" xml:space="preserve">
     <value>Call by</value>
   </data>
+  <data name="lbCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="lbCarAdvice" xml:space="preserve">
     <value>Car Advice</value>
   </data>
@@ -155,6 +158,12 @@
   </data>
   <data name="lbColumns" xml:space="preserve">
     <value>Columns</value>
+  </data>
+  <data name="lbCustomers" xml:space="preserve">
+    <value>Customers</value>
+  </data>
+  <data name="lbDelete" xml:space="preserve">
+    <value>Delete</value>
   </data>
   <data name="lbDestination" xml:space="preserve">
     <value>Destination</value>
@@ -195,6 +204,9 @@
   <data name="lbleftdockdate" xml:space="preserve">
     <value>Left dock date</value>
   </data>
+  <data name="lbLoadingplaces" xml:space="preserve">
+    <value>Loading places</value>
+  </data>
   <data name="lbLoggeduser" xml:space="preserve">
     <value>Logged user</value>
   </data>
@@ -234,6 +246,9 @@
   <data name="lbRoles" xml:space="preserve">
     <value>Roles</value>
   </data>
+  <data name="lbSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="lbScanneddate" xml:space="preserve">
     <value>Scanned date</value>
   </data>
@@ -252,14 +267,23 @@
   <data name="lbSecurityinfo" xml:space="preserve">
     <value>Security info</value>
   </data>
+  <data name="lbSecuritypersons" xml:space="preserve">
+    <value>Security persons</value>
+  </data>
   <data name="lbShipment" xml:space="preserve">
     <value>Shipment</value>
+  </data>
+  <data name="lbStatuscodes" xml:space="preserve">
+    <value>Status codes</value>
   </data>
   <data name="lbTPVEntrydate" xml:space="preserve">
     <value>TPV Entry date</value>
   </data>
   <data name="lbTPVEntrytime" xml:space="preserve">
     <value>TPV Entry time</value>
+  </data>
+  <data name="lbTPVExitdate" xml:space="preserve">
+    <value>TPV exit date</value>
   </data>
   <data name="lbTpvExitTime" xml:space="preserve">
     <value>Tpv exit time</value>

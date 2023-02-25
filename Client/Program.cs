@@ -26,8 +26,6 @@ builder.Services.AddLogging(logging => {
     logging.AddProvider(new ApplicationLoggerProvider(httpClient));
 });
 
-
-
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddAuthorizationCore();
@@ -35,25 +33,16 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 
-
 builder.Services.AddScoped<IApiBroker, ApiBroker>();
 
 builder.Services.AddScoped<IGlobalUsersService, GlobalUsersService>();
 
-// serwis do idCA uzytkownik i rola 
-//builder.Services.AddSingleton<StateContainer>();
-
-
-CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pl-PL");
-CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("pl-PL");
-
-// await builder.Build().RunAsync();
-
-// added localization 
-
 builder.Services.AddLocalization();
 
+
+
 var host = builder.Build();
+// start localozation 
 
 CultureInfo culture;
 var js = host.Services.GetRequiredService<IJSRuntime>();

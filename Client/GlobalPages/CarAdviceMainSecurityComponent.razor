@@ -64,30 +64,30 @@
         <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Label=@Loc["lbCallBy"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.EntryByS" Label="Entry by S" Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.EntryByS" Label=@Loc["lbEntryByS"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.RemarksS" Label="Remarks S." Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.RemarksS" Label=@Loc["lbRemarksS"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="12">
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">Security exit info </MudAlert>
     </MudItem>
     <MudItem xs="2">
-        <MudDatePicker Label="TPV Exit date" @bind-Date="TPVExitTimeDate" DisableToolbar="true" />
+        <MudDatePicker Label=@Loc["lbTPVExitdate"] @bind-Date="TPVExitTimeDate" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label="TPV Exit time" AmPm="true" @bind-Time="TPVExitTimeTime" DisableToolbar="true" />
+        <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="true" @bind-Time="TPVExitTimeTime" DisableToolbar="true" />
     </MudItem>
 </MudGrid>
 <hr />
-<MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">Warehouse information </MudAlert>
+<MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>
 <hr />
 
 
 <div class="container-fluid">
     <div class="row row-cols-6">
-        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Shipment: @CarAdviceMainTableWHEdit.Shipment "></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Ref.  @CarAdviceMainTableWHEdit.Reference "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbShipment"]: @CarAdviceMainTableWHEdit.Shipment "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbReference"]:  @CarAdviceMainTableWHEdit.Reference "></div>
         <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Ad.  @CarAdviceMainTableWHEdit.AdviceDate "></div>
         <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Etd:  @CarAdviceMainTableWHEdit.Etd "></div>
         <div class="col">   <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Dest.  @CarAdviceMainTableWHEdit.Destination "></div>
@@ -95,8 +95,8 @@
     </div>
 
     <div class="row row-cols-6">
-        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Client:  @CarAdviceMainTableWHEdit.Client "></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Plates:  @CarAdviceMainTableWHEdit.TruckPlatesWh "></div>
+        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbClient"]:  @CarAdviceMainTableWHEdit.Client "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbPlates"]:  @CarAdviceMainTableWHEdit.TruckPlatesWh "></div>
         <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Driver:  @CarAdviceMainTableWHEdit.DriverWh "></div>
         <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Status:  @CarAdviceMainTableWHEdit.PickingStatus "></div>
         <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="P.Time:  @CarAdviceMainTableWHEdit.PickingTime "></div>
@@ -123,11 +123,11 @@
 
     </MudItem>
     <MudItem xs="2">
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">@Loc["lbCancel"]</MudButton>
     </MudItem>
 
     <MudItem xs="2">
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="SaveWh">Save</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Size="Size.Small" OnClick="SaveWh">@Loc["lbSave"]</MudButton>
     </MudItem>
 </MudGrid>
 
