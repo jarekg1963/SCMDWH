@@ -79,7 +79,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --AdDate.
+        ///   Looks up a localized string similar to Czas awizacji.
         /// </summary>
         public static string lbAdDate {
             get {
@@ -268,6 +268,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zly format daty.
+        /// </summary>
+        public static string lberrorDateTime {
+            get {
+                return ResourceManager.GetString("lberrorDateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to --ETD Date.
         /// </summary>
         public static string lbEtdDate {
@@ -336,6 +345,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbNew {
             get {
                 return ResourceManager.GetString("lbNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teraz.
+        /// </summary>
+        public static string lbNow {
+            get {
+                return ResourceManager.GetString("lbNow", resourceCulture);
             }
         }
         

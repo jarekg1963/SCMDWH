@@ -75,10 +75,11 @@ else
 
                     <Column T="CarAdviceMainTable" Field="Id">
                         <CellTemplate>
-                            <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Primary"
+                            @*<MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Primary"
                                    StartIcon="@Icons.Material.Filled.Edit" OnClick="@(() => this.Click(context.Item))">
                                @context.Item.Id
-                            </MudButton>
+                            </MudButton>*@
+                            @context.Item.Id
                         </CellTemplate>
                     </Column>
      
@@ -413,24 +414,34 @@ else
 
     void RowClicked(DataGridRowClickEventArgs<CarAdviceMainTable> args)
     {
-        clickCounter++;
-        firstClickTime = DateTime.Now;
-        clickVerification.Add(new clickInterval { clickCount = clickCounter, clickTime = firstClickTime });
-        TimeSpan operationDuration = clickVerification.Last().clickTime - clickVerification[0].clickTime;
-        if (clickVerification.Count() >= 2)
-        {
-            clickVerification.Clear();
-        }
-        double ileczasu = (double)operationDuration.TotalSeconds;
-        if ( ileczasu > 0 &&   ileczasu < 1)
-        {
+        //clickCounter++;
+        //firstClickTime = DateTime.Now;
+        //clickVerification.Add(new clickInterval { clickCount = clickCounter, clickTime = firstClickTime });
+        //TimeSpan operationDuration = clickVerification.Last().clickTime - clickVerification[0].clickTime;
+        //if (clickVerification.Count() >= 2)
+        //{
+        //    clickVerification.Clear();
+        //    clickCounter = 0;
+        //}
+        //double ileczasu = (double)operationDuration.TotalSeconds;
+        //Console.WriteLine("ileczasu " + ileczasu);
+        //Console.WriteLine("clickCounter " + clickCounter);
+        //if ( ileczasu > 0 &&   ileczasu < 3)
+        //{
             if (rolaAdmin) tabs.ActivatePanel(1);
             if (rolaSecurity) tabs.ActivatePanel(1);
             if (rolaWh) tabs.ActivatePanel(1);
             _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
             selectedRow = args.Item.Id.ToString();
-        }
-        selectedRow = args.Item.Id.ToString();
+        //    clickCounter = 0;
+        //    clickVerification.Clear();
+        //}
+        //if (ileczasu > 3)
+        //{
+        //    clickCounter = 0;
+        //    clickVerification.Clear();
+        //}
+        //selectedRow = args.Item.Id.ToString();
     }
 
 

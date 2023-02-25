@@ -124,7 +124,7 @@
     <value>Hello world</value>
   </data>
   <data name="lbAdDate" xml:space="preserve">
-    <value>--AdDate</value>
+    <value>Czas awizacji</value>
   </data>
   <data name="lbAta" xml:space="preserve">
     <value>Ata</value>
@@ -186,6 +186,9 @@
   <data name="lbEntrybyWH" xml:space="preserve">
     <value>--lbEntrybyWH</value>
   </data>
+  <data name="lberrorDateTime" xml:space="preserve">
+    <value>Zly format daty</value>
+  </data>
   <data name="lbEtdDate" xml:space="preserve">
     <value>--ETD Date</value>
   </data>
@@ -209,6 +212,9 @@
   </data>
   <data name="lbNew" xml:space="preserve">
     <value>Nowy</value>
+  </data>
+  <data name="lbNow" xml:space="preserve">
+    <value>Teraz</value>
   </data>
   <data name="lbPickingdate" xml:space="preserve">
     <value>Data załadunku</value>

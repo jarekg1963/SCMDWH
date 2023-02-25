@@ -26,26 +26,31 @@
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbSecurityEntryInfo"] </MudAlert>
 
      </MudItem>
-    <MudItem xs="2">
+    <MudItem xs="1">
         <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Id" Label="Nr" Variant="Variant.Text" ReadOnly="true"></MudTextField>
     </MudItem>
 
     <MudItem xs="2">
-        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" />
+        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" Editable="true" />
 
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="true" @bind-Time="AtaTimeTime" DisableToolbar="true" />
+        <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] />
     </MudItem>
+
+    <MudItem xs="1">
+        <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton">@Loc["lbNow"]</MudButton>
+    </MudItem>
+
     <MudItem xs="2">
         <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbQuality"] @bind-Value="CarAdviceMainTableWHEdit.Quality" SearchFunc="@SearchQuality"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
     <MudItem xs="2">
         <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbTruckType"] @bind-Value="CarAdviceMainTableWHEdit.TruckType" SearchFunc="@SearchTuruckType"
-                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+                         ResetValueOnEmptyText="@resetValueOnEmptyText"/>
     </MudItem>
-@*    <MudItem xs="2">
+@*    <MudItem xs="2">a
         <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesWh" Label="Truck plates WH" Variant="Variant.Text"></MudTextField>
     </MudItem>*@
     <MudItem xs="2">
@@ -58,7 +63,7 @@
         <MudDatePicker Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="true" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" />
+        <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
         <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Label=@Loc["lbCallBy"] Variant="Variant.Text"></MudTextField>
@@ -76,7 +81,7 @@
         <MudDatePicker Label=@Loc["lbTPVExitdate"] @bind-Date="TPVExitTimeDate" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="true" @bind-Time="TPVExitTimeTime" DisableToolbar="true" />
+        <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" DisableToolbar="true" />
     </MudItem>
 </MudGrid>
 <hr />
@@ -260,7 +265,14 @@
         await DeleteItem.InvokeAsync("Cancel");
     }
 
-  
+    private void NowButton()
+    {
+        AtaTimeDate = DateTime.Now;
+        AtaTimeTime = DateTime.Now.TimeOfDay;
+        StateHasChanged();
+    }
+
+
 
     protected async override void OnInitialized()
     {
@@ -470,5 +482,14 @@
             return trucktype;
         return trucktype.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
+
+    //private MudAutocomplete<string> _autoComplete { get; set; }
+
+    //private async Task resetNA(string value)
+    //{
+    //    value = "";
+    //    await _autoComplete.Clear()
+    //    StateHasChanged();
+    //}
 
 }

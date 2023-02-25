@@ -189,6 +189,9 @@
   <data name="lbEntrybyWH" xml:space="preserve">
     <value>Entryby WH</value>
   </data>
+  <data name="lberrorDateTime" xml:space="preserve">
+    <value>Wrong time format</value>
+  </data>
   <data name="lbEtdDate" xml:space="preserve">
     <value>ETD date</value>
   </data>
@@ -212,6 +215,9 @@
   </data>
   <data name="lbNew" xml:space="preserve">
     <value>New</value>
+  </data>
+  <data name="lbNow" xml:space="preserve">
+    <value>Now</value>
   </data>
   <data name="lbPickingdate" xml:space="preserve">
     <value>Picking date</value>
