@@ -38,7 +38,7 @@ else
                         <MudItem xs="1">
                             <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Filled.ViewColumn" 
                             Style="text-transform:none ; margin-top:25px!important" OnClick="ShowColumsForSelection" Size="Size.Small">
-                                Columns
+                                @Loc["lbColumns"]
                             </MudButton>
                         </MudItem>
                         <MudItem xs="1">
@@ -50,7 +50,7 @@ else
                         <MudItem xs="2">
                             <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Filled.AddToDrive"
                                    Style="text-transform:none ; margin-top:25px!important" OnClick="NewItemsCarAdviceMain" Size="Size.Small">
-                               New 
+                               @Loc["lbNew"] 
                             </MudButton>
                         </MudItem>
                         <MudItem xs="3">
@@ -64,7 +64,7 @@ else
                         </MudItem>
                    
                         <MudItem xs="4">
-                            <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                            <MudTextField @bind-Value="_searchString" Placeholder=@Loc["lbSearch"] Adornment="Adornment.Start" Immediate="true"
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                         </MudItem>
                     </MudGrid>
@@ -82,9 +82,20 @@ else
                         </CellTemplate>
                     </Column>
      
-                    @foreach (var ii in listGridColums)
+
+                    @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
                     {
-                      <Column T="CarAdviceMainTable" Style="width:10px!important" Field="@ii.fieldName" Title="@ii.fieldTitle" Sortable="ii.filedSortable" Filterable="ii.filedfirterable" Hidden="ii.filedHiden"  />
+                        @foreach (var ii in listGridColums)
+                        {
+                            <Column T="CarAdviceMainTable" Style="width:10px!important" Field="@ii.fieldName" Title="@ii.plHeader" Sortable="ii.filedSortable" Filterable="ii.filedfirterable" Hidden="ii.filedHiden"  />
+                        }
+                    }
+                    else
+                    {
+                        @foreach (var ii in listGridColums)
+                        {
+                            <Column T="CarAdviceMainTable" Style="width:10px!important" Field="@ii.fieldName" Title="@ii.fieldName" Sortable="ii.filedSortable" Filterable="ii.filedfirterable" Hidden="ii.filedHiden" />
+                        }
                     }
                 </Columns>
                 <PagerContent>
@@ -230,8 +241,8 @@ else
           // Cancelled - czerwony 
           if (x.PickingStatus == "Cancelled")
               return "background-color:#e65e69";
-         
-              return "";
+
+          return "";
 
       };
 
@@ -500,7 +511,7 @@ else
 
         string linkUserParameters = "/api/GlobalAppUsersParameters/" + UserName;
 
-      
+
         userParametersDates = await httpClient.GetFromJsonAsync<GlobalAppUsersParameters>(linkUserParameters);
 
         if (userParametersDates == null)
@@ -515,7 +526,7 @@ else
         }
 
         _dateRange = new DateRange(ldStart, ldEnd);
-        
+
         string linkLoad = "/api/CarAdviceMainTables/GetbyDate/" + Helpers.ChangeDateToString(ldStart) + "/" + Helpers.ChangeDateToString(ldEnd);
         ListCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceMainTable>>(linkLoad);
         string linkcoluser = "/api/CarAdviceMainPlanColums/MainPlanComumByUser/" + UserName;
@@ -526,11 +537,12 @@ else
 
         foreach (var columienka in columsForDisplayListDb)
         {
-            listGridColums.Add(new gridColums() { fieldName = columienka.MainScreenColumn, fieldTitle = columienka.MainScreenColumn, filedfirterable = true, filedSortable = true, filedHiden = columienka.Hidden });    
+            listGridColums.Add(new gridColums() { fieldName = columienka.MainScreenColumn,fieldTitle = columienka.MainScreenColumn, 
+                filedfirterable = true, filedSortable = true, filedHiden = columienka.Hidden , plHeader = columienka.plHeader});    
 
         }
 
-  
+
         #region setupColumsVisibility
         hiddenId = verificationColumsVisibility("Id");
         hiddenAdviceDate = verificationColumsVisibility("AdviceDate");
@@ -562,8 +574,8 @@ else
         hiddenPickingTime = verificationColumsVisibility("PickingTime");
         hiddenScannedTime = verificationColumsVisibility("ScannedTime");
         #endregion setupColumsVisibility
-    
-        
+
+
     }
 
     private bool verificationColumsVisibility(string comumnName)
@@ -593,6 +605,7 @@ else
         public bool filedfirterable { get; set; }
         public bool filedHiden { get; set; }
         public int orderNumber { get; set; }
+        public string plHeader { get; set; }
     }
 
 }

@@ -4,6 +4,7 @@
 @using SCMDWH.Shared.Models;
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
+@inject IStringLocalizer<CultureExample2> Loc
 
 <style>
     .mud-input {
@@ -22,7 +23,7 @@
 <MudGrid Style="background-color:#faf6f5!important">
      <MudItem xs="12">
 
-        <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">Security entry info </MudAlert>
+        <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbSecurityEntryInfo"] </MudAlert>
 
      </MudItem>
     <MudItem xs="2">
@@ -30,37 +31,37 @@
     </MudItem>
 
     <MudItem xs="2">
-        <MudDatePicker Label="Ata date" @bind-Date="AtaTimeDate" DisableToolbar="true" />
+        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" />
 
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label="Ata  time" AmPm="true" @bind-Time="AtaTimeTime" DisableToolbar="true" />
+        <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="true" @bind-Time="AtaTimeTime" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Quality " @bind-Value="CarAdviceMainTableWHEdit.Quality" SearchFunc="@SearchQuality"
+        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbQuality"] @bind-Value="CarAdviceMainTableWHEdit.Quality" SearchFunc="@SearchQuality"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
     <MudItem xs="2">
-        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Tuck type " @bind-Value="CarAdviceMainTableWHEdit.TruckType" SearchFunc="@SearchTuruckType"
+        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbTruckType"] @bind-Value="CarAdviceMainTableWHEdit.TruckType" SearchFunc="@SearchTuruckType"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
 @*    <MudItem xs="2">
         <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesWh" Label="Truck plates WH" Variant="Variant.Text"></MudTextField>
     </MudItem>*@
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesS" Label="Truck plates S S." Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesS" Label=@Loc["lbPlates"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.DriverS" Label="Driver S." Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.DriverS" Label=@Loc["lbDriverS"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudDatePicker Label="TPV Entry date" @bind-Date="TPVEntryTimeDate" DisableToolbar="true" />
+        <MudDatePicker Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label="TPV Entry time" AmPm="true" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" />
+        <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="true" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Label="Call by" Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Label=@Loc["lbCallBy"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
         <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.EntryByS" Label="Entry by S" Variant="Variant.Text"></MudTextField>
@@ -69,9 +70,7 @@
         <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.RemarksS" Label="Remarks S." Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="12">
-
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">Security exit info </MudAlert>
-
     </MudItem>
     <MudItem xs="2">
         <MudDatePicker Label="TPV Exit date" @bind-Date="TPVExitTimeDate" DisableToolbar="true" />

@@ -4,6 +4,7 @@
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
+@inject IStringLocalizer<CultureExample2> Loc
 <style>
     .mud-input {
         height: 0.6rem !important;
@@ -22,38 +23,38 @@
 
 <MudGrid Style="background-color:#f8faf5!important">
     <MudItem xs="12">
-        <MudAlert Severity="Severity.Normal" Style="background-color:#f8faf5!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">General warehouse infoprmation</MudAlert>
+        <MudAlert Severity="Severity.Normal" Style="background-color:#f8faf5!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>
     </MudItem>
     <MudItem xs="2">
         <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Id" Label="Nr" Variant="Variant.Text" ReadOnly="true"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Shipment" Label="Shipment" Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Shipment" Label=@Loc["lbShipment"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Reference" Label="Reference" Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Reference" Label=@Loc["lbReference"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudDatePicker Label="Ad. Date" @bind-Date=" CarAdviceMainTableWHEdit.AdviceDate" DisableToolbar="true" />
+        <MudDatePicker Label=@Loc["lbAdDate"] @bind-Date=" CarAdviceMainTableWHEdit.AdviceDate" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudDatePicker Label="Etd date" @bind-Date="EtdTimeDate" DisableToolbar="true" />
+        <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="EtdTimeDate" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label="Etd time" AmPm="true" @bind-Time="EtdTimeTime" DisableToolbar="true" />
+        <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="true" @bind-Time="EtdTimeTime" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="1">
-        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Destination " @bind-Value="CarAdviceMainTableWHEdit.Destination" SearchFunc="@SearchDestination"
+        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbDestination"] @bind-Value="CarAdviceMainTableWHEdit.Destination" SearchFunc="@SearchDestination"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
     <MudItem xs="2">
-        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Curriers " @bind-Value="CarAdviceMainTableWHEdit.Forwarder" SearchFunc="@SearchCurriers"
+        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbCurriers"] @bind-Value="CarAdviceMainTableWHEdit.Forwarder" SearchFunc="@SearchCurriers"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
 
     </MudItem>
 
     <MudItem xs="2">
-        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Client " @bind-Value="CarAdviceMainTableWHEdit.Client" SearchFunc="@SearchClient"
+        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbClient"] @bind-Value="CarAdviceMainTableWHEdit.Client" SearchFunc="@SearchClient"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
     <MudItem xs="7">
@@ -63,50 +64,50 @@
 
 <MudGrid Style="background-color:#f0fafa!important">
     <MudItem xs="12">
-        <MudAlert Severity="Severity.Normal" Style="background-color:#f0fafa!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">Warehouse information</MudAlert>
+        <MudAlert Severity="Severity.Normal" Style="background-color:#f0fafa!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbWarehouseinformation"]</MudAlert>
 
     </MudItem>
 
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesWh" Label="Truck plates WH" Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesWh" Label=@Loc["lbTruckplatesWH"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.DriverWh" Label="Driver WH" Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.DriverWh" Label=@Loc["lbDriverWH"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudAutocomplete Class="KombiTest" Margin="Margin.None" Dense="true" T="string" Label="Picking status" @bind-Value="CarAdviceMainTableWHEdit.PickingStatus" SearchFunc="@SearchPickingStatus"
+        <MudAutocomplete Class="KombiTest" Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbPickingstatus"] @bind-Value="CarAdviceMainTableWHEdit.PickingStatus" SearchFunc="@SearchPickingStatus"
                          ResetValueOnEmptyText="@resetValueOnEmptyText"  />
     </MudItem>
     <MudItem xs="2">
-        <MudDatePicker Label="Picking date" @bind-Date="PickingTimeDate" DisableToolbar="true" />
+        <MudDatePicker Label=@Loc["lbPickingdate"] @bind-Date="PickingTimeDate" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label="Picking  time" AmPm="true" @bind-Time="PickingTimeTime" DisableToolbar="true" />
+        <MudTimePicker Label=@Loc["lbPickingtime"] AmPm="true" @bind-Time="PickingTimeTime" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudDatePicker Label="Scanned date" @bind-Date="ScannedTimeDate" DisableToolbar="true" />
+        <MudDatePicker Label=@Loc["lbScanneddate"] @bind-Date="ScannedTimeDate" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label="Scanned time" AmPm="true" @bind-Time="ScannedTimeTime" DisableToolbar="true" />
+        <MudTimePicker Label=@Loc["lbScannedtime"] AmPm="true" @bind-Time="ScannedTimeTime" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="3">
-        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Reason " @bind-Value="CarAdviceMainTableWHEdit.FgDelayReason" SearchFunc="@SearchFGDelayReason"
+        <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbReason"] @bind-Value="CarAdviceMainTableWHEdit.FgDelayReason" SearchFunc="@SearchFGDelayReason"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
     <MudItem xs="1">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.LoadingDock" Label="Dock" Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.LoadingDock" Label=@Loc["lbDock"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudDatePicker Label="left dock date" @bind-Date="LeftDockTimeDate" DisableToolbar="true" />
+        <MudDatePicker Label=@Loc["lbleftdockdate"] @bind-Date="LeftDockTimeDate" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label="Left dock time" AmPm="true" @bind-Time="LeftDockTimeTime" DisableToolbar="true" />
+        <MudTimePicker Label=@Loc["leftdocktime"] AmPm="true" @bind-Time="LeftDockTimeTime" DisableToolbar="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.EntryByWh" Label="Rntry by WH" Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.EntryByWh" Label=@Loc["lbEntrybyWH"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.RemarksWh" Label="Remark WH" Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.RemarksWh" Label=@Loc["lbRemarkWH"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="10">
        
@@ -114,25 +115,25 @@
 </MudGrid>
 
 
-<MudAlert Severity="Severity.Normal" Style="background-color:#fcf0ed!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">Security entry/exit info </MudAlert>
+<MudAlert Severity="Severity.Normal" Style="background-color:#fcf0ed!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbSecurityinfo"]</MudAlert>
 
 <hr />
 
 <div class="container-fluid" style="font-size:xx-small!important">
     <div class="row row-cols-6">
-        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" Ata:  @AtaTimeDate" /> </div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Quality:  @CarAdviceMainTableWHEdit.Quality " /></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="TruckType: @CarAdviceMainTableWHEdit.TruckType" /> </div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" Plates:  @CarAdviceMainTableWHEdit.TruckPlatesS" /> </div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" Driver S:  @CarAdviceMainTableWHEdit.DriverS " /></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" En.Time:  @CarAdviceMainTableWHEdit.TpvEnterTime " /></div>
+        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" @Loc["lbAta"]:  @AtaTimeDate" /> </div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbQuality"]:  @CarAdviceMainTableWHEdit.Quality " /></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbTruckType"]: @CarAdviceMainTableWHEdit.TruckType" /> </div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" @Loc["lbPlates"]:  @CarAdviceMainTableWHEdit.TruckPlatesS" /> </div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" @Loc["lbDriverS"]:  @CarAdviceMainTableWHEdit.DriverS " /></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" @Loc["lbEnTime"]:  @CarAdviceMainTableWHEdit.TpvEnterTime " /></div>
     </div>
 
     <div class="row row-cols-4">
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" CallBy:  @CarAdviceMainTableWHEdit.CallBy" /> </div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="EntryByS:  @CarAdviceMainTableWHEdit.EntryByS " /> </div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="RemarksS:  @CarAdviceMainTableWHEdit.RemarksS " /></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="TpvExitTime:  @CarAdviceMainTableWHEdit.TpvExitTime " /></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" @Loc["lbCallBy"]:  @CarAdviceMainTableWHEdit.CallBy" /> </div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbEntryByS"]:  @CarAdviceMainTableWHEdit.EntryByS " /> </div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbRemarksS"]:  @CarAdviceMainTableWHEdit.RemarksS " /></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbTpvExitTime"]:  @CarAdviceMainTableWHEdit.TpvExitTime " /></div>
     </div>
 </div>
 <hr />

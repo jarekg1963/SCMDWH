@@ -123,31 +123,157 @@
   <data name="HelloWorld" xml:space="preserve">
     <value>Hello world</value>
   </data>
+  <data name="lbAdDate" xml:space="preserve">
+    <value>--AdDate</value>
+  </data>
+  <data name="lbAta" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="lbAtaDateTime" xml:space="preserve">
+    <value>--Ata czas</value>
+  </data>
+  <data name="lbAtaTime" xml:space="preserve">
+    <value>Ata godziny </value>
+  </data>
+  <data name="lbAtaTimeDate" xml:space="preserve">
+    <value>--Ata </value>
+  </data>
+  <data name="lbCallBy" xml:space="preserve">
+    <value>Wywołujący </value>
+  </data>
   <data name="lbCarAdvice" xml:space="preserve">
     <value>Samochody </value>
   </data>
   <data name="lbCarriers" xml:space="preserve">
     <value>Przewoźnicy</value>
   </data>
+  <data name="lbClient" xml:space="preserve">
+    <value>Klient</value>
+  </data>
+  <data name="lbColumns" xml:space="preserve">
+    <value>Kolumny </value>
+  </data>
+  <data name="lbDestination" xml:space="preserve">
+    <value>--Dest</value>
+  </data>
   <data name="lbDictionary" xml:space="preserve">
     <value>Słowniki</value>
+  </data>
+  <data name="lbDock" xml:space="preserve">
+    <value>Dok</value>
+  </data>
+  <data name="lbDriverS" xml:space="preserve">
+    <value>Kierowca och.</value>
+  </data>
+  <data name="lbDriverWH" xml:space="preserve">
+    <value>Kierowca-magazyn</value>
+  </data>
+  <data name="lbEnTime" xml:space="preserve">
+    <value>Godzina wjazdu</value>
+  </data>
+  <data name="lbEntryByS" xml:space="preserve">
+    <value>Wjazd - ochrona</value>
+  </data>
+  <data name="lbEntrybyWH" xml:space="preserve">
+    <value>--lbEntrybyWH</value>
+  </data>
+  <data name="lbEtdDate" xml:space="preserve">
+    <value>--ETD Date</value>
+  </data>
+  <data name="lbEtdTime" xml:space="preserve">
+    <value>--ETD time</value>
+  </data>
+  <data name="lbGeneralWarehouseInfoprmation" xml:space="preserve">
+    <value>Magazyn wyrobów gotowych</value>
   </data>
   <data name="lbHome" xml:space="preserve">
     <value>Start</value>
   </data>
+  <data name="lbleftdockdate" xml:space="preserve">
+    <value>Data opuszczenia doku</value>
+  </data>
   <data name="lbLoggeduser" xml:space="preserve">
     <value>Uzytkownik</value>
+  </data>
+  <data name="lbNew" xml:space="preserve">
+    <value>Nowy</value>
+  </data>
+  <data name="lbPickingdate" xml:space="preserve">
+    <value>Data załadunku</value>
+  </data>
+  <data name="lbPickingstatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="lbPickingtime" xml:space="preserve">
+    <value>Godzina załadunku</value>
   </data>
   <data name="lbPlan" xml:space="preserve">
     <value>Lista aut</value>
   </data>
+  <data name="lbPlates" xml:space="preserve">
+    <value>Tablice</value>
+  </data>
+  <data name="lbQuality" xml:space="preserve">
+    <value>Jakość</value>
+  </data>
+  <data name="lbReason" xml:space="preserve">
+    <value>Przyczyna</value>
+  </data>
+  <data name="lbReference" xml:space="preserve">
+    <value>Numer</value>
+  </data>
+  <data name="lbRemarksS" xml:space="preserve">
+    <value>Uwagi ochrona</value>
+  </data>
+  <data name="lbRemarkWH" xml:space="preserve">
+    <value>Magazyn uwagi</value>
+  </data>
   <data name="lbRoles" xml:space="preserve">
     <value>Role</value>
+  </data>
+  <data name="lbScanneddate" xml:space="preserve">
+    <value>Data skanowania</value>
+  </data>
+  <data name="lbScannedtime" xml:space="preserve">
+    <value>Godzina skanowania</value>
+  </data>
+  <data name="lbSearch" xml:space="preserve">
+    <value>Szukaj</value>
   </data>
   <data name="lbSecurity" xml:space="preserve">
     <value>Ochrona</value>
   </data>
+  <data name="lbSecurityEntryInfo" xml:space="preserve">
+    <value>Informacje Ochrony</value>
+  </data>
+  <data name="lbSecurityinfo" xml:space="preserve">
+    <value>Informacje ochrony</value>
+  </data>
+  <data name="lbShipment" xml:space="preserve">
+    <value>Wysyłka</value>
+  </data>
+  <data name="lbTPVEntrydate" xml:space="preserve">
+    <value>Data wjazdu</value>
+  </data>
+  <data name="lbTPVEntrytime" xml:space="preserve">
+    <value>Czas wjazdu</value>
+  </data>
+  <data name="lbTpvExitTime" xml:space="preserve">
+    <value>Wyjazd z TPV</value>
+  </data>
+  <data name="lbTruckplatesWH" xml:space="preserve">
+    <value>Tablice-magazyn</value>
+  </data>
+  <data name="lbTruckType" xml:space="preserve">
+    <value>Samochód</value>
+  </data>
   <data name="lbWarehouse" xml:space="preserve">
     <value>Magazyn</value>
+  </data>
+  <data name="lbWarehouseinformation" xml:space="preserve">
+    <value>Magazyn dane wysyłki </value>
+  </data>
+  <data name="leftdocktime" xml:space="preserve">
+    <value>Godzina opuszcz. doku</value>
   </data>
 </root>

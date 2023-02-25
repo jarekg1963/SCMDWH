@@ -19,5 +19,7 @@ namespace SCMDWH.Shared.Models
         public int?  OrderColumn { get; set; }
 
         public int? ColumnWidth { get; set; }
+
+        public string? plHeader { get; set; }
     }
 }

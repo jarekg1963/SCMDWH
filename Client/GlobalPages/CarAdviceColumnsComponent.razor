@@ -30,6 +30,7 @@
         <MudTh class="thcs">Hidden </MudTh>
         <MudTh class="thcs">Order Time</MudTh>
         <MudTh class="thcs">Width</MudTh>
+        <MudTh class="thcs">PL-Name</MudTh>
         <MudTh class="thcs">Operations</MudTh>
     </HeaderContent>
     <RowTemplate>
@@ -44,6 +45,8 @@
         </MudTd>
         <MudTd DataLabel="Order">@context.OrderColumn</MudTd>
         <MudTd DataLabel="Remark">@context.ColumnWidth</MudTd>
+        <MudTd DataLabel="Remark">@context.plHeader</MudTd>
+
         <MudTd DataLabel="Methods">
             <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
           @*  <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />*@
