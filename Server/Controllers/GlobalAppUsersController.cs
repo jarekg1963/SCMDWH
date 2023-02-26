@@ -38,8 +38,6 @@ namespace SCMDWH.Server.Controllers
         }
 
 
-        #endregion
-
 
 
 
