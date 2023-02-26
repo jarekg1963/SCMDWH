@@ -21,6 +21,18 @@ namespace SCMDWH.Server.Controllers
             _context = context;
         }
 
+        [HttpGet("GetWHGlobalAppUserRoles")]
+
+        public async Task<ActionResult<IEnumerable<string>>> GetWHGlobalAppUserRoles()
+        {
+            if (_context.GlobalAppUserRoles == null)
+            {
+                return NotFound();
+            }
+            return await _context.GlobalAppUserRoles.Where(x => x.RoleName == "WH").Select(c => c.UserName).ToListAsync();
+
+        }
+
         // GET: api/GlobalAppUserRoles
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GlobalAppUserRoles>>> GetGlobalAppUserRoles()
