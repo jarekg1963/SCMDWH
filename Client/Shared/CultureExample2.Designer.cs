@@ -547,7 +547,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Użytkowani i hasło  .
+        ///   Looks up a localized string similar to Użytkowanik i hasło  .
         /// </summary>
         public static string lbSignIn {
             get {
@@ -628,7 +628,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Użytkowanik.
+        ///   Looks up a localized string similar to Użytkownik.
         /// </summary>
         public static string lbusername {
             get {

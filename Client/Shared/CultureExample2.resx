@@ -280,7 +280,7 @@
     <value>Wysyłka</value>
   </data>
   <data name="lbSignIn" xml:space="preserve">
-    <value>Użytkowani i hasło  </value>
+    <value>Użytkowanik i hasło  </value>
   </data>
   <data name="lbSingIn" xml:space="preserve">
     <value>Wejście</value>
@@ -307,7 +307,7 @@
     <value>Samochód</value>
   </data>
   <data name="lbusername" xml:space="preserve">
-    <value>Użytkowanik</value>
+    <value>Użytkownik</value>
   </data>
   <data name="lbWarehouse" xml:space="preserve">
     <value>Magazyn</value>
