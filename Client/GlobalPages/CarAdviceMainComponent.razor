@@ -12,6 +12,10 @@
 
 
 <style>
+
+    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
+        font-size: xx-small!important;
+    }
     .mud-table-cell {
         padding: 0px !important;
         font-size: small !important;
@@ -30,7 +34,7 @@ else
     <MudTabs  Elevation="2" Rounded="true"  Centered="true" Class="my-6" Color="Color.Dark" @ref="tabs" >
         <MudTabPanel Icon="@Icons.Material.Filled.Api" Style="width:550px" Text=@Loc["lbCarAdvice"] BadgeData='"!"' BadgeColor="Color.Error" @ref="panel01" ID="@("pn_one")"
                  OnClick="Tab0Active">
-            <MudDataGrid  T="CarAdviceMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+            <MudDataGrid   T="CarAdviceMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                      Height="35em" RowsPerPage="30" MultiSelection="false" Items="@ListCAMainTable" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
                      Hideable="true" RowClick="@RowClicked" RowStyleFunc="@_rowStyleFunc">
                 <ToolBarContent >
@@ -72,16 +76,6 @@ else
                 <ColGroup>
                 </ColGroup>
                 <Columns>
-
-                    <Column T="CarAdviceMainTable" Field="Id">
-                        <CellTemplate>
-                            @*<MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Primary"
-                                   StartIcon="@Icons.Material.Filled.Edit" OnClick="@(() => this.Click(context.Item))">
-                               @context.Item.Id
-                            </MudButton>*@
-                            @context.Item.Id
-                        </CellTemplate>
-                    </Column>
      
 
                     @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
