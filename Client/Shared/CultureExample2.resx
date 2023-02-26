@@ -216,6 +216,9 @@
   <data name="lbNow" xml:space="preserve">
     <value>Teraz</value>
   </data>
+  <data name="lbPassword" xml:space="preserve">
+    <value>Hasło</value>
+  </data>
   <data name="lbPickingdate" xml:space="preserve">
     <value>Data załadunku</value>
   </data>
@@ -276,6 +279,12 @@
   <data name="lbShipment" xml:space="preserve">
     <value>Wysyłka</value>
   </data>
+  <data name="lbSignIn" xml:space="preserve">
+    <value>Użytkowani i hasło  </value>
+  </data>
+  <data name="lbSingIn" xml:space="preserve">
+    <value>Wejście</value>
+  </data>
   <data name="lbStatuscodes" xml:space="preserve">
     <value>Kody status</value>
   </data>
@@ -297,11 +306,17 @@
   <data name="lbTruckType" xml:space="preserve">
     <value>Samochód</value>
   </data>
+  <data name="lbusername" xml:space="preserve">
+    <value>Użytkowanik</value>
+  </data>
   <data name="lbWarehouse" xml:space="preserve">
     <value>Magazyn</value>
   </data>
   <data name="lbWarehouseinformation" xml:space="preserve">
     <value>Magazyn dane wysyłki </value>
+  </data>
+  <data name="lbWrongpassuser" xml:space="preserve">
+    <value>Złe hasło lub nazwa użytkowanika</value>
   </data>
   <data name="leftdocktime" xml:space="preserve">
     <value>Godzina opuszcz. doku</value>

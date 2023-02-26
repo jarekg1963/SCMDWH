@@ -219,6 +219,9 @@
   <data name="lbNow" xml:space="preserve">
     <value>Now</value>
   </data>
+  <data name="lbPassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
   <data name="lbPickingdate" xml:space="preserve">
     <value>Picking date</value>
   </data>
@@ -279,6 +282,12 @@
   <data name="lbShipment" xml:space="preserve">
     <value>Shipment</value>
   </data>
+  <data name="lbSignIn" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="lbSingIn" xml:space="preserve">
+    <value>SIGN IN</value>
+  </data>
   <data name="lbStatuscodes" xml:space="preserve">
     <value>Status codes</value>
   </data>
@@ -300,11 +309,17 @@
   <data name="lbTruckType" xml:space="preserve">
     <value>Truck type</value>
   </data>
+  <data name="lbusername" xml:space="preserve">
+    <value>User name</value>
+  </data>
   <data name="lbWarehouse" xml:space="preserve">
     <value>Warehouse</value>
   </data>
   <data name="lbWarehouseinformation" xml:space="preserve">
     <value>Warehouse information</value>
+  </data>
+  <data name="lbWrongpassuser" xml:space="preserve">
+    <value>Wrong password or username </value>
   </data>
   <data name="leftdocktime" xml:space="preserve">
     <value>Left dock time</value>

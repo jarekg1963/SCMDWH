@@ -358,6 +358,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hasło.
+        /// </summary>
+        public static string lbPassword {
+            get {
+                return ResourceManager.GetString("lbPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data załadunku.
         /// </summary>
         public static string lbPickingdate {
@@ -538,6 +547,24 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Użytkowani i hasło  .
+        /// </summary>
+        public static string lbSignIn {
+            get {
+                return ResourceManager.GetString("lbSignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wejście.
+        /// </summary>
+        public static string lbSingIn {
+            get {
+                return ResourceManager.GetString("lbSingIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kody status.
         /// </summary>
         public static string lbStatuscodes {
@@ -601,6 +628,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Użytkowanik.
+        /// </summary>
+        public static string lbusername {
+            get {
+                return ResourceManager.GetString("lbusername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Magazyn.
         /// </summary>
         public static string lbWarehouse {
@@ -615,6 +651,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbWarehouseinformation {
             get {
                 return ResourceManager.GetString("lbWarehouseinformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Złe hasło lub nazwa użytkowanika.
+        /// </summary>
+        public static string lbWrongpassuser {
+            get {
+                return ResourceManager.GetString("lbWrongpassuser", resourceCulture);
             }
         }
         
