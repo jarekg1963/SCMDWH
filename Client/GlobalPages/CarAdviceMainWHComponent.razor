@@ -250,8 +250,8 @@
 
 
         //---------------------------------------------
-      
-      
+
+
         // Scanned Time
         if (ScannedTimeDate != null)
         {
@@ -262,7 +262,7 @@
 
         //  LeftTheDockTime
 
-        
+
 
 
         if (EtdTimeDate != null)
@@ -308,11 +308,12 @@
 
     private async Task DeleteWh()
     {
-
+        string zmLbDelete = Loc["lbDelete"];
+        string zmLbWarningDelete = Loc["lbDoYouRealyDelete"];
 
         var parameters = new DialogParameters();
-        parameters.Add("ContentText", $"Do you really want to delete Item {Id}? This process cannot be undone.");
-        parameters.Add("ButtonText", "Delete");
+        parameters.Add("ContentText", zmLbWarningDelete);
+        parameters.Add("ButtonText", zmLbDelete);
         parameters.Add("Color", Color.Error);
         var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
         var dialog = DialogService.Show<DialogUserDeleteComponent>("Delete", parameters, options);

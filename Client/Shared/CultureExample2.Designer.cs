@@ -61,24 +61,6 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Polskie default .
-        /// </summary>
-        public static string Greeting {
-            get {
-                return ResourceManager.GetString("Greeting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hello world.
-        /// </summary>
-        public static string HelloWorld {
-            get {
-                return ResourceManager.GetString("HelloWorld", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Czas awizacji.
         /// </summary>
         public static string lbAdDate {
@@ -97,7 +79,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --Ata czas.
+        ///   Looks up a localized string similar to Ata Czas.
         /// </summary>
         public static string lbAtaDateTime {
             get {
@@ -115,7 +97,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --Ata .
+        ///   Looks up a localized string similar to Ata.
         /// </summary>
         public static string lbAtaTimeDate {
             get {
@@ -196,7 +178,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --Dest.
+        ///   Looks up a localized string similar to Kraj.
         /// </summary>
         public static string lbDestination {
             get {
@@ -219,6 +201,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbDock {
             get {
                 return ResourceManager.GetString("lbDock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Czy na prawdę chcesz usunąć ? Ta czynnośćjest nieodwracalna !!!.
+        /// </summary>
+        public static string lbDoYouRealyDelete {
+            get {
+                return ResourceManager.GetString("lbDoYouRealyDelete", resourceCulture);
             }
         }
         
@@ -259,7 +250,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --lbEntrybyWH.
+        ///   Looks up a localized string similar to Magazynier.
         /// </summary>
         public static string lbEntrybyWH {
             get {
@@ -277,7 +268,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --ETD Date.
+        ///   Looks up a localized string similar to ETD Dzień.
         /// </summary>
         public static string lbEtdDate {
             get {
@@ -286,7 +277,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --ETD time.
+        ///   Looks up a localized string similar to ETD Godzina.
         /// </summary>
         public static string lbEtdTime {
             get {

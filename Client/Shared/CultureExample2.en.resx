@@ -120,12 +120,6 @@
   <data name="Dictionary" xml:space="preserve">
     <value>Dictionary</value>
   </data>
-  <data name="Greeting" xml:space="preserve">
-    <value>Angielskie po wyborze </value>
-  </data>
-  <data name="HelloWorld" xml:space="preserve">
-    <value>Viva Espania</value>
-  </data>
   <data name="lbAdDate" xml:space="preserve">
     <value>AdDate</value>
   </data>
@@ -173,6 +167,9 @@
   </data>
   <data name="lbDock" xml:space="preserve">
     <value>Dock</value>
+  </data>
+  <data name="lbDoYouRealyDelete" xml:space="preserve">
+    <value>Do you really want to delete Item ?This process cannot be undone.</value>
   </data>
   <data name="lbDriverS" xml:space="preserve">
     <value>Driver Sec.</value>
