@@ -7,6 +7,20 @@
 @inject IStringLocalizer<CultureExample2> Loc
 
 <style>
+
+    .demo-content {
+        padding: 1px;
+        font-size: 10px;
+        background: #dbdfe5;
+        margin-bottom: 1px;
+        font-weight: 500;
+    }
+
+        .demo-content.bg-alt {
+            background: #dbdfe5;
+            font-size: 15px;
+        }
+
     .mud-input {
         height: 0.6rem !important;
         font: 100;
@@ -90,34 +104,164 @@
 <MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>
 <hr />
 
+<div class="container">
+    <div class="row " style="--bs-gutter-x: 0.5rem!important">
+            <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbShipment"]</div>
+            </div>
+            <div class="col-lg-2">
+            <div class="demo-content ">@Loc["lbReference"]</div>
+            </div>
+            <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbAdDate"]</div>
+            </div>
+            <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbEtdDate"]</div>
+            </div>
+            <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbDestination"]</div>
+            </div>
+            <div class="col-lg-2">
+                <div class="demo-content">@Loc["lbCarriers"]</div>
+            </div>
+        </div>
+    <div class="row " style="--bs-gutter-x: 0.5rem!important">
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Shipment</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Reference</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.AdviceDate</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Etd</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Destination</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Forwarder</div>
+        </div>
+    </div>
+    <div class="row " style="--bs-gutter-x: 0.5rem!important">
+        <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbClient"]</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content ">@Loc["lbPlates"]</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbDriverWH"]</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbPickingstatus"]</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbPickingtime"]</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbScannedtime"]</div>
+        </div>
+    </div>
+    <div class="row " style="--bs-gutter-x: 0.5rem!important">
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Client</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.TruckPlatesWh</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.DriverWh</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.PickingStatus</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.PickingTime</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.ScannedTime</div>
+        </div>
+    </div>
+    <div class="row " style="--bs-gutter-x: 0.5rem!important">
+        <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbReason"]</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content ">@Loc["lbDock"]</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbleftdockdate"]</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbEntryByS"]</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbRemarkWH"]</div>
+        </div>
+    
+    </div>
+    <div class="row " style="--bs-gutter-x: 0.5rem!important">
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.FgDelayReason</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.LoadingDock</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.LeftTheDockTime</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.EntryByS</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.RemarksWh</div>
+        </div>
 
+    </div>
+  </div>
+
+
+@*
 <div class="container-fluid">
     <div class="row row-cols-6">
         <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbShipment"]: @CarAdviceMainTableWHEdit.Shipment "></div>
         <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbReference"]:  @CarAdviceMainTableWHEdit.Reference "></div>
-        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Ad.  @CarAdviceMainTableWHEdit.AdviceDate "></div>
-        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Etd:  @CarAdviceMainTableWHEdit.Etd "></div>
-        <div class="col">   <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Dest.  @CarAdviceMainTableWHEdit.Destination "></div>
-        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Forw.:  @CarAdviceMainTableWHEdit.Forwarder "></div>
+        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbAdDate"].  @CarAdviceMainTableWHEdit.AdviceDate "></div>
+        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbEtdDate"]:  @CarAdviceMainTableWHEdit.Etd "></div>
+        <div class="col">   <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbDestination"].  @CarAdviceMainTableWHEdit.Destination "></div>
+        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbCarriers"].:  @CarAdviceMainTableWHEdit.Forwarder "></div>
+    </div>
+
+    <div class="row row-cols-6">
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbShipment"]: @CarAdviceMainTableWHEdit.Shipment "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbReference"]:  @CarAdviceMainTableWHEdit.Reference "></div>
+        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbAdDate"].  @CarAdviceMainTableWHEdit.AdviceDate "></div>
+        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbEtdDate"]:  @CarAdviceMainTableWHEdit.Etd "></div>
+        <div class="col">   <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbDestination"].  @CarAdviceMainTableWHEdit.Destination "></div>
+        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbCarriers"].:  @CarAdviceMainTableWHEdit.Forwarder "></div>
     </div>
 
     <div class="row row-cols-6">
         <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbClient"]:  @CarAdviceMainTableWHEdit.Client "></div>
         <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbPlates"]:  @CarAdviceMainTableWHEdit.TruckPlatesWh "></div>
-        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Driver:  @CarAdviceMainTableWHEdit.DriverWh "></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Status:  @CarAdviceMainTableWHEdit.PickingStatus "></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="P.Time:  @CarAdviceMainTableWHEdit.PickingTime "></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="S.Time:  @CarAdviceMainTableWHEdit.ScannedTime "></div>
+        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbDriverWH"]:  @CarAdviceMainTableWHEdit.DriverWh "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbPickingstatus"]:  @CarAdviceMainTableWHEdit.PickingStatus "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbPickingtime"]  @CarAdviceMainTableWHEdit.PickingTime "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbScannedtime"]  @CarAdviceMainTableWHEdit.ScannedTime "></div>
     </div>
     <div class="row row-cols-6">
-        <div class="col">  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Delay:  @CarAdviceMainTableWHEdit.FgDelayReason "></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Dock:  @CarAdviceMainTableWHEdit.LoadingDock "></div>
-        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="left.Time:  @CarAdviceMainTableWHEdit.LeftTheDockTime "></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Entry:  @CarAdviceMainTableWHEdit.EntryByS "></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="Status:  @CarAdviceMainTableWHEdit.RemarksWh "></div>
+        <div class="col">
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbReason"] @CarAdviceMainTableWHEdit.FgDelayReason "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbDock"]:  @CarAdviceMainTableWHEdit.LoadingDock "></div>
+        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbleftdockdate"]  @CarAdviceMainTableWHEdit.LeftTheDockTime "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbEntryByS"]  @CarAdviceMainTableWHEdit.EntryByS "></div>
+        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbRemarkWH"]  @CarAdviceMainTableWHEdit.RemarksWh "></div>
        
     </div>
-</div>
+</div>*@
 <hr />
 
 <MudGrid>
