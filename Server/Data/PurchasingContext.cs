@@ -14,9 +14,6 @@ public partial class PurchasingContext : DbContext
     {
     }
 
-
- 
-
     public virtual DbSet<ErrorDataLog> ErrorDataLog { get; set; }
     public virtual DbSet<CarAdviceMainPlanColumn> CarAdviceMainPlanComum { get; set; }
     public virtual DbSet<GlobalAppRoles> GlobalAppRoles { get; set; }
@@ -24,7 +21,6 @@ public partial class PurchasingContext : DbContext
     public virtual DbSet<GlobalAppUserRoles> GlobalAppUserRoles { get; set; }
 
     public virtual DbSet<GlobalAppUsers> GlobalAppUsers { get; set; }
-
 
     public DbSet<GlobalAppUsersParameters> GlobalAppUsersParameters { get; set; }
 
@@ -47,8 +43,6 @@ public partial class PurchasingContext : DbContext
     public DbSet<SCMDWH.Shared.Models.CarAdviceMainTable> CarAdviceMainTable { get; set; } = default!;
 
     public DbSet<SCMDWH.Shared.Models.CarAdviceDictionaryCountryCode> CarAdviceDictionaryCountryCodes { get; set; } = default!;
-
-    public DbSet<SCMDWH.Shared.Models.CarAdviceDictionarySecurityPerson> CarAdviceDictionarySecurityPersons { get; set; } = default!;
 
     public DbSet<SCMDWH.Shared.Models.CarAdviceDictionaryQuality> CarAdviceDictionaryQuality { get; set; } = default!;
 

@@ -29,7 +29,7 @@ public partial class CarAdviceMainTable
 
     public string? TruckPlatesWh { get; set; }
 
-    public string Forwarder { get; set; } = null!;
+    public string? Forwarder { get; set; } = null!;
 
     public string? ForwarderInfo { get; set; }
 
@@ -70,8 +70,6 @@ public partial class CarAdviceMainTable
     public virtual CarAdviceDictionaryCustomers? ClientNavigation { get; set; } = null!;
 
     public virtual CarAdviceDictionaryCountryCode? DestinationNavigation { get; set; } = null!;
-
-    public virtual CarAdviceDictionarySecurityPerson? EntryBySNavigation { get; set; } = null!;
 
     public virtual CarAdviceDictionaryReason? FgDelayReasonNavigation { get; set; } = null!;
 

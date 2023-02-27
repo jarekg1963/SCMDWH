@@ -26,8 +26,6 @@ public partial class CarAdviceContext : DbContext
 
     public virtual DbSet<CarAdviceDictionaryReason> CarAdviceDictionaryReasons { get; set; }
 
-    public virtual DbSet<CarAdviceDictionarySecurityPerson> CarAdviceDictionarySecurityPersons { get; set; }
-
     public virtual DbSet<CarAdviceDictionaryStatus> CarAdviceDictionaryStatuses { get; set; }
 
     public virtual DbSet<CarAdviceDictionaryTruckType> CarAdviceDictionaryTruckTypes { get; set; }
@@ -113,23 +111,6 @@ public partial class CarAdviceContext : DbContext
             entity.Property(e => e.Code).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<CarAdviceDictionarySecurityPerson>(entity =>
-        {
-            entity.HasIndex(e => e.Security, "IX_CarAdviceDictionarySecurityPersons").IsUnique();
-
-            entity.Property(e => e.ActiveFlag)
-                .IsRequired()
-                .HasDefaultValueSql("((1))");
-            entity.Property(e => e.AddByUser)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("('System')");
-            entity.Property(e => e.AddTime)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.ContactEmail).HasMaxLength(100);
-            entity.Property(e => e.ContactMobile).HasMaxLength(50);
-            entity.Property(e => e.Security).HasMaxLength(50);
-        });
 
         modelBuilder.Entity<CarAdviceDictionaryStatus>(entity =>
         {
@@ -233,11 +214,6 @@ public partial class CarAdviceContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CarAdviceMainTable_CarAdviceDictionaryCountryCodes");
 
-            entity.HasOne(d => d.EntryBySNavigation).WithMany(p => p.CarAdviceMainTables)
-                .HasPrincipalKey(p => p.Security)
-                .HasForeignKey(d => d.EntryByS)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CarAdviceMainTable_CarAdviceDictionarySecurityPersons");
 
             entity.HasOne(d => d.FgDelayReasonNavigation).WithMany(p => p.CarAdviceMainTables)
                 .HasPrincipalKey(p => p.Code)
