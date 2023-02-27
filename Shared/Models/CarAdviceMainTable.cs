@@ -23,7 +23,7 @@ public partial class CarAdviceMainTable
 
     public string? Reference { get; set; }
 
-    public string Destination { get; set; } = null!;
+    public string? Destination { get; set; } = null!;
 
     public string? DriverWh { get; set; }
 
@@ -41,7 +41,7 @@ public partial class CarAdviceMainTable
 
     public DateTime? Ata { get; set; }
 
-    public string Quality { get; set; } = null!;
+    public string? Quality { get; set; } = null!;
 
     public string? TruckType { get; set; } 
 

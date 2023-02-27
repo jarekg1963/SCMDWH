@@ -40,7 +40,7 @@
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbSecurityEntryInfo"]</MudAlert>
 
      </MudItem>
-    <MudItem xs="2">
+    <MudItem xs="1">
         <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Id" Label="Nr" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
     </MudItem>
 
@@ -50,7 +50,9 @@
     </MudItem>
     <MudItem xs="2">
         <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-        <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
+    </MudItem>
+    <MudItem xs="1">
+        <MudButton Style="align-baseline!important" Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
     </MudItem>
 
     <MudItem xs="2">
