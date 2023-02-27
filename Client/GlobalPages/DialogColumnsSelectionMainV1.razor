@@ -36,7 +36,6 @@
 			
 		</ChildContent>
 		<ItemRenderer >
-		@*	<MudListItem Text="@($"{context.Name} ({context.Order})")" Dense="true" />*@
 			<MudListItem Text="@($"{context.Name}")" Dense="true" />
 		</ItemRenderer>
 	</MudDropContainer>
@@ -78,23 +77,38 @@
 
 	protected async override Task OnInitializedAsync()
 	{
+
+		Console.WriteLine(CultureInfo.CurrentCulture.Name);
+
 		List<DropItem> newdata = new List<DropItem>();
 
 		string linkcoluser = "/api/CarAdviceMainPlanColums/MainPlanComumByUser/" + UserName;
 		columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<CarAdviceMainPlanColumn>>(linkcoluser);
 
-
-
-		int i = 1;
-		foreach (var gg in columsForDisplayListDb)
+		if (CultureInfo.CurrentCulture.Name == "en-US")
 		{
+			int i = 1;
+			foreach (var gg in columsForDisplayListDb)
+			{
+				if (gg.Hidden)
+					newdata.Add(new DropItem() { Order = i, Name = gg.MainScreenColumn, Selector = "2" });
+				if (!gg.Hidden)
+					newdata.Add(new DropItem() { Order = i, Name = gg.MainScreenColumn, Selector = "1" });
+				i++;
+			}
+		}
 
-			if (gg.Hidden)
-				newdata.Add(new DropItem() { Order = i, Name = gg.MainScreenColumn, Selector = "2" });
-			if (!gg.Hidden)
-				newdata.Add(new DropItem() { Order = i, Name = gg.MainScreenColumn, Selector = "1" });
-			i++;
-
+		if (CultureInfo.CurrentCulture.Name == "pl-PL")
+		{
+			int i = 1;
+			foreach (var gg in columsForDisplayListDb)
+			{
+				if (gg.Hidden)
+					newdata.Add(new DropItem() { Order = i, Name = gg.plHeader, Selector = "2" });
+				if (!gg.Hidden)
+					newdata.Add(new DropItem() { Order = i, Name = gg.plHeader, Selector = "1" });
+				i++;
+			}
 		}
 
 		_dropzoneItems = newdata;
@@ -147,8 +161,17 @@
 		foreach(var itemForupdate in _dropzoneItems)
 		{
 			CarAdviceMainPlanColumn columnForUpdate = new();
-			columnForUpdate = columsForDisplayListDb.FirstOrDefault(c => c.MainScreenColumn == itemForupdate.Name);
-		
+			
+			if (CultureInfo.CurrentCulture.Name == "en-US")
+			{
+				columnForUpdate = columsForDisplayListDb.FirstOrDefault(c => c.MainScreenColumn == itemForupdate.Name);
+			}
+
+			if (CultureInfo.CurrentCulture.Name == "pl-PL")
+			{
+				columnForUpdate = columsForDisplayListDb.FirstOrDefault(c => c.plHeader == itemForupdate.Name);
+			}
+
 			if (itemForupdate.Selector == "1")
 			{
 				columnForUpdate.Hidden = false;
