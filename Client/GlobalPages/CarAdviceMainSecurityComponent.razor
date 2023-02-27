@@ -49,10 +49,13 @@
 
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-    </MudItem>
-    <MudItem xs="1">
-        <MudButton Style="align-baseline!important" Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
+        <MudStack Row="true">
+            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
+        </MudStack>
+
+
+
     </MudItem>
 
     <MudItem xs="2">
@@ -73,8 +76,10 @@
         <MudDatePicker Margin="Margin.Normal" Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Editable="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudTimePicker Margin="Margin.Normal" Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Editable="true" />
-        <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
+        <MudStack Row="true">
+            <MudTimePicker Margin="Margin.Normal" Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Editable="true" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
+      </MudStack>
     </MudItem>
     <MudItem xs="2">
        @* <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Label=@Loc["lbCallBy"] Variant="Variant.Text"></MudTextField>*@
