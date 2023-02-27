@@ -231,6 +231,9 @@
   <data name="lbPlates" xml:space="preserve">
     <value>Tablice</value>
   </data>
+  <data name="lbPleaseSelectRow" xml:space="preserve">
+    <value>Najpierw wybierz wysyłkę  </value>
+  </data>
   <data name="lbQuality" xml:space="preserve">
     <value>Jakość</value>
   </data>
@@ -314,6 +317,12 @@
   </data>
   <data name="lbWrongpassuser" xml:space="preserve">
     <value>Złe hasło lub nazwa użytkowanika</value>
+  </data>
+  <data name="lbYouMustBeSECURITY" xml:space="preserve">
+    <value>Tylko dla pracowników ochrony </value>
+  </data>
+  <data name="lbYoumustbeWH" xml:space="preserve">
+    <value>Tylko dla pracowników magazynu</value>
   </data>
   <data name="leftdocktime" xml:space="preserve">
     <value>Godzina opuszcz. doku</value>

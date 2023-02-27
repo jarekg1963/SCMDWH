@@ -234,6 +234,9 @@
   <data name="lbPlates" xml:space="preserve">
     <value>Plates</value>
   </data>
+  <data name="lbPleaseSelectRow" xml:space="preserve">
+    <value>Please select row</value>
+  </data>
   <data name="lbQuality" xml:space="preserve">
     <value>Quality</value>
   </data>
@@ -317,6 +320,12 @@
   </data>
   <data name="lbWrongpassuser" xml:space="preserve">
     <value>Wrong password or username </value>
+  </data>
+  <data name="lbYouMustBeSECURITY" xml:space="preserve">
+    <value>You must be security </value>
+  </data>
+  <data name="lbYoumustbeWH" xml:space="preserve">
+    <value>You must work in warehouse</value>
   </data>
   <data name="leftdocktime" xml:space="preserve">
     <value>Left dock time</value>

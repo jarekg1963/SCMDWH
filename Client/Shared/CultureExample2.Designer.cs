@@ -403,6 +403,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Najpierw wybierz wysyłkę  .
+        /// </summary>
+        public static string lbPleaseSelectRow {
+            get {
+                return ResourceManager.GetString("lbPleaseSelectRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jakość.
         /// </summary>
         public static string lbQuality {
@@ -651,6 +660,24 @@ namespace SCMDWH.Client.Shared {
         public static string lbWrongpassuser {
             get {
                 return ResourceManager.GetString("lbWrongpassuser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tylko dla pracowników ochrony .
+        /// </summary>
+        public static string lbYouMustBeSECURITY {
+            get {
+                return ResourceManager.GetString("lbYouMustBeSECURITY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tylko dla pracowników magazynu.
+        /// </summary>
+        public static string lbYoumustbeWH {
+            get {
+                return ResourceManager.GetString("lbYoumustbeWH", resourceCulture);
             }
         }
         

@@ -289,10 +289,12 @@ else
 
     private void Tab1Active()
     {
+        string strlbPleaseSelectRow = Loc["lbPleaseSelectRow"];
+
         if (selectedRow== "") 
         {
             tabs.ActivatePanel(0);
-            Snackbar.Add("Please select row" , Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+            Snackbar.Add( strlbPleaseSelectRow , Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
         }
 
         if (!rolaAdmin) 
@@ -303,32 +305,37 @@ else
     }
     private void Tab2Active()
     {
+        string strlbPleaseSelectRow = Loc["lbPleaseSelectRow"];
+        string strlbYoumustbeWH = Loc["lbYoumustbeWH"];
 
         if (!rolaWh)
         {
             tabs.ActivatePanel(0);
-            Snackbar.Add("You must be WH", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+            Snackbar.Add(strlbYoumustbeWH, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
         }
 
         if (selectedRow == "")
         {
             tabs.ActivatePanel(0);
-            Snackbar.Add("Please select row", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+            Snackbar.Add(strlbPleaseSelectRow, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
         }
 
 
     }
     private void Tab3Active()
     {
+        string strlbPleaseSelectRow = Loc["lbPleaseSelectRow"];
+        string strYouMustBeSECURITY = Loc["lbYouMustBeSECURITY"];
+
         if (!rolaSecurity)
         {
             tabs.ActivatePanel(0);
-            Snackbar.Add("You must be SECURITY", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+            Snackbar.Add(strYouMustBeSECURITY, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
         }
         if (selectedRow == "")
         {
             tabs.ActivatePanel(0);
-            Snackbar.Add("Please select row", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
+            Snackbar.Add(strlbPleaseSelectRow, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
         }
     }
 
