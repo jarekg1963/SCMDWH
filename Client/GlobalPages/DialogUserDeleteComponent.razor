@@ -1,9 +1,11 @@
-﻿<MudDialog>
+﻿@inject IStringLocalizer<CultureExample2> Loc
+
+<MudDialog>
     <DialogContent>
         <MudText>@(new MarkupString(ContentText))</MudText>
         </DialogContent>
         <DialogActions>
-            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton OnClick="Cancel">@Loc["lbCancel"]</MudButton>
             <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
         </DialogActions>
     </MudDialog>

@@ -6,6 +6,19 @@
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
 <style>
+    .demo-content {
+        padding: 1px;
+        font-size: 10px;
+        background: #dbdfe5;
+        margin-bottom: 1px;
+        font-weight: 500;
+    }
+
+        .demo-content.bg-alt {
+            background: #dbdfe5;
+            font-size: 15px;
+        }
+
     .mud-input {
         height: 0.6rem !important;
         font: 100;
@@ -119,23 +132,77 @@
 
 <hr />
 
-<div class="container-fluid" style="font-size:xx-small!important">
-    <div class="row row-cols-6">
-        <div class="col"> <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" @Loc["lbAta"]:  @AtaTimeDate" /> </div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbQuality"]:  @CarAdviceMainTableWHEdit.Quality " /></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbTruckType"]: @CarAdviceMainTableWHEdit.TruckType" /> </div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" @Loc["lbPlates"]:  @CarAdviceMainTableWHEdit.TruckPlatesS" /> </div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" @Loc["lbDriverS"]:  @CarAdviceMainTableWHEdit.DriverS " /></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" @Loc["lbEnTime"]:  @CarAdviceMainTableWHEdit.TpvEnterTime " /></div>
+<div class="container">
+    <div class="row " style="--bs-gutter-x: 0.5rem!important">
+            <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbAta"]</div>
+            </div>
+            <div class="col-lg-2">
+            <div class="demo-content ">@Loc["lbQuality"]</div>
+            </div>
+            <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbTruckType"]</div>
+            </div>
+            <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbPlates"]</div>
+            </div>
+            <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbDriverS"]</div>
+            </div>
+            <div class="col-lg-2">
+            <div class="demo-content">@Loc["lbEnTime"]</div>
+            </div>
+        </div>
+    <div class="row " style="--bs-gutter-x: 0.5rem!important">
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Ata</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Quality</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.TruckType</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.TruckPlatesS</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.DriverS</div>
+        </div>
+        <div class="col-lg-2">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.TpvEnterTime</div>
+        </div>
     </div>
+    <div class="row " style="--bs-gutter-x: 0.5rem!important">
+        <div class="col-lg-3">
+            <div class="demo-content">@Loc["CallBy"]</div>
+        </div>
+        <div class="col-lg-3">
+            <div class="demo-content ">@Loc["lbEntryByS"]</div>
+        </div>
+        <div class="col-lg-3">
+            <div class="demo-content">@Loc["lbRemarksS"]</div>
+        </div>
+        <div class="col-lg-3">
+            <div class="demo-content">@Loc["lbTpvExitTime"]</div>
+        </div>
+    </div>
+    <div class="row " style="--bs-gutter-x: 0.5rem!important">
+        <div class="col-lg-3">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.CallBy</div>
+        </div>
+        <div class="col-lg-3">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.EntryByS</div>
+        </div>
+        <div class="col-lg-3">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.RemarksS</div>
+        </div>
+        <div class="col-lg-3">
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.TpvExitTime</div>
+        </div>
+    </div>
+   </div>
 
-    <div class="row row-cols-4">
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value=" @Loc["lbCallBy"]:  @CarAdviceMainTableWHEdit.CallBy" /> </div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbEntryByS"]:  @CarAdviceMainTableWHEdit.EntryByS " /> </div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbRemarksS"]:  @CarAdviceMainTableWHEdit.RemarksS " /></div>
-        <div class="col"><input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ata" readonly value="@Loc["lbTpvExitTime"]:  @CarAdviceMainTableWHEdit.TpvExitTime " /></div>
-    </div>
-</div>
 <hr />
 
 <MudGrid>
@@ -250,8 +317,8 @@
 
 
         //---------------------------------------------
-      
-      
+
+
         // Scanned Time
         if (ScannedTimeDate != null)
         {
@@ -262,7 +329,7 @@
 
         //  LeftTheDockTime
 
-        
+
 
 
         if (EtdTimeDate != null)
@@ -308,11 +375,12 @@
 
     private async Task DeleteWh()
     {
-
+        string zmLbDelete = Loc["lbDelete"];
+        string zmLbWarningDelete = Loc["lbDoYouRealyDelete"];
 
         var parameters = new DialogParameters();
-        parameters.Add("ContentText", $"Do you really want to delete Item {Id}? This process cannot be undone.");
-        parameters.Add("ButtonText", "Delete");
+        parameters.Add("ContentText", zmLbWarningDelete);
+        parameters.Add("ButtonText", zmLbDelete);
         parameters.Add("Color", Color.Error);
         var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
         var dialog = DialogService.Show<DialogUserDeleteComponent>("Delete", parameters, options);

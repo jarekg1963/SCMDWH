@@ -61,24 +61,6 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Polskie default .
-        /// </summary>
-        public static string Greeting {
-            get {
-                return ResourceManager.GetString("Greeting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hello world.
-        /// </summary>
-        public static string HelloWorld {
-            get {
-                return ResourceManager.GetString("HelloWorld", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Czas awizacji.
         /// </summary>
         public static string lbAdDate {
@@ -97,7 +79,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --Ata czas.
+        ///   Looks up a localized string similar to Ata Czas.
         /// </summary>
         public static string lbAtaDateTime {
             get {
@@ -115,7 +97,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --Ata .
+        ///   Looks up a localized string similar to Ata.
         /// </summary>
         public static string lbAtaTimeDate {
             get {
@@ -196,7 +178,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --Dest.
+        ///   Looks up a localized string similar to Kraj.
         /// </summary>
         public static string lbDestination {
             get {
@@ -219,6 +201,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbDock {
             get {
                 return ResourceManager.GetString("lbDock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Czy na prawdę chcesz usunąć ? Ta czynnośćjest nieodwracalna !!!.
+        /// </summary>
+        public static string lbDoYouRealyDelete {
+            get {
+                return ResourceManager.GetString("lbDoYouRealyDelete", resourceCulture);
             }
         }
         
@@ -259,7 +250,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --lbEntrybyWH.
+        ///   Looks up a localized string similar to Magazynier.
         /// </summary>
         public static string lbEntrybyWH {
             get {
@@ -277,7 +268,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --ETD Date.
+        ///   Looks up a localized string similar to ETD Dzień.
         /// </summary>
         public static string lbEtdDate {
             get {
@@ -286,7 +277,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --ETD time.
+        ///   Looks up a localized string similar to ETD Godzina.
         /// </summary>
         public static string lbEtdTime {
             get {
@@ -358,6 +349,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hasło.
+        /// </summary>
+        public static string lbPassword {
+            get {
+                return ResourceManager.GetString("lbPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data załadunku.
         /// </summary>
         public static string lbPickingdate {
@@ -399,6 +399,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbPlates {
             get {
                 return ResourceManager.GetString("lbPlates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Najpierw wybierz wysyłkę  .
+        /// </summary>
+        public static string lbPleaseSelectRow {
+            get {
+                return ResourceManager.GetString("lbPleaseSelectRow", resourceCulture);
             }
         }
         
@@ -538,6 +547,24 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Użytkowanik i hasło  .
+        /// </summary>
+        public static string lbSignIn {
+            get {
+                return ResourceManager.GetString("lbSignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wejście.
+        /// </summary>
+        public static string lbSingIn {
+            get {
+                return ResourceManager.GetString("lbSingIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kody status.
         /// </summary>
         public static string lbStatuscodes {
@@ -601,6 +628,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Użytkownik.
+        /// </summary>
+        public static string lbusername {
+            get {
+                return ResourceManager.GetString("lbusername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Magazyn.
         /// </summary>
         public static string lbWarehouse {
@@ -615,6 +651,33 @@ namespace SCMDWH.Client.Shared {
         public static string lbWarehouseinformation {
             get {
                 return ResourceManager.GetString("lbWarehouseinformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Złe hasło lub nazwa użytkowanika.
+        /// </summary>
+        public static string lbWrongpassuser {
+            get {
+                return ResourceManager.GetString("lbWrongpassuser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tylko dla pracowników ochrony .
+        /// </summary>
+        public static string lbYouMustBeSECURITY {
+            get {
+                return ResourceManager.GetString("lbYouMustBeSECURITY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tylko dla pracowników magazynu.
+        /// </summary>
+        public static string lbYoumustbeWH {
+            get {
+                return ResourceManager.GetString("lbYoumustbeWH", resourceCulture);
             }
         }
         

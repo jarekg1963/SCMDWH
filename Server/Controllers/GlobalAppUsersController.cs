@@ -38,6 +38,9 @@ namespace SCMDWH.Server.Controllers
         }
 
 
+
+
+
         // GET: api/GlobalAppUsers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GlobalAppUsers>>> GetGlobalAppUsers()
@@ -140,6 +143,7 @@ namespace SCMDWH.Server.Controllers
                 columnRecordAdd.MainScreenColumn = c.MainScreenColumn;
                 columnRecordAdd.OrderColumn = c.OrderColumn;
                 columnRecordAdd.Hidden= c.Hidden;
+                columnRecordAdd.plHeader = c.plHeader;
 
                 await _context.CarAdviceMainPlanComum.AddAsync(columnRecordAdd);
                 
@@ -187,6 +191,10 @@ namespace SCMDWH.Server.Controllers
             {
                 return NotFound();
             }
+
+            var columnsForDelete = _context.CarAdviceMainPlanComum.Where(c => c.UserName == userName).ToList();
+
+            _context.CarAdviceMainPlanComum.RemoveRange(columnsForDelete);
 
             _context.GlobalAppUsers.Remove(globalAppUsers);
             await _context.SaveChangesAsync();

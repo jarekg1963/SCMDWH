@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Greeting" xml:space="preserve">
-    <value>Polskie default </value>
-  </data>
-  <data name="HelloWorld" xml:space="preserve">
-    <value>Hello world</value>
-  </data>
   <data name="lbAdDate" xml:space="preserve">
     <value>Czas awizacji</value>
   </data>
@@ -130,13 +124,13 @@
     <value>Ata</value>
   </data>
   <data name="lbAtaDateTime" xml:space="preserve">
-    <value>--Ata czas</value>
+    <value>Ata Czas</value>
   </data>
   <data name="lbAtaTime" xml:space="preserve">
     <value>Ata godziny </value>
   </data>
   <data name="lbAtaTimeDate" xml:space="preserve">
-    <value>--Ata </value>
+    <value>Ata</value>
   </data>
   <data name="lbCallBy" xml:space="preserve">
     <value>Wywołujący </value>
@@ -163,13 +157,16 @@
     <value>Usuń</value>
   </data>
   <data name="lbDestination" xml:space="preserve">
-    <value>--Dest</value>
+    <value>Kraj</value>
   </data>
   <data name="lbDictionary" xml:space="preserve">
     <value>Słowniki</value>
   </data>
   <data name="lbDock" xml:space="preserve">
     <value>Dok</value>
+  </data>
+  <data name="lbDoYouRealyDelete" xml:space="preserve">
+    <value>Czy na prawdę chcesz usunąć ? Ta czynnośćjest nieodwracalna !!!</value>
   </data>
   <data name="lbDriverS" xml:space="preserve">
     <value>Kierowca och.</value>
@@ -184,16 +181,16 @@
     <value>Wjazd - ochrona</value>
   </data>
   <data name="lbEntrybyWH" xml:space="preserve">
-    <value>--lbEntrybyWH</value>
+    <value>Magazynier</value>
   </data>
   <data name="lberrorDateTime" xml:space="preserve">
     <value>Zly format daty</value>
   </data>
   <data name="lbEtdDate" xml:space="preserve">
-    <value>--ETD Date</value>
+    <value>ETD Dzień</value>
   </data>
   <data name="lbEtdTime" xml:space="preserve">
-    <value>--ETD time</value>
+    <value>ETD Godzina</value>
   </data>
   <data name="lbGeneralWarehouseInfoprmation" xml:space="preserve">
     <value>Magazyn wyrobów gotowych</value>
@@ -216,6 +213,9 @@
   <data name="lbNow" xml:space="preserve">
     <value>Teraz</value>
   </data>
+  <data name="lbPassword" xml:space="preserve">
+    <value>Hasło</value>
+  </data>
   <data name="lbPickingdate" xml:space="preserve">
     <value>Data załadunku</value>
   </data>
@@ -230,6 +230,9 @@
   </data>
   <data name="lbPlates" xml:space="preserve">
     <value>Tablice</value>
+  </data>
+  <data name="lbPleaseSelectRow" xml:space="preserve">
+    <value>Najpierw wybierz wysyłkę  </value>
   </data>
   <data name="lbQuality" xml:space="preserve">
     <value>Jakość</value>
@@ -276,6 +279,12 @@
   <data name="lbShipment" xml:space="preserve">
     <value>Wysyłka</value>
   </data>
+  <data name="lbSignIn" xml:space="preserve">
+    <value>Użytkowanik i hasło  </value>
+  </data>
+  <data name="lbSingIn" xml:space="preserve">
+    <value>Wejście</value>
+  </data>
   <data name="lbStatuscodes" xml:space="preserve">
     <value>Kody status</value>
   </data>
@@ -297,11 +306,23 @@
   <data name="lbTruckType" xml:space="preserve">
     <value>Samochód</value>
   </data>
+  <data name="lbusername" xml:space="preserve">
+    <value>Użytkownik</value>
+  </data>
   <data name="lbWarehouse" xml:space="preserve">
     <value>Magazyn</value>
   </data>
   <data name="lbWarehouseinformation" xml:space="preserve">
     <value>Magazyn dane wysyłki </value>
+  </data>
+  <data name="lbWrongpassuser" xml:space="preserve">
+    <value>Złe hasło lub nazwa użytkowanika</value>
+  </data>
+  <data name="lbYouMustBeSECURITY" xml:space="preserve">
+    <value>Tylko dla pracowników ochrony </value>
+  </data>
+  <data name="lbYoumustbeWH" xml:space="preserve">
+    <value>Tylko dla pracowników magazynu</value>
   </data>
   <data name="leftdocktime" xml:space="preserve">
     <value>Godzina opuszcz. doku</value>

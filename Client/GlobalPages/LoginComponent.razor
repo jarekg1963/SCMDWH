@@ -8,6 +8,7 @@
 @inject ISnackbar Snackbar
 @using System.Security.Claims
 @inject IWebAssemblyHostEnvironment _webAssemblyHostEnvironment
+@inject IStringLocalizer<CultureExample2> Loc
 
 
 @attribute [AllowAnonymous]
@@ -16,24 +17,24 @@
     <DataAnnotationsValidator />
     <div class="login-wrap">
         <di class="login-html">
-            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">@Loc["lbSignIn"]</label>
             <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
             <div class="login-form">
                 <div class="sign-in-htm">
                     <div class="group">
-                        <label for="user" class="label">Username</label>
+                        <label for="user" class="label">@Loc["lbusername"]</label>
                         <InputText @bind-Value="_userForAuthentication.Email" class="form-control mat-elevation-z1" />
                         <ValidationMessage For="@(() =>_userForAuthentication.Email)" />
                     </div>
                     <div class="group">
-                        <label for="pass" class="label">Password</label>
+                        <label for="pass" class="label">@Loc["lbPassword"]</label>
                         <InputText @bind-Value="_userForAuthentication.Password" type="password" class="form-control mat-elevation-z1" />
                         <ValidationMessage For="@(() => _userForAuthentication.Password)" />
                     </div>
                     @if (!loading)
                     {
                         <div class="group">
-                            <input type="submit" class="button" value="Sign In">
+                            <input type="submit" class="button" value=@Loc["lbSingIn"]>
                         </div>
                     }
                     else
@@ -82,7 +83,7 @@
         var result = await AuthenticationService.Login(_userForAuthentication);
         if (!result.IsAuthSuccessful)
         {    
-            Snackbar.Add($"Wrong password or username ", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            Snackbar.Add( @Loc["lbWrongpassuser"], Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
         }
         else
         {
