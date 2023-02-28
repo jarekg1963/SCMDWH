@@ -48,15 +48,13 @@
         <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal"/>
 
     </MudItem>
-    <MudItem xs="2">
-        <MudStack Row="true">
+    <MudItem xs="2">     
             <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-            <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
-        </MudStack>
-
-
-
     </MudItem>
+    <MudItem xs="1">        
+        <MudButton Style="margin-top:1rem!important" Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
+    </MudItem>
+
 
     <MudItem xs="2">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbQuality"] @bind-Value="CarAdviceMainTableWHEdit.Quality" SearchFunc="@SearchQuality"
@@ -75,14 +73,14 @@
     <MudItem xs="2">
         <MudDatePicker Margin="Margin.Normal" Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Editable="true" />
     </MudItem>
-    <MudItem xs="2">
-        <MudStack Row="true">
+    <MudItem xs="1">
             <MudTimePicker Margin="Margin.Normal" Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Editable="true" />
-            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
-      </MudStack>
     </MudItem>
-    <MudItem xs="2">
-       @* <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Label=@Loc["lbCallBy"] Variant="Variant.Text"></MudTextField>*@
+    <MudItem xs="1">
+        <MudButton Style="margin-top:1rem!important" Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
+    </MudItem>
+
+    <MudItem xs="2">    
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbCallBy"] @bind-Value="CarAdviceMainTableWHEdit.CallBy" SearchFunc="@SearchCallBy"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
@@ -95,13 +93,20 @@
     <MudItem xs="12">
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">Security exit info </MudAlert>
     </MudItem>
+
+
+
     <MudItem xs="2">
         <MudDatePicker Label=@Loc["lbTPVExitdate"] @bind-Date="TPVExitTimeDate" DisableToolbar="true" Editable="true" />
     </MudItem>
     <MudItem xs="2">
         <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" DisableToolbar="true" Editable="true" />
-        <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton3">@Loc["lbNow"] </MudButton>
     </MudItem>
+    <MudItem xs="2">
+        <MudButton Variant="Variant.Filled" Size="Size.Small" Style="margin-top:1rem!important" OnClick="NowButton3">@Loc["lbNow"] </MudButton>
+    </MudItem>
+ 
+
 </MudGrid>
 <hr />
 <MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>
