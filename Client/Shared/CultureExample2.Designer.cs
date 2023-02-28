@@ -70,6 +70,24 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data awizacji .
+        /// </summary>
+        public static string lbAdDateNowy {
+            get {
+                return ResourceManager.GetString("lbAdDateNowy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nowy.
+        /// </summary>
+        public static string lbAddnewitem {
+            get {
+                return ResourceManager.GetString("lbAddnewitem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ata.
         /// </summary>
         public static string lbAta {
@@ -228,6 +246,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbDriverWH {
             get {
                 return ResourceManager.GetString("lbDriverWH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string lbEdit {
+            get {
+                return ResourceManager.GetString("lbEdit", resourceCulture);
             }
         }
         

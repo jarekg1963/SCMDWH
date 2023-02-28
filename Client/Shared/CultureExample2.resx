@@ -120,6 +120,12 @@
   <data name="lbAdDate" xml:space="preserve">
     <value>Czas awizacji</value>
   </data>
+  <data name="lbAdDateNowy" xml:space="preserve">
+    <value>Data awizacji </value>
+  </data>
+  <data name="lbAddnewitem" xml:space="preserve">
+    <value>Nowy</value>
+  </data>
   <data name="lbAta" xml:space="preserve">
     <value>Ata</value>
   </data>
@@ -173,6 +179,9 @@
   </data>
   <data name="lbDriverWH" xml:space="preserve">
     <value>Kierowca-magazyn</value>
+  </data>
+  <data name="lbEdit" xml:space="preserve">
+    <value>Edit</value>
   </data>
   <data name="lbEnTime" xml:space="preserve">
     <value>Godzina wjazdu</value>

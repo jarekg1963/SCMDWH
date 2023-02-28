@@ -1,6 +1,6 @@
 ﻿@using SCMDWH.Shared.Models;
 @inject HttpClient httpClient;
-
+@inject IStringLocalizer<CultureExample2> Loc
 
 <EditForm Model="@updateColum" OnValidSubmit="HandleValidSubmit">
     <MudCard style="width:600px">
@@ -10,13 +10,13 @@
                     <MudTextField @bind-Value="@updateColum.MainScreenColumn" Label="Colums name" Variant="Variant.Text"></MudTextField>
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox @bind-Checked="@updateColum.Hidden" Size="Size.Medium" Label="Active"></MudCheckBox>
+                    <MudCheckBox @bind-Checked="@updateColum.Hidden" Size="Size.Medium" Label="Hide"></MudCheckBox>
                 </MudItem>
                 <MudItem xs="12">
                     <MudTextField @bind-Value="@updateColum.OrderColumn" Label="Order" Variant="Variant.Text"></MudTextField>
                 </MudItem>  
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@updateColum.plHeader" Label="Header" Variant="Variant.Text"></MudTextField>
+                    <MudTextField @bind-Value="@updateColum.plHeader" Label="PLHeader" Variant="Variant.Text"></MudTextField>
                 </MudItem>
             </MudGrid>
         </MudCardContent>
@@ -24,9 +24,9 @@
             <MudItem xs="8">
             </MudItem>
             <MudItem xs="2">
-                <MudButton Variant="Variant.Filled" OnClick="Close">Cancel</MudButton>
+                <MudButton Variant="Variant.Filled" OnClick="Close">@Loc["lbCancel"]</MudButton>
             </MudItem>
-            <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">Save</MudButton>
+            <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">@Loc["lbSave"]</MudButton>
         </MudCardActions>
     </MudCard>
 </EditForm>
