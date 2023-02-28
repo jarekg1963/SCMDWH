@@ -7,7 +7,7 @@
 @inject IStringLocalizer<CultureExample2> Loc
 
 <style>
-/*test integracji plików*/
+    
     .demo-content {
         padding: 1px;
         font-size: 10px;
@@ -21,15 +21,15 @@
             font-size: 15px;
         }
 
-    .mud-input {
+    /*   .mud-input {
 /*        height: 0.6rem !important;
         font: 100 !important;
         font-size: medium !important;
         font-weight: 500 !important;*/
     }
 
-    .form-control {
-/*        font-size: x-small !important;
+    /*    .form-control {
+       font-size: x-small !important;
         font-weight: 600 !important;*/
     }
 </style>
@@ -48,13 +48,11 @@
         <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal"/>
 
     </MudItem>
-    <MudItem xs="2">
-        <MudStack Row="true">
+    <MudItem xs="3">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-            <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
+            <MudButton Class="gaj-style-button" Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
         </MudStack>
-
-
 
     </MudItem>
 
@@ -76,7 +74,7 @@
         <MudDatePicker Margin="Margin.Normal" Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Editable="true" />
     </MudItem>
     <MudItem xs="2">
-        <MudStack Row="true">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTimePicker Margin="Margin.Normal" Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Editable="true" />
             <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
       </MudStack>
@@ -99,8 +97,10 @@
         <MudDatePicker Label=@Loc["lbTPVExitdate"] @bind-Date="TPVExitTimeDate" DisableToolbar="true" Editable="true" />
     </MudItem>
     <MudItem xs="2">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
         <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" DisableToolbar="true" Editable="true" />
         <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton3">@Loc["lbNow"] </MudButton>
+        </MudStack>
     </MudItem>
 </MudGrid>
 <hr />
