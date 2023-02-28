@@ -123,6 +123,12 @@
   <data name="lbAdDate" xml:space="preserve">
     <value>AdDate</value>
   </data>
+  <data name="lbAdDateNowy" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="lbAddnewitem" xml:space="preserve">
+    <value>New</value>
+  </data>
   <data name="lbAta" xml:space="preserve">
     <value>Ata</value>
   </data>
@@ -176,6 +182,9 @@
   </data>
   <data name="lbDriverWH" xml:space="preserve">
     <value>Driver WH</value>
+  </data>
+  <data name="lbEdit" xml:space="preserve">
+    <value>Edycja</value>
   </data>
   <data name="lbEnTime" xml:space="preserve">
     <value>En Time</value>

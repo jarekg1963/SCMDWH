@@ -55,6 +55,10 @@
         </MudStack>
 
     </MudItem>
+    <MudItem xs="1">        
+        <MudButton Style="margin-top:1rem!important" Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
+    </MudItem>
+
 
     <MudItem xs="2">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbQuality"] @bind-Value="CarAdviceMainTableWHEdit.Quality" SearchFunc="@SearchQuality"
@@ -76,11 +80,12 @@
     <MudItem xs="2">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTimePicker Margin="Margin.Normal" Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Editable="true" />
-            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
-      </MudStack>
     </MudItem>
-    <MudItem xs="2">
-       @* <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Label=@Loc["lbCallBy"] Variant="Variant.Text"></MudTextField>*@
+    <MudItem xs="1">
+        <MudButton Style="margin-top:1rem!important" Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
+    </MudItem>
+
+    <MudItem xs="2">    
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbCallBy"] @bind-Value="CarAdviceMainTableWHEdit.CallBy" SearchFunc="@SearchCallBy"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
@@ -93,6 +98,9 @@
     <MudItem xs="12">
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">Security exit info </MudAlert>
     </MudItem>
+
+
+
     <MudItem xs="2">
         <MudDatePicker Label=@Loc["lbTPVExitdate"] @bind-Date="TPVExitTimeDate" DisableToolbar="true" Editable="true" />
     </MudItem>
@@ -102,6 +110,8 @@
         <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton3">@Loc["lbNow"] </MudButton>
         </MudStack>
     </MudItem>
+ 
+
 </MudGrid>
 <hr />
 <MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>

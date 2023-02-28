@@ -2,53 +2,54 @@
 @using System.Text.Json;
 @inject HttpClient httpClient;
 @inject ISnackbar Snackbar
+@inject IStringLocalizer<CultureExample2> Loc
 
 
 <MudDialog Style="min-width: 1400px;">
     <DialogContent>
         <MudCard Outlined="true" Elevation="20">
-            <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Center" Elevation="1">Add new item</MudAlert>
+            <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbAddnewitem"]</MudAlert>
         <MudGrid>
             <MudItem xs="2">
-                <MudDatePicker Label="Ad. Date" @bind-Date="CarAdviceMainTableNew.AdviceDate" DisableToolbar="true" />
+                    <MudDatePicker Label=@Loc["lbAdDateNowy"] @bind-Date="CarAdviceMainTableNew.AdviceDate" DisableToolbar="true" />
             </MudItem>
             <MudItem xs="2">
-                <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Client" @bind-Value="CarAdviceMainTableNew.Client" SearchFunc="@SearchClient"
+                    <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbClient"] @bind-Value="CarAdviceMainTableNew.Client" SearchFunc="@SearchClient"
                                  ResetValueOnEmptyText="@resetValueOnEmptyText"/>
             </MudItem>
                  <MudItem xs="1">
-                    <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Dest." @bind-Value="CarAdviceMainTableNew.Destination" SearchFunc="@SearchCountry"
+                    <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbDestination"] @bind-Value="CarAdviceMainTableNew.Destination" SearchFunc="@SearchCountry"
                                  ResetValueOnEmptyText="@resetValueOnEmptyText"/>
             </MudItem>                           
             <MudItem xs="2">
-                <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label="Currier" @bind-Value="CarAdviceMainTableNew.Forwarder" SearchFunc="@SearchCarrier"
+                    <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbCarriers"] @bind-Value="CarAdviceMainTableNew.Forwarder" SearchFunc="@SearchCarrier"
                                  ResetValueOnEmptyText="@resetValueOnEmptyText" />
             </MudItem>
             <MudItem xs="2">
-                  <MudTextField @bind-Value="@CarAdviceMainTableNew.Shipment" Label="Shipment" Variant="Variant.Text" ></MudTextField>
+                    <MudTextField @bind-Value="@CarAdviceMainTableNew.Shipment" Label=@Loc["lbShipment"] Variant="Variant.Text"></MudTextField>
             </MudItem>
             <MudItem xs="3">
-                <MudTextField @bind-Value="@CarAdviceMainTableNew.Reference" Label="Reference" Variant="Variant.Text"></MudTextField>
+                    <MudTextField @bind-Value="@CarAdviceMainTableNew.Reference" Label=@Loc["lbReference"] Variant="Variant.Text"></MudTextField>
             </MudItem>
           
              </MudGrid>
                <MudGrid>
                      <MudItem xs="2">
-                <MudDatePicker Label="Etd date" @bind-Date="newEtadate"  />
+                    <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="newEtadate" />
             </MudItem>
             <MudItem xs="2">
-                    <MudTimePicker Label="Etd time" AmPm="true" @bind-Time="newEtatime"   />
+                    <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="true" @bind-Time="newEtatime" />
             </MudItem>
         </MudGrid>
           <MudGrid>
            <MudItem xs="4">
-               <MudTextField @bind-Value="@CarAdviceMainTableNew.DriverWh" Label="Driver WH" Variant="Variant.Text" ></MudTextField>
+                    <MudTextField @bind-Value="@CarAdviceMainTableNew.DriverWh" Label=@Loc["lbDriverWH"] Variant="Variant.Text"></MudTextField>
            </MudItem>
             <MudItem xs="4">
-                <MudTextField @bind-Value="@CarAdviceMainTableNew.TruckPlatesWh" Label="Truck plates WH" Variant="Variant.Text"></MudTextField>
+                    <MudTextField @bind-Value="@CarAdviceMainTableNew.TruckPlatesWh" Label=@Loc["lbTruckplatesWH"] Variant="Variant.Text"></MudTextField>
             </MudItem>
             <MudItem xs="4">
-                    <MudTextField @bind-Value="@CarAdviceMainTableNew.RemarksWh"  Label="Remarks WH" Variant="Variant.Text"></MudTextField>
+                    <MudTextField @bind-Value="@CarAdviceMainTableNew.RemarksWh" Label=@Loc["lbRemarkWH"] Variant="Variant.Text"></MudTextField>
             </MudItem>
         </MudGrid>
         </MudCard>
@@ -57,19 +58,14 @@
 
         <MudGrid>
             <MudItem xs="6">
-
-            </MudItem>
-
-
-            <MudItem xs="2">
-
-            </MudItem>
-
-            <MudItem xs="2">
-                <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">Cancel</MudButton>
             </MudItem>
             <MudItem xs="2">
-                    <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">Save</MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                    <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">@Loc["lbSave"]</MudButton>
             </MudItem>
         </MudGrid>
     </DialogActions>

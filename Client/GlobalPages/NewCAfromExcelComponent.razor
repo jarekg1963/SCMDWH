@@ -7,6 +7,7 @@
 @inject NavigationManager navigationManager
 @inject HttpClient httpClient
 @inject ISnackbar Snackbar
+@inject IStringLocalizer<CultureExample2> Loc
 
 <style>
     .mud-table-cell {
@@ -15,18 +16,11 @@
         text-transform: uppercase !important;
         text-align: left !important;
     }
-
-
 </style>
 
-
-
-
 <hr />
-
 <InputFile OnChange="ReadExcelNpoi" class="form-control form-control-lg" id="formFileLg" type="file">Select excel file</InputFile>
 <hr />
-
 
     
 @if (listCarAdviceMainTableNew == null)
@@ -39,18 +33,18 @@ else
     <MudTable RowStyleFunc="@_rowStyleFunc" Items="@listCarAdviceMainTableNew" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"400px":"")">
         <HeaderContent>
             <MudTh>Id</MudTh>
-            <MudTh>AdviceDate</MudTh>
-            <MudTh>Client</MudTh>
-            <MudTh>Shipment</MudTh>
-            <MudTh>Reference</MudTh>
-            <MudTh>Destination</MudTh>
-            <MudTh>Forwarder</MudTh>
-            <MudTh>Etd</MudTh>
-            <MudTh>DriverWh</MudTh>
-            <MudTh>TruckPlatesWh</MudTh>
-            <MudTh>RemarksWh</MudTh>
-            <MudTh >Edit</MudTh>
-            <MudTh >Delete</MudTh>
+            <MudTh>@Loc["lbAdDate"]</MudTh>
+            <MudTh>@Loc["lbClient"]</MudTh>
+            <MudTh>@Loc["lbShipment"]</MudTh>
+            <MudTh>@Loc["lbReference"]</MudTh>
+            <MudTh>@Loc["lbDestination"]</MudTh>
+            <MudTh>@Loc["lbCarriers"]</MudTh>
+            <MudTh>@Loc["lbEtdDate"]</MudTh>
+            <MudTh>@Loc["lbDriverWH"]</MudTh>
+            <MudTh>@Loc["lbTruckplatesWH"]</MudTh>
+            <MudTh>@Loc["lbRemarkWH"]</MudTh>
+            <MudTh>@Loc["lbEdit"]</MudTh>
+            <MudTh>@Loc["lbDelete"]</MudTh>
 
         </HeaderContent>
         <RowTemplate>
@@ -88,10 +82,10 @@ else
         </MudItem>
 
         <MudItem xs="2">
-            <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">Cancel</MudButton>
+            <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
         </MudItem>
         <MudItem xs="2">
-            <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">Save</MudButton>
+            <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">@Loc["lbSave"]</MudButton>
         </MudItem>
     </MudGrid>
  }
@@ -116,7 +110,6 @@ else
              return "background-color:#f79f52";
 
          return "";
-
      };
 
 
@@ -134,14 +127,11 @@ else
 
         foreach (var listforSave in  listCarAdviceMainTableNew)
         {
-
-
             listforSave.Quality = null;
             listforSave.EntryByS = null;
             listforSave.TruckType = null;
             listforSave.FgDelayReason = null;
             listforSave.PickingStatus = null;
-
             listforSave.ClientNavigation = null;
             // CarAdviceMainTableNew.QualityNavigation = null;
             //listforSave.EntryBySNavigation = null;
@@ -149,31 +139,23 @@ else
             listforSave.DestinationNavigation = null;
             listforSave.FgDelayReasonNavigation = null;
             listforSave.PickingStatusNavigation = null;
-
             listforSave.Id = null;
-
             //DateTime EtaDateNotNulable = (DateTime)newEtadate;
             //TimeSpan EtaTimeNotNulable = (TimeSpan)newEtatime;
             //CarAdviceMainTableNew.Etd = EtaDateNotNulable.Add(EtaTimeNotNulable);
-
-
             // Sprawdzenie czy istnieje reference 
-
             bool exitref = await ExitByReference(listforSave.Reference);
-
             if (exitref)
             {
                 Snackbar.Add("Item already uploaded " + listforSave.ForwarderInfo, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 2500; });
             }
             else
             {
-
                 string linkpostca = "/api/CarAdviceMainTables";
                 var Response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkpostca, listforSave);
                 if (!Response.IsSuccessStatusCode)
                 {
                     Snackbar.Add("Error Excel in row " + listforSave.ForwarderInfo, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 2500; });
-
                 }
                 else
                 {
@@ -187,15 +169,8 @@ else
         {
             listCarAdviceMainTableNew.RemoveAll(c => c.ForwarderInfo == tabForDelete[i]);
         }
-
-
-
         StateHasChanged();
-
         if (listCarAdviceMainTableNew.Count == 0) navigationManager.NavigateTo("/caradvice", true);
-
-
-
     }
 
     private async void Edit(CarAdviceMainTable caForEdit)
@@ -279,7 +254,7 @@ else
 
     private async Task<bool> ExitByReference(string references)
     {
-        string linkver = "/api/CarAdviceMainTables/FoundByReference/" + CarAdviceMainTableNew.Reference;
+        string linkver = "/api/CarAdviceMainTables/FoundByReference/" + references;
         bool refExit = await httpClient.GetFromJsonAsync<bool>(linkver);
         if (refExit) 
         {
