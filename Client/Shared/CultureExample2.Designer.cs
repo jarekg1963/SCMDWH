@@ -178,6 +178,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lista przewoźników .
+        /// </summary>
+        public static string lbCurrierList {
+            get {
+                return ResourceManager.GetString("lbCurrierList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Klienci.
         /// </summary>
         public static string lbCustomers {
@@ -223,7 +232,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Czy na prawdę chcesz usunąć ? Ta czynnośćjest nieodwracalna !!!.
+        ///   Looks up a localized string similar to Czy na prawdę chcesz usunąć ? Ta czynność jest nieodwracalna !!!.
         /// </summary>
         public static string lbDoYouRealyDelete {
             get {
@@ -651,6 +660,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbTruckType {
             get {
                 return ResourceManager.GetString("lbTruckType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista typów samochodów .
+        /// </summary>
+        public static string lbTruckTypes {
+            get {
+                return ResourceManager.GetString("lbTruckTypes", resourceCulture);
             }
         }
         

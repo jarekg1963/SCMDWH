@@ -4,36 +4,40 @@
 @inject IDialogService DialogService;
 @inject ISnackbar Snackbar;
 @using SCMDWH.Shared.Models;
+@inject IStringLocalizer<CultureExample2> Loc
 
 <style>
+    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
+        font-size: small !important;
+    }
+
     .mud-table-cell {
         padding: 0px !important;
         font-size: small !important;
         text-transform: uppercase !important;
-        text-align: left!important;
-       /* font-weight: bold;*/
-    }
-
-    .thcs {
-        height: 1.6em !important;
-        border: 1px solid;
-        background-color: #c7c7c7 !important;
-        font-size: small !important;
-        font-weight: bold !important;
-        text-align: center !important;
-        font-family: sans-serif;
+        text-align: left !important;
     }
 </style>
 
-
 <MudTable Items="@qualityList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
           FixedHeader="true" Height="38em" RowsPerPage="18" Filter="new Func<CarAdviceDictionaryQuality,bool>(FilterFunc)">
-    <ToolBarContent >
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="AddNew">New item</MudButton>
-        <MudSpacer />
-        <MudText Typo="Typo.h6">Quality  </MudText>
-        <MudSpacer />
-        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    <ToolBarContent>
+        <MudGrid Style="background-color:#f5f8f8">
+            <MudItem xs="3">
+                <MudButton Target="_blank" Variant="Variant.Filled" EndIcon="@Icons.Filled.NewLabel"
+                           Style="text-transform:none " OnClick="AddNew" Size="Size.Large">
+                    @Loc["lbAddnewitem"]
+                </MudButton>
+            </MudItem>
+            <MudItem xs="4">
+                <MudAlert Severity="Severity.Normal" Variant="Variant.Text">
+                    <h5>@Loc["lbStatuscodes"] </h5>
+                </MudAlert>
+            </MudItem>
+            <MudItem xs="5">
+                <MudTextField Variant="Variant.Outlined" @bind-Value="searchString" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small" Class="mt-0"></MudTextField>
+            </MudItem>
+        </MudGrid>
     </ToolBarContent>
     <ColGroup>
         <col style="width: 2%; " />
@@ -95,11 +99,11 @@
     private async void Delete(CarAdviceDictionaryQuality qty)
     {
         var parameters = new DialogParameters();
-        parameters.Add("ContentText", $"Do you really want to delete carrier {qty.Quality}? This process cannot be undone.");
-        parameters.Add("ButtonText", "Delete");
+        string strDelete = Loc["lbDelete"];
+        parameters.Add("ButtonText", strDelete);
         parameters.Add("Color", Color.Error);
         var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
-        var dialog = DialogService.Show<DialogDictionaryDeleteComponent>("Delete", parameters, options);
+        var dialog = DialogService.Show<DialogDictionaryDeleteComponent>(strDelete, parameters, options);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {

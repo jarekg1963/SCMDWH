@@ -156,6 +156,9 @@
   <data name="lbColumns" xml:space="preserve">
     <value>Kolumny </value>
   </data>
+  <data name="lbCurrierList" xml:space="preserve">
+    <value>Lista przewoźników </value>
+  </data>
   <data name="lbCustomers" xml:space="preserve">
     <value>Klienci</value>
   </data>
@@ -172,7 +175,7 @@
     <value>Dok</value>
   </data>
   <data name="lbDoYouRealyDelete" xml:space="preserve">
-    <value>Czy na prawdę chcesz usunąć ? Ta czynnośćjest nieodwracalna !!!</value>
+    <value>Czy na prawdę chcesz usunąć ? Ta czynność jest nieodwracalna !!!</value>
   </data>
   <data name="lbDriverS" xml:space="preserve">
     <value>Kierowca och.</value>
@@ -314,6 +317,9 @@
   </data>
   <data name="lbTruckType" xml:space="preserve">
     <value>Samochód</value>
+  </data>
+  <data name="lbTruckTypes" xml:space="preserve">
+    <value>Lista typów samochodów </value>
   </data>
   <data name="lbusername" xml:space="preserve">
     <value>Użytkownik</value>

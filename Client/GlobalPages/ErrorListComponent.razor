@@ -2,15 +2,34 @@
 @using SCMDWH.Shared.Models;
 @inject HttpClient httpClient
 
+<style>
+/*    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
+        font-size: large !important;
+    }
+*/
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: xx-small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+    }
+</style>
 
 <MudTable Items="@ErrorAppList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
           FixedHeader="true" Height="38em" RowsPerPage="15" Filter="new Func<ErrorDataLog,bool>(FilterFunc)">
     <ToolBarContent>
-     
-        <MudSpacer />
-        <MudText Typo="Typo.h6">Errors </MudText>
-        <MudSpacer />
-        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudGrid Style="background-color:#f5f8f8">
+            <MudItem xs="3">
+            </MudItem>
+            <MudItem xs="4">
+                <MudAlert Severity="Severity.Normal" Variant="Variant.Text">
+                    <h5>Operation log </h5>
+                </MudAlert>
+            </MudItem>
+            <MudItem xs="5">
+                <MudTextField Variant="Variant.Outlined" @bind-Value="searchString" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small" Class="mt-0"></MudTextField>
+            </MudItem>
+        </MudGrid>
     </ToolBarContent>
     <ColGroup>
         <col style="width: 1%;" />
@@ -35,7 +54,7 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Methods">
-            <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+            <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
         </MudTd>
         <MudTd DataLabel="User Name">@context.LogId</MudTd>
         <MudTd DataLabel="Email">@context.LogLevel</MudTd>

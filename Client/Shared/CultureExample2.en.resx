@@ -159,6 +159,9 @@
   <data name="lbColumns" xml:space="preserve">
     <value>Columns</value>
   </data>
+  <data name="lbCurrierList" xml:space="preserve">
+    <value>Currier list</value>
+  </data>
   <data name="lbCustomers" xml:space="preserve">
     <value>Customers</value>
   </data>
@@ -317,6 +320,9 @@
   </data>
   <data name="lbTruckType" xml:space="preserve">
     <value>Truck type</value>
+  </data>
+  <data name="lbTruckTypes" xml:space="preserve">
+    <value>Truck types list</value>
   </data>
   <data name="lbusername" xml:space="preserve">
     <value>User name</value>

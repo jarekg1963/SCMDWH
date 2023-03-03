@@ -4,34 +4,36 @@
 @inject ISnackbar Snackbar
 
 @using SCMDWH.Shared.Models;
-
 <style>
+
+    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
+        font-size: small !important;
+    }
+
     .mud-table-cell {
         padding: 0px !important;
         font-size: small !important;
         text-transform: uppercase !important;
         text-align: left !important;
-        /* font-weight: bold;*/
-    }
-
-    .thcs {
-        height: 1.6em !important;
-        border: 1px solid;
-        background-color: #c7c7c7 !important;
-        font-size: small !important;
-        font-weight: bold !important;
-        text-align: center !important;
-        font-family: sans-serif;
     }
 </style>
 
 <MudTable Items="@UserLogList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
           FixedHeader="true" Height="38em" RowsPerPage="25" Filter="new Func<LogAppUserActivity,bool>(FilterFunc)">
     <ToolBarContent>
-        <MudSpacer />
-        <MudText Typo="Typo.h6">Users </MudText>
-        <MudSpacer />
-        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudGrid Style="background-color:#f5f8f8">
+            <MudItem xs="3">
+
+            </MudItem>
+            <MudItem xs="4">
+                <MudAlert Severity="Severity.Normal" Variant="Variant.Text">
+                    <h5>User log </h5>
+                </MudAlert>
+            </MudItem>
+            <MudItem xs="5">
+                <MudTextField Variant="Variant.Outlined" @bind-Value="searchString" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small" Class="mt-0"></MudTextField>
+            </MudItem>
+        </MudGrid>
     </ToolBarContent>
     <ColGroup>
         <col style="width: 1%;" />

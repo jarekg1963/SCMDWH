@@ -1,20 +1,29 @@
-﻿<MudDialog>
+﻿@inject IStringLocalizer<CultureExample2> Loc
+<MudDialog>
     <DialogContent>
         <MudText>@(new MarkupString(ContentText))</MudText>
         </DialogContent>
         <DialogActions>
-            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton OnClick="Cancel">@Loc["lbCancel"]</MudButton>
             <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
         </DialogActions>
     </MudDialog>
     @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Parameter] public string ContentText { get; set; }
+    //[Parameter] public string ContentText { get; set; }
 
     [Parameter] public string ButtonText { get; set; }
-
     [Parameter] public Color Color { get; set; }
+
+    private string ContentText;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ContentText = Loc["lbDoYouRealyDelete"];
+    }
+
+
 
     void Submit() => MudDialog.Close(DialogResult.Ok(true));
     void Cancel() => MudDialog.Cancel();
