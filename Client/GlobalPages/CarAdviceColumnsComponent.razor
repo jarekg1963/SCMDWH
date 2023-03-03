@@ -4,23 +4,49 @@
 @inject IDialogService DialogService;
 
 
+<style>
+
+    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
+        font-size: small !important;
+    }
+
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: center !important;
+    }
+</style>
+
 <MudTable Items="@ColumsList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
           FixedHeader="true" Height="38em" RowsPerPage="15" Filter="new Func<CarAdviceMainPlanColumn,bool>(FilterFunc)">
+
+
     <ToolBarContent>
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="AddNew">New user</MudButton>
-        <MudSpacer />
-        <MudText Typo="Typo.h6">Users </MudText>
-        <MudSpacer />
-        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudGrid Style="background-color:#f5f8f8">
+            <MudItem xs="3">
+          
+            </MudItem>
+            <MudItem xs="4">
+                <MudAlert Severity="Severity.Normal" Variant="Variant.Text">
+                    <h5>Columns </h5>
+                </MudAlert>
+            </MudItem>
+            <MudItem xs="5">
+                <MudTextField Variant="Variant.Outlined" @bind-Value="searchString" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small" Class="mt-0"></MudTextField>
+            </MudItem>
+        </MudGrid>
     </ToolBarContent>
+
     <ColGroup>
-        <col style="width: 1%;" />
-        <col style="width: 15%; " />
-        <col style="width: 15%;" />
         <col style="width: 2%;" />
+        <col style="width: 10%; " />
+        <col style="width: 10%;" />
         <col style="width: 2%;" />
-        <col style="width: 2%;" />
-        <col style="width: 2%;" />
+        <col style="width: 5%;" />
+        <col style="width: 5%;" />
+        <col style="width: 10%;" />
+        <col style="width: 5%;" />
 
     </ColGroup>
     <HeaderContent>
@@ -35,20 +61,20 @@
     </HeaderContent>
     <RowTemplate>
 
-        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Id" >@context.Id</MudTd>
         <MudTd DataLabel="UserName ">@context.UserName</MudTd>
         <MudTd DataLabel="Column name">@context.MainScreenColumn</MudTd>
 
       
-        <MudTd DataLabel="Hiden">
+        <MudTd DataLabel="Hiden" >
             <MudCheckBox ReadOnly="true" @bind-Checked="@context.Hidden"></MudCheckBox>
         </MudTd>
-        <MudTd DataLabel="Order">@context.OrderColumn</MudTd>
+        <MudTd DataLabel="Order" >@context.OrderColumn</MudTd>
         <MudTd DataLabel="Remark">@context.ColumnWidth</MudTd>
         <MudTd DataLabel="Remark">@context.plHeader</MudTd>
 
         <MudTd DataLabel="Methods">
-            <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+            <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
           @*  <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />*@
         </MudTd>
     </RowTemplate>
@@ -117,27 +143,3 @@
     }
 }
 
-
-<style>
-
-
-
-
-    .mud-table-cell {
-        padding: 0px !important;
-        font-size: small !important;
-        text-transform: uppercase !important;
-        text-align: left !important;
-        /* font-weight: bold;*/
-    }
-
-    .thcs {
-        height: 1.6em !important;
-        border: 1px solid;
-        background-color: #c7c7c7 !important;
-        font-size: small !important;
-        font-weight: bold !important;
-        text-align: center !important;
-        font-family: sans-serif;
-    }
-</style>

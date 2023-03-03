@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Microsoft.EntityFrameworkCore;
 using SCMDWH.Server.Data;
 using SCMDWH.Server.Repository;
 using SCMDWH.Shared.Models;
+using SCMDWH.Shared.Tools;
 
 namespace SCMDWH.Server.Controllers
 {
@@ -27,6 +29,7 @@ namespace SCMDWH.Server.Controllers
         [HttpGet("RepoGlobalAppUsers")]
         public async Task<ActionResult<IEnumerable<GlobalAppUsers>>> RepoUsers()
         {
+
             return Ok(_usersRepo.GetUsers());
         }
 
@@ -43,14 +46,29 @@ namespace SCMDWH.Server.Controllers
 
         // GET: api/GlobalAppUsers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GlobalAppUsers>>> GetGlobalAppUsers()
+        public async Task<ActionResult<List<GlobalAppUsers>>> GetGlobalAppUsers()
         {
+            //throw new Exception("A custom message for an application specific exception");
+            //return StatusCode(400, "Brak danych na liscie uzytkownikow ");
+
+
+         
 
             if (_context.GlobalAppUsers == null)
             {
-                return NotFound();
+                return NotFound("App users context not found ");
             }
-            return await _context.GlobalAppUsers.ToListAsync();
+
+            try
+            {
+                 return await _context.GlobalAppUsers.ToListAsync();
+            }
+            catch (Exception ex) 
+            {
+                return StatusCode(400, ex.Message);
+            }
+
+          
         }
      
             // GET: api/GlobalAppUsers/5
@@ -75,9 +93,7 @@ namespace SCMDWH.Server.Controllers
             {
                 return BadRequest();
             }
-
             _context.Entry(globalAppUsers).State = EntityState.Modified;
-
             try
             {
                 await _context.SaveChangesAsync();
@@ -181,25 +197,32 @@ namespace SCMDWH.Server.Controllers
         [HttpDelete("{userName}")]
         public async Task<IActionResult> DeleteGlobalAppUsers(string userName)
         {
+          
+
             if (_context.GlobalAppUsers == null)
             {
-                return NotFound();
+                return NotFound("App users context not foud ");
             }
 
             var globalAppUsers = await _context.GlobalAppUsers.FirstOrDefaultAsync(c=> c.UserName == userName);
             if (globalAppUsers == null)
             {
-                return NotFound();
+                return NotFound("User already deleted ");
             }
 
-            var columnsForDelete = _context.CarAdviceMainPlanComum.Where(c => c.UserName == userName).ToList();
-
-            _context.CarAdviceMainPlanComum.RemoveRange(columnsForDelete);
-
-            _context.GlobalAppUsers.Remove(globalAppUsers);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            try
+            {
+                var columnsForDelete = _context.CarAdviceMainPlanComum.Where(c => c.UserName == userName).ToList();
+                _context.CarAdviceMainPlanComum.RemoveRange(columnsForDelete);
+                _context.GlobalAppUsers.Remove(globalAppUsers);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch(Exception ex) 
+            {
+                return StatusCode(400, ex.Message);
+            }
+            
         }
 
         private bool GlobalAppUsersExists(string id)

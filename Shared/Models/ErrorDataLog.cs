@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SCMDWH.Shared.Models
 {
-    public partial class ErrorDataLog
+    public  class ErrorDataLog
     {
         public long LogId { get; set; }
         public string? LogLevel { get; set; }

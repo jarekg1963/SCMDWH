@@ -10,7 +10,6 @@
 @inject IStringLocalizer<CultureExample2> Loc
 
 
-
 <style>
 
     .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
@@ -65,8 +64,7 @@ else
                                     <MudButton Color="Color.Primary" OnClick="SelectTimeFrameFromPicker" >Ok</MudButton>
                                 </PickerActions>
                             </MudDateRangePicker>
-                        </MudItem>
-                   
+                        </MudItem>              
                         <MudItem xs="4">
                             <MudTextField @bind-Value="_searchString" Placeholder=@Loc["lbSearch"] Adornment="Adornment.Start" Immediate="true"
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>

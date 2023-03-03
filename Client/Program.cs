@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using SCMDWH.Client;
 using SCMDWH.Client.AuthProviders;
-using SCMDWH.Client.Brokers.Api;
+
 using SCMDWH.Client.Logging;
 using SCMDWH.Client.Services;
-using SCMDWH.Client.Services.GlobalUsers;
+
 using System.Globalization;
 using Microsoft.JSInterop;
+using SCMDWH.Client.JGHttpClient;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -33,12 +34,10 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 
-builder.Services.AddScoped<IApiBroker, ApiBroker>();
-
-builder.Services.AddScoped<IGlobalUsersService, GlobalUsersService>();
 
 builder.Services.AddLocalization();
 
+builder.Services.AddScoped<JGHttpClient>();
 
 
 var host = builder.Build();
