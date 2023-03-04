@@ -115,7 +115,7 @@
             {
                 qualityList = qualityList.Where(u => u.Quality != qty.Quality).ToList();
                 StateHasChanged();
-             //   Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+                //   Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
             }
             else
             {
@@ -127,9 +127,10 @@
 
     private async void AddNew()
     {
+        string strlbQuality = Loc["lbQuality"];
         CarAdviceDictionaryQuality newQty = new CarAdviceDictionaryQuality();
         var parameters = new DialogParameters { ["Id"] = "XXX" };
-        var dialog = DialogService.Show<CADQualityAddEditComponent>("Add new qty", parameters);
+        var dialog = DialogService.Show<CADQualityAddEditComponent>(strlbQuality, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -143,9 +144,10 @@
 
     private async void Edit(CarAdviceDictionaryQuality qty)
     {
+        string strlbQuality = Loc["lbQuality"];
         CarAdviceDictionaryQuality updateQty = new CarAdviceDictionaryQuality();
         var parameters = new DialogParameters { ["Id"] = qty.Id.ToString() };
-        var dialog = DialogService.Show<CADQualityAddEditComponent>("Edit qty ", parameters);
+        var dialog = DialogService.Show<CADQualityAddEditComponent>(strlbQuality, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {

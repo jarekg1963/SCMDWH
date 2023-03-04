@@ -126,7 +126,7 @@
             {
                 customerList = customerList.Where(u => u.Customer != customer.Customer).ToList();
                 StateHasChanged();
-              //  Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+                //  Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
             }
             else
             {
@@ -138,9 +138,10 @@
 
     private async void AddNew()
     {
+        string strlbCustomer = Loc["lbClient"];
         CarAdviceDictionaryCustomers newCustomer = new CarAdviceDictionaryCustomers();
         var parameters = new DialogParameters { ["Id"] = "XXX" };
-        var dialog = DialogService.Show<CADCustomerDialogAddEdit>("Add new customer", parameters);
+        var dialog = DialogService.Show<CADCustomerDialogAddEdit>(strlbCustomer, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -154,9 +155,10 @@
 
     private async void Edit(CarAdviceDictionaryCustomers customer)
     {
+        string strlbCustomer = Loc["lbClient"];
         CarAdviceDictionaryCustomers updateCustomer = new CarAdviceDictionaryCustomers();
         var parameters = new DialogParameters { ["Id"] = customer.Id.ToString() };
-        var dialog = DialogService.Show<CADCustomerDialogAddEdit>("Edit customer ", parameters);
+        var dialog = DialogService.Show<CADCustomerDialogAddEdit>(strlbCustomer, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {

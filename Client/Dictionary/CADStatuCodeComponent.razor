@@ -126,7 +126,7 @@
             {
                 statusesList = statusesList.Where(u => u.Status != stStatus.Status).ToList();
                 StateHasChanged();
-             //   Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+                //   Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
             }
             else
             {
@@ -137,9 +137,10 @@
 
     private async void AddNew()
     {
+        string strlbStatusCode = Loc["lbStatuscodes"];
         CarAdviceDictionaryStatus newStatusCode = new CarAdviceDictionaryStatus();
         var parameters = new DialogParameters { ["Id"] = "XXX" };
-        var dialog = DialogService.Show<CADStatusDialogAddEdit>("Add new ststus", parameters);
+        var dialog = DialogService.Show<CADStatusDialogAddEdit>(strlbStatusCode, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -153,9 +154,10 @@
 
     private async void Edit(CarAdviceDictionaryStatus carrier)
     {
+        string strlbStatusCode = Loc["lbStatuscodes"];
         CarAdviceDictionaryStatus updateStatus = new CarAdviceDictionaryStatus();
         var parameters = new DialogParameters { ["Id"] = carrier.Id.ToString() };
-        var dialog = DialogService.Show<CADStatusDialogAddEdit>("Edit carrier ", parameters);
+        var dialog = DialogService.Show<CADStatusDialogAddEdit>(strlbStatusCode, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {

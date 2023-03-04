@@ -128,7 +128,7 @@
             if (Response.IsSuccessStatusCode)
             {
                 carriersList = carriersList.Where(u => u.Carrier != carrier.Carrier).ToList();
-               // Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+                // Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
                 StateHasChanged();
             }
             else
@@ -140,9 +140,10 @@
 
     private async void AddNew()
     {
+        string strlbAddNewCurrier = Loc["lbAddNewCurrier"];
         CarAdviceDictionaryCarriers newCarrier = new CarAdviceDictionaryCarriers();
         var parameters = new DialogParameters { ["Id"] = "XXX" };
-        var dialog = DialogService.Show<CADCarriersDialogAddEdit>("Add new carrier", parameters);
+        var dialog = DialogService.Show<CADCarriersDialogAddEdit>(strlbAddNewCurrier, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -156,9 +157,10 @@
 
     private async void Edit(CarAdviceDictionaryCarriers carrier)
     {
+        string strlbEditCurrier = Loc["lbEditCurrier"];
         CarAdviceDictionaryCarriers updateCarrier = new CarAdviceDictionaryCarriers();
         var parameters = new DialogParameters { ["Id"] = carrier.Id.ToString() };
-       var dialog =  DialogService.Show<CADCarriersDialogAddEdit>("Edit carrier ", parameters);
+        var dialog = DialogService.Show<CADCarriersDialogAddEdit>(strlbEditCurrier, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {

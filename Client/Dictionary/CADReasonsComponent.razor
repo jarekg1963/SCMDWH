@@ -129,7 +129,7 @@
             {
                 reasonsList = reasonsList.Where(u => u.Code != rReason.Code).ToList();
                 StateHasChanged();
-              //  Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+                //  Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
             }
             else
             {
@@ -140,9 +140,10 @@
 
     private async void AddNew()
     {
+        string strlbReason = Loc["lbReason"];
         CarAdviceDictionaryReason newReasonCode = new CarAdviceDictionaryReason();
         var parameters = new DialogParameters { ["Id"] = "XXX" };
-        var dialog = DialogService.Show<CADReasonsDialogAddEdit>("Add new carrier", parameters);
+        var dialog = DialogService.Show<CADReasonsDialogAddEdit>(strlbReason, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -157,9 +158,10 @@
 
     private async void Edit(CarAdviceDictionaryReason rReason)
     {
+        string strlbReason = Loc["lbReason"];
         CarAdviceDictionaryReason updateReasonCode = new CarAdviceDictionaryReason();
         var parameters = new DialogParameters { ["Id"] = rReason.Id.ToString() };
-        var dialog = DialogService.Show<CADReasonsDialogAddEdit>("Edit carrier ", parameters);
+        var dialog = DialogService.Show<CADReasonsDialogAddEdit>(strlbReason, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {

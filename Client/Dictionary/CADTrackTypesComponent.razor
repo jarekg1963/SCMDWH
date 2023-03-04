@@ -126,7 +126,7 @@
             {
                 tracktypesList = tracktypesList.Where(u => u.Truck != tracktype.Truck).ToList();
                 StateHasChanged();
-               // Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+                // Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
             }
             else
             {
@@ -137,9 +137,10 @@
 
     private async void AddNew()
     {
+        string strlbAddNew = Loc["lbNew"];
         CarAdviceDictionaryTruckType newTractType = new CarAdviceDictionaryTruckType();
         var parameters = new DialogParameters { ["Id"] = "XXX" };
-        var dialog = DialogService.Show<CADTrackTypesDialogAddEdit>("Add new track type", parameters);
+        var dialog = DialogService.Show<CADTrackTypesDialogAddEdit>(strlbAddNew, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -153,9 +154,10 @@
 
     private async void Edit(CarAdviceDictionaryTruckType trackType)
     {
+        string strlbEdit = Loc["lbEdit"];
         CarAdviceDictionaryTruckType updateTrackType = new CarAdviceDictionaryTruckType();
         var parameters = new DialogParameters { ["Id"] = trackType.Id.ToString() };
-        var dialog = DialogService.Show<CADTrackTypesDialogAddEdit>("Edit carrier ", parameters);
+        var dialog = DialogService.Show<CADTrackTypesDialogAddEdit>(strlbEdit, parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {

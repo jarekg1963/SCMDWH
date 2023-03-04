@@ -2,7 +2,7 @@
 @inject HttpClient httpClient;
 @inject NavigationManager navigationManager
 @inject ISnackbar Snackbar
-
+@inject IStringLocalizer<CultureExample2> Loc
 
 <EditForm Model="@trackTypes" OnValidSubmit="HandleValidSubmit">
     <MudCard style="width:600px">
@@ -23,12 +23,14 @@
             </MudGrid>
         </MudCardContent>
         <MudCardActions>
-            <MudItem xs="8">
+            <MudItem xs="6">
+            </MudItem>
+            <MudItem xs="4">
+                <MudButton Variant="Variant.Filled" OnClick="Close">@Loc["lbCancel"]</MudButton>
             </MudItem>
             <MudItem xs="2">
-                <MudButton Variant="Variant.Filled" OnClick="Close">Cancel</MudButton>
+            <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">@Loc["lbSave"]</MudButton>
             </MudItem>
-            <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">Save</MudButton>
         </MudCardActions>
     </MudCard>
 </EditForm>

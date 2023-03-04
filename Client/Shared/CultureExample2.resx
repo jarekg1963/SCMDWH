@@ -123,6 +123,9 @@
   <data name="lbAdDateNowy" xml:space="preserve">
     <value>Data awizacji </value>
   </data>
+  <data name="lbAddNewCurrier" xml:space="preserve">
+    <value>Dodawanie nowego przewoźnika</value>
+  </data>
   <data name="lbAddnewitem" xml:space="preserve">
     <value>Nowy</value>
   </data>
@@ -184,7 +187,10 @@
     <value>Kierowca-magazyn</value>
   </data>
   <data name="lbEdit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Edycja</value>
+  </data>
+  <data name="lbEditCurrier" xml:space="preserve">
+    <value>Edycja przewoźnika </value>
   </data>
   <data name="lbEnTime" xml:space="preserve">
     <value>Godzina wjazdu</value>

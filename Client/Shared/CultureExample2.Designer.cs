@@ -79,6 +79,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dodawanie nowego przewoźnika.
+        /// </summary>
+        public static string lbAddNewCurrier {
+            get {
+                return ResourceManager.GetString("lbAddNewCurrier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nowy.
         /// </summary>
         public static string lbAddnewitem {
@@ -259,11 +268,20 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit.
+        ///   Looks up a localized string similar to Edycja.
         /// </summary>
         public static string lbEdit {
             get {
                 return ResourceManager.GetString("lbEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edycja przewoźnika .
+        /// </summary>
+        public static string lbEditCurrier {
+            get {
+                return ResourceManager.GetString("lbEditCurrier", resourceCulture);
             }
         }
         

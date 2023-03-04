@@ -126,6 +126,9 @@
   <data name="lbAdDateNowy" xml:space="preserve">
     <value>Ata</value>
   </data>
+  <data name="lbAddNewCurrier" xml:space="preserve">
+    <value>Add new currier</value>
+  </data>
   <data name="lbAddnewitem" xml:space="preserve">
     <value>New</value>
   </data>
@@ -188,6 +191,9 @@
   </data>
   <data name="lbEdit" xml:space="preserve">
     <value>Edycja</value>
+  </data>
+  <data name="lbEditCurrier" xml:space="preserve">
+    <value>Edit currier</value>
   </data>
   <data name="lbEnTime" xml:space="preserve">
     <value>En Time</value>
