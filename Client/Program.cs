@@ -12,6 +12,7 @@ using SCMDWH.Client.Services;
 using System.Globalization;
 using Microsoft.JSInterop;
 using SCMDWH.Client.JGHttpClient;
+using SCMDWH.Client.Tools;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -38,6 +39,8 @@ builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddLocalization();
 
 builder.Services.AddScoped<JGHttpClient>();
+builder.Services.AddScoped<RecordLog>();
+
 
 
 var host = builder.Build();

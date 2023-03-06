@@ -2,8 +2,12 @@
 @inject NavigationManager navigationManager
 @inject HttpClient httpClient
 @inject ISnackbar Snackbar
+@using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
-
+@using SCMDWH.Client.JGHttpClient;
+@using System.Security.Claims;
+@inject JGHttpClient http;
+@inject RecordLog rl;
 
 @if (UserName != "0")
 {
@@ -106,8 +110,12 @@ else
     private bool readonlyUserName = false;
     private string LogonUserName = "Nieznany";
     GlobalAppUsers globalAppUser = new GlobalAppUsers();
+    private string currentUser = "";
     [Parameter]
     public string UserName { get; set; }
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
 
 
     private void resetPassword()
@@ -158,69 +166,69 @@ else
         globalAppUser.Active = true;
         globalAppUser.CreatedBy = LogonUserName;
         globalAppUser.CreatedTime = DateTime.Now;
-         //globalAppUser.GlobalAppUserRoles[] = null;
+        //globalAppUser.GlobalAppUserRoles[] = null;
         if (globalAppUser.Remark == null) globalAppUser.Remark = "";
+
+        try
+        {
         string link = "/api/GlobalAppUsers/";
         var Response = await httpClient.PostAsJsonAsync<GlobalAppUsers>(link, globalAppUser);
 
-        LogAppUserActivity ilo = new LogAppUserActivity()
+        rl.RecordLogForLogAppReportingActions("User created:" + globalAppUser.UserName, currentUser);
+  
+            if (Response.StatusCode == System.Net.HttpStatusCode.Created)
             {
-                AppActivityType = "User created" + globalAppUser.Email,
-                AppActivityDetails = "Success",
-                ActivityTime = DateTime.Now,
-                ActivityTriggeredByUser = LogonUserName
-            };
-        await httpClient.PostAsJsonAsync("/api/LogAppUserActivities", ilo);
+                navigationManager.NavigateTo("/UserListPage");
+                StateHasChanged();
 
+            }
 
-        @if (Response.StatusCode == System.Net.HttpStatusCode.Created)
-        {
-            
-            navigationManager.NavigateTo("/UserListPage");
-            StateHasChanged();
-        }
-        else
-        {
             if (Response.StatusCode == System.Net.HttpStatusCode.Conflict)
             {
                 Snackbar.Add($"Error User: {globalAppUser.UserName} already exist", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1000; });
             }
-            else
+
+            if (Response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                Snackbar.Add($"Error: {Response.StatusCode.ToString()}", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1000; });
+                Snackbar.Add($"Error User: {globalAppUser.UserName} already exist", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1000; });
             }
+
+
         }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1000; });
+        }
+
+
+
     }
     private async Task Update()
     {
-        string link = "/api/GlobalAppUsers/" + UserName;
-        var Response = await httpClient.PutAsJsonAsync<GlobalAppUsers>(link, globalAppUser);
 
-        LogAppUserActivity ilo = new LogAppUserActivity()
-            {
-                AppActivityType = "User updated" + globalAppUser.UserName,
-                AppActivityDetails = "Success",
-                ActivityTime = DateTime.Now,
-                ActivityTriggeredByUser = LogonUserName
-            };
-        await httpClient.PostAsJsonAsync("/api/LogAppUserActivities", ilo);
-
-        @if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
+        try
         {
+            string link = "/api/GlobalAppUsers/" + UserName;
+            var Response = await http.Put<GlobalAppUsers>(link, globalAppUser);
+            rl.RecordLogForLogAppReportingActions("User updated:" + UserName, currentUser);
+
             navigationManager.NavigateTo("/UserListPage");
             StateHasChanged();
         }
-        else
+        catch (Exception ex)
         {
-            Snackbar.Add("Error !!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+            Snackbar.Add(ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1500; });
         }
     }
 
     protected override async Task OnInitializedAsync()
-    {
-      
+    {   
         if (UserName != "0")
         {
+            var authState = await AuthState;
+            var user = authState.User;
+            currentUser = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+
             readonlyUserName = true;
             string link = "/api/GlobalAppUsers/" + UserName;
             globalAppUser = await httpClient.GetFromJsonAsync<GlobalAppUsers>(link);

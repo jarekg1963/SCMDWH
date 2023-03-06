@@ -98,7 +98,7 @@ namespace SCMDWH.Server.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!GlobalAppUsersExists(id))
                 {
@@ -106,7 +106,7 @@ namespace SCMDWH.Server.Controllers
                 }
                 else
                 {
-                    throw;
+                    throw new Exception(ex.Message);
                 }
             }
 

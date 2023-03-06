@@ -4,12 +4,15 @@
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
+@using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
 @using SCMDWH.Client.JGHttpClient;
 @using SCMDWH.Shared.Tools
+@using System.Security.Claims;
 @inject IStringLocalizer<CultureExample2> Loc
 
 @inject JGHttpClient http;
+@inject RecordLog rl;
 
 @attribute [Authorize]
 
@@ -89,7 +92,7 @@
         <MudTd DataLabel="Remark">@context.Remark</MudTd>
         <MudTd DataLabel="Methods">
             <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
-            <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+            <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -106,6 +109,9 @@
     private string searchString = "";
     private List<GlobalAppUsers> UserList = new List<GlobalAppUsers>();
     private string UserName = "";
+    private string currentUser = "";
+
+
     //------------------------------------------------------------------------
 
     [CascadingParameter]
@@ -139,6 +145,9 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthState;
+        var user = authState.User;
+        currentUser = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
 
         try
         {
@@ -185,15 +194,8 @@
             {
                 string link = "/api/GlobalAppUsers/" + user.UserName;
                 var Res = await http.Delete<HttpResponseMessage>(link);
-
-                LogAppUserActivity ilo = new LogAppUserActivity()
-                    {
-                        AppActivityType = "User deleted" + user.UserName,
-                        AppActivityDetails = "Success",
-                        ActivityTime = DateTime.Now,
-                        ActivityTriggeredByUser = UserName
-                    };
-                await httpClient.PostAsJsonAsync("/api/LogAppUserActivities", ilo);
+                rl.RecordLogForLogAppReportingActions("Deleted user:" + user.UserName, currentUser);
+                // odświerzanie listy uzytkowników 
                 UserList = UserList.Where(u => u.UserName != user.UserName).ToList();
                 StateHasChanged();
             }
