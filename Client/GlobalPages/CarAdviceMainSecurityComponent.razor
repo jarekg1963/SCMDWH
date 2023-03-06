@@ -41,17 +41,17 @@
 
      </MudItem>
     <MudItem xs="1">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Id" Label="Nr" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Id" Label="Nr" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField> @*dodane do excela*@
     </MudItem>
 
     <MudItem xs="2">
-        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal"/>
+        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal" /> @*dodane do excela*@
 
     </MudItem>
     <MudItem xs="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
+            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" /> @*dodane do excela*@
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton> @*dodane do excela*@
         </MudStack>
 
     </MudItem>
@@ -67,7 +67,7 @@
         <MudTextField Margin="Margin.Normal"  @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesS" Label=@Loc["lbPlates"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudTextField Margin="Margin.Normal" @bind-Value="@CarAdviceMainTableWHEdit.DriverS" Label=@Loc["lbDriverS"] Variant="Variant.Text"></MudTextField>
+        <MudTextField Margin="Margin.Normal" @bind-Value="@CarAdviceMainTableWHEdit.DriverS" Label=@Loc["lbDriverS"] Variant="Variant.Text"></MudTextField> @*dodane do excela*@
     </MudItem>
     <MudItem xs="2">
         <MudDatePicker Margin="Margin.Normal" Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Editable="true" />
@@ -113,56 +113,56 @@
 <div class="container">
     <div class="row " style="--bs-gutter-x: 0.5rem!important">
             <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbShipment"]</div>
+            <div class="demo-content">@Loc["lbShipment"]</div> @*dodane do excela*@
             </div>
             <div class="col-lg-2">
-            <div class="demo-content ">@Loc["lbReference"]</div>
+            <div class="demo-content ">@Loc["lbReference"]</div> @*dodane do excela*@
             </div>
             <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbAdDate"]</div>
+            <div class="demo-content">@Loc["lbAdDate"]</div> @*dodane do excela*@
             </div>
             <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbEtdDate"]</div>
+            <div class="demo-content">@Loc["lbEtdDate"]</div> @*dodane do excela*@
             </div>
             <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbDestination"]</div>
+            <div class="demo-content">@Loc["lbDestination"]</div>  @*dodane do excela*@
             </div>
             <div class="col-lg-2">
-                <div class="demo-content">@Loc["lbCarriers"]</div>
+            <div class="demo-content">@Loc["lbCarriers"]</div> @*dodane do excela*@
             </div>
         </div>
     <div class="row " style="--bs-gutter-x: 0.5rem!important">
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Shipment</div>
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Shipment</div>  @*dodane do excela*@
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Reference</div>
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Reference</div>  @*dodane do excela*@
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.AdviceDate</div>
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.AdviceDate</div>  @*dodane do excela*@
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Etd</div>
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Etd</div> @*dodane do excela*@
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Destination</div>
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Destination</div>  @*dodane do excela*@
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Forwarder</div>
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Forwarder</div> @*dodane do excela*@
         </div>
     </div>
     <div class="row " style="--bs-gutter-x: 0.5rem!important">
         <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbClient"]</div>
+            <div class="demo-content">@Loc["lbClient"]</div>  @*dodane do excela*@
         </div>
         <div class="col-lg-2">
-            <div class="demo-content ">@Loc["lbPlates"]</div>
+            <div class="demo-content ">@Loc["lbPlates"]</div> @*dodane do excela*@
         </div>
         <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbDriverWH"]</div>
+            <div class="demo-content">@Loc["lbDriverWH"]</div> @*dodane do excela*@
         </div>
         <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbPickingstatus"]</div>
+            <div class="demo-content">@Loc["lbPickingstatus"]</div> 
         </div>
         <div class="col-lg-2">
             <div class="demo-content">@Loc["lbPickingtime"]</div>
@@ -173,13 +173,13 @@
     </div>
     <div class="row " style="--bs-gutter-x: 0.5rem!important">
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Client</div>
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Client</div>  @*dodane do excela*@
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.TruckPlatesWh</div>
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.TruckPlatesWh</div> @*dodane do excela*@
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.DriverWh</div>
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.DriverWh</div> @*dodane do excela*@
         </div>
         <div class="col-lg-2">
             <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.PickingStatus</div>
