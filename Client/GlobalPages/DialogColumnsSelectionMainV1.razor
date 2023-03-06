@@ -158,10 +158,11 @@
 
 	private async Task SaveData()
 	{
-		foreach(var itemForupdate in _dropzoneItems)
+		int i = 1;
+		foreach(var itemForupdate in _dropzoneItems.OrderBy(o => o.Order))
 		{
 			CarAdviceMainPlanColumn columnForUpdate = new();
-			
+
 			if (CultureInfo.CurrentCulture.Name == "en-US")
 			{
 				columnForUpdate = columsForDisplayListDb.FirstOrDefault(c => c.MainScreenColumn == itemForupdate.Name);
@@ -172,20 +173,19 @@
 				columnForUpdate = columsForDisplayListDb.FirstOrDefault(c => c.plHeader == itemForupdate.Name);
 			}
 
-			if (itemForupdate.Selector == "1")
-			{
-				columnForUpdate.Hidden = false;
-			}
+			columnForUpdate.Hidden = itemForupdate.Selector == "2";
+
+			columnForUpdate.OrderColumn = i;
+			i++;
 
 			if (itemForupdate.Selector == "2")
 			{
 				columnForUpdate.Hidden = true;
 			}
 			columnForUpdate.OrderColumn = itemForupdate.Order;
-
 			//CarAdviceMainPlanColums
 			string linkcoluser = "/api/CarAdviceMainPlanColums/" + columnForUpdate.Id;
-			var res =  httpClient.PutAsJsonAsync<CarAdviceMainPlanColumn>(linkcoluser, columnForUpdate);		
+			var res =  httpClient.PutAsJsonAsync<CarAdviceMainPlanColumn>(linkcoluser, columnForUpdate);
 		}
 		MudDialog.Close(DialogResult.Ok("OK"));
 	}
