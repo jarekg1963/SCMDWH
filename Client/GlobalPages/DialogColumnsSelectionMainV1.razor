@@ -182,6 +182,7 @@
 				columnForUpdate.Hidden = true;
 			}
 			columnForUpdate.OrderColumn = itemForupdate.Order;
+
 			//CarAdviceMainPlanColums
 			string linkcoluser = "/api/CarAdviceMainPlanColums/" + columnForUpdate.Id;
 			var res =  httpClient.PutAsJsonAsync<CarAdviceMainPlanColumn>(linkcoluser, columnForUpdate);		
