@@ -179,11 +179,15 @@
 			i++;
 
 			string linkcoluser = "/api/CarAdviceMainPlanColums/" + columnForUpdate.Id;
-			var res =  httpClient.PutAsJsonAsync<CarAdviceMainPlanColumn>(linkcoluser, columnForUpdate);
-			await Task.Delay(50);
+			var res = await httpClient.PutAsJsonAsync<CarAdviceMainPlanColumn>(linkcoluser, columnForUpdate);			
+			//await Task.Delay(50);
+
 		}
 		MudDialog.Close(DialogResult.Ok("OK"));
 	}
+
+
+
 
 
 
