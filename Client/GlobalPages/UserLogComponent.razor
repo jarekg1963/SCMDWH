@@ -2,10 +2,10 @@
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 @inject ISnackbar Snackbar
-
 @using SCMDWH.Shared.Models;
-<style>
 
+
+<style>
     .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
         font-size: small !important;
     }
@@ -44,10 +44,10 @@
     </ColGroup>
     <HeaderContent>  
         <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppUserActivity, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
-        <MudTh class="thcs">Type</MudTh>
-        <MudTh class="thcs">Dateils</MudTh>
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppUserActivity, object>(x=>x.AppActivityType)">AppActivityType</MudTableSortLabel></MudTh>
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppUserActivity, object>(x=>x.AppActivityDetails)">AppCtivityDetails</MudTableSortLabel></MudTh>
         <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppUserActivity, object>(x=>x.ActivityTime)">Time</MudTableSortLabel></MudTh>
-        <MudTh class="thcs">User</MudTh>      
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppUserActivity, object>(x=>x.ActivityTriggeredByUser)">User</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>       
         <MudTd DataLabel="User Name">@context.Id</MudTd>
@@ -77,6 +77,8 @@
         try
         {
             UserLogList = await httpClient.GetFromJsonAsync<List<LogAppUserActivity>>(link);
+
+
         }
         catch (Exception ex)
         {
@@ -89,6 +91,12 @@
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
         if (element.AppActivityDetails.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.ActivityTime.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.ActivityTriggeredByUser.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
         return false;

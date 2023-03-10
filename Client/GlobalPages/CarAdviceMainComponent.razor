@@ -1,13 +1,16 @@
 ﻿@page "/caradvice"
 @using System.Net.Http.Json
 @using System.Text.Json.Serialization;
+@using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
 @using System.Security.Claims;
+@using System.Text.Json;
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService;
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
+@inject RecordLog rl;
 
 
 <style>
@@ -351,17 +354,11 @@ else
             string linkAddNew = "/api/CarAdviceMainTables";
             var response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkAddNew, CarAdviceMainTableNewForSave);
 
+            string jsonStringCANew = JsonSerializer.Serialize(CarAdviceMainTableNewForSave);
 
-            // write in log table 
-            LogAppReportingAction ilo = new LogAppReportingAction()
-                {
-                       ActionType = "New item added" ,
-                    ActionDetails = CarAdviceMainTableNewForSave.AdviceDate.ToString() + "  " + CarAdviceMainTableNewForSave.Shipment,
-                    ActionResult = "Success",
-                    ActionTime = DateTime.Now,
-                    ActrionTriggeredByUser = UserName
-                };
-            await httpClient.PostAsJsonAsync("/api/LogAppReportingActions", ilo);
+            rl.RecordOperationLog("New item",
+            jsonStringCANew,
+            UserName,"Success");
 
             // koniec log
 

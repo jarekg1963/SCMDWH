@@ -194,6 +194,7 @@
             {
                 string link = "/api/GlobalAppUsers/" + user.UserName;
                 var Res = await http.Delete<HttpResponseMessage>(link);
+                // zapisanie log
                 rl.RecordLogForLogAppReportingActions("Deleted user:" + user.UserName, currentUser);
                 // odświerzanie listy uzytkowników 
                 UserList = UserList.Where(u => u.UserName != user.UserName).ToList();

@@ -2,8 +2,10 @@
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 @inject ISnackbar Snackbar
+@inject IDialogService DialogService;
 
 @using SCMDWH.Shared.Models;
+@using System.Text.Json;
 
 <style>
     .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
@@ -41,22 +43,29 @@
         <col style="width: 10%;" />
         <col style="width: 10%;" />
         <col style="width: 10%;" />
+        <col style="width: 1%;" />
+        
     </ColGroup>
     <HeaderContent>
         <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppReportingAction, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
-        <MudTh class="thcs">Type</MudTh>
-        <MudTh class="thcs">Dateils</MudTh>
-        <MudTh class="thcs">Result</MudTh>
-        <MudTh class="thcs">Time</MudTh>
-        <MudTh class="thcs">User</MudTh>
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppReportingAction, object>(x=>x.ActionType)">ActionType</MudTableSortLabel></MudTh>
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppReportingAction, object>(x=>x.ActionType)">ActionDetails</MudTableSortLabel></MudTh>
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppReportingAction, object>(x=>x.ActionType)">ActionResult</MudTableSortLabel></MudTh>
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppReportingAction, object>(x=>x.ActionType)">ActionTime</MudTableSortLabel></MudTh>
+        <MudTh class="thcs"><MudTableSortLabel SortBy="new Func<LogAppReportingAction, object>(x=>x.ActionType)">ActrionTriggeredByUser</MudTableSortLabel></MudTh>
+        <MudTh class="thcs">Operations</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="User Name">@context.Id</MudTd>
         <MudTd DataLabel="Email">@context.ActionType</MudTd>
-        <MudTd DataLabel="Mobile">@context.ActionDetails</MudTd>
+        <MudTd DataLabel="Mobile">@context.ActionDetails.Substring(1,33)</MudTd>
         <MudTd DataLabel="Created Time">@context.ActionResult</MudTd>
         <MudTd DataLabel="Remark">@context.ActionTime</MudTd>
         <MudTd DataLabel="Remark">@context.ActrionTriggeredByUser</MudTd>
+        <MudTd DataLabel="Methods">
+            <MudIconButton @onclick="@(()=>ShowLogItem(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.RemoveRedEye" Size="Size.Small" IconSize="Size.Small" />
+           
+        </MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />
@@ -70,8 +79,21 @@
     private bool striped = true;
     private bool bordered = true;
     private string searchString = "";
+    
 
     private List<LogAppReportingAction> LogActivityList = new List<LogAppReportingAction>();
+
+
+    private async void ShowLogItem(LogAppReportingAction logItem)
+    {
+        //logDetaile = JsonSerializer.Deserialize<LogAppReportingAction>(logItem.ActionDetails);
+
+        var parameters = new DialogParameters { ["Id"] = logItem.Id.ToString() };
+        var dialog = DialogService.Show<OperationLogDetailComponent>("Log detail ", parameters);
+     
+   
+    }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -94,7 +116,8 @@
             return true;
         if (element.ActionType.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-
+        if (element.ActrionTriggeredByUser.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
         return false;
     }
 }

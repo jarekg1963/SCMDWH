@@ -1,10 +1,13 @@
 ﻿@using System.Security.Claims;
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
+@using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
+@using System.Text.Json;
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
+@inject RecordLog rl;
 
 <style>
     
@@ -371,6 +374,13 @@
 
         string linkSave = "/api/CarAdviceMainTables/" + CarAdviceMainTableWHEdit.Id;
         var Response = await httpClient.PutAsJsonAsync<CarAdviceMainTable>(linkSave, CarAdviceMainTableWHEdit);
+        
+        // zapisanie delete do logu operacji
+
+        string jsonStringCAEdit = JsonSerializer.Serialize(CarAdviceMainTableWHEdit);
+        rl.RecordOperationLog("Updated item",
+        jsonStringCAEdit,
+        UserName, "Success");
 
         await ReadData();
         StateHasChanged();
@@ -626,13 +636,6 @@
         return trucktype.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
-    //private MudAutocomplete<string> _autoComplete { get; set; }
-
-    //private async Task resetNA(string value)
-    //{
-    //    value = "";
-    //    await _autoComplete.Clear()
-    //    StateHasChanged();
-    //}
+ 
 
 }

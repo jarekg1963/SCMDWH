@@ -27,5 +27,17 @@ namespace SCMDWH.Client.Tools
               await _httpClient.PostAsJsonAsync("/api/LogAppUserActivities", ilo);
         }
 
+        public async void RecordOperationLog(string actionType , string logMessage, string userName , string actionResult)
+        {
+            LogAppReportingAction ilo = new LogAppReportingAction()
+            {
+                ActionType = actionType,
+                ActionDetails = logMessage,
+                ActionResult = actionResult,
+                ActionTime = DateTime.Now,
+                ActrionTriggeredByUser = userName
+            };
+            await _httpClient.PostAsJsonAsync("/api/LogAppReportingActions", ilo);
+        }
     }
 }

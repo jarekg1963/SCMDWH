@@ -2,12 +2,16 @@
 @using System.Data;
 @using NPOI.SS.UserModel;
 @using NPOI.XSSF.UserModel;
+@using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
+@using System.Text.Json;
+@using System.Security.Claims;
 @inject IDialogService DialogService;
 @inject NavigationManager navigationManager
 @inject HttpClient httpClient
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
+@inject RecordLog rl;
 
 <style>
     .mud-table-cell {
@@ -95,13 +99,28 @@ else
     bool CAverification;
     bool fixed_header = true;
     bool fixed_footer = false;
-
-
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    string UserName = "";
     CarAdviceMainTable CarAdviceMainTableNew = new CarAdviceMainTable();
     CarAdviceMainTable UpdatedCarAdviceMainTableNew = new CarAdviceMainTable();
-
-
     List<CarAdviceMainTable> listCarAdviceMainTableNew = new List<CarAdviceMainTable>();
+
+
+    protected async override void OnInitialized()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+        }
+
+    }
 
     private Func<CarAdviceMainTable, int, string> _rowStyleFunc => (x, i) =>
      {
@@ -153,6 +172,15 @@ else
             {
                 string linkpostca = "/api/CarAdviceMainTables";
                 var Response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkpostca, listforSave);
+
+                // zapisanie delete do logu operacji
+
+                string jsonStringCAEdit = JsonSerializer.Serialize(listforSave);
+                rl.RecordOperationLog("Updated item",
+                jsonStringCAEdit,
+                UserName, 
+                "Success");
+
                 if (!Response.IsSuccessStatusCode)
                 {
                     Snackbar.Add("Error Excel in row " + listforSave.ForwarderInfo, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 2500; });

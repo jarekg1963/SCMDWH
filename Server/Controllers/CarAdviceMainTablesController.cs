@@ -60,8 +60,6 @@ namespace SCMDWH.Server.Controllers
             int eMc = Int32.Parse(endDate.Substring(0, 2));
             DateTime endDt = new DateTime(eYear, eMc, eDay);
 
-
-
             return await _context.CarAdviceMainTables.Where(d=>d.Etd >= startDt && d.Etd <= endDt)
                 .OrderByDescending(c => c.Id).ToListAsync();
         }
@@ -105,10 +103,13 @@ namespace SCMDWH.Server.Controllers
                 return BadRequest();
             }
 
+            //var exitingCarAdviceMain = _context.CarAdviceMainTables.Find(id);
+            //if (exitingCarAdviceMain == null) return NotFound();
+			//_context.Entry(exitingCarAdviceMain).State = EntityState.Modified;
+			
             _context.Entry(carAdviceMainTable).State = EntityState.Modified;
-
-            try
-            {
+			try
+			{
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

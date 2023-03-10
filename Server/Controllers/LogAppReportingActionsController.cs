@@ -29,7 +29,7 @@ namespace SCMDWH.Server.Controllers
           {
               return NotFound();
           }
-            return await _context.LogAppReportingActions.ToListAsync();
+            return await _context.LogAppReportingActions.OrderByDescending(o=>o.ActionTime).ToListAsync();
         }
 
         // GET: api/LogAppReportingActions/5

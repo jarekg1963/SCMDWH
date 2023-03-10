@@ -1,10 +1,14 @@
 ﻿@using System.Security.Claims;
+@using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
+@using System.Text.Json;
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
+@inject RecordLog rl;
+
 <style>
     .demo-content {
         padding: 1px;
@@ -299,26 +303,6 @@
 
             CarAdviceMainTableWHEdit.LeftTheDockTime = DateTime.Now;
         }
-
-        // Picking date
-        //if (PickingTimeDate != null)
-        //{
-        //    DateTime PickingTimeDateNotNulable = (DateTime)PickingTimeDate;
-        //    TimeSpan PickingTimeTimeNotNulable = (TimeSpan)PickingTimeTime;
-        //    CarAdviceMainTableWHEdit.PickingTime = PickingTimeDateNotNulable.Add(PickingTimeTimeNotNulable);
-        //}
-        //// left dock date mapped by SENT -> pisking status 
-        //if (LeftDockTimeDate != null)
-        //{
-        //    DateTime LeftDockTimeDateNotNulable = (DateTime)LeftDockTimeDate;
-        //    TimeSpan LeftDockTimeTimeNotNulable = (TimeSpan)LeftDockTimeTime;
-        //    CarAdviceMainTableWHEdit.LeftTheDockTime = LeftDockTimeDateNotNulable.Add(LeftDockTimeTimeNotNulable);
-        //}
-
-
-        //---------------------------------------------
-
-
         // Scanned Time
         if (ScannedTimeDate != null)
         {
@@ -328,9 +312,6 @@
         }
 
         //  LeftTheDockTime
-
-
-
 
         if (EtdTimeDate != null)
         {
@@ -364,6 +345,12 @@
         string linkSave = "/api/CarAdviceMainTables/" + CarAdviceMainTableWHEdit.Id;
         var Response = await httpClient.PutAsJsonAsync<CarAdviceMainTable>(linkSave, CarAdviceMainTableWHEdit);
 
+        string jsonStringCAEdit = JsonSerializer.Serialize(CarAdviceMainTableWHEdit);
+
+        // zapisanie delete do logu operacji
+        rl.RecordOperationLog("Updated item",
+        jsonStringCAEdit,
+        UserName, "Success");
         await DeleteItemWH.InvokeAsync("Save");
 
     }
@@ -390,19 +377,15 @@
             string linkDel = "api/CarAdviceMainTables/" + Id;
             var Response = await httpClient.DeleteAsync(linkDel);
             if (Response.IsSuccessStatusCode)
-            {
-                LogAppReportingAction ilo = new LogAppReportingAction()
-                    {
-                        ActionType = "Item deleted",
-                        ActionDetails = Id.ToString(),
-                        ActionResult = "Success",
-                        ActionTime = DateTime.Now,
-                        ActrionTriggeredByUser = UserName
-                    };
-                await httpClient.PostAsJsonAsync("/api/LogAppReportingActions", ilo);
+            {           
+                // zapisanie delete do logu operacji 
 
-                //  Snackbar.Add("Item deleted " + Id, Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.DeleteForever; config.VisibleStateDuration = 500; });
+                string jsonStringCADelete = JsonSerializer.Serialize(CarAdviceMainTableWHEdit);
 
+                
+                rl.RecordOperationLog("Deleted item",
+                jsonStringCADelete,
+                UserName, "Success");
                 await DeleteItemWH.InvokeAsync("Deleted");
                 StateHasChanged();
 

@@ -1,0 +1,197 @@
+﻿@using SCMDWH.Shared.Models;
+@using System.Text.Json;
+@inject HttpClient httpClient;
+@inject IStringLocalizer<CultureExample2> Loc
+
+<MudAlert Severity="Severity.Normal" Variant="Variant.Text">
+    <MudGrid>
+        <MudItem xs="4">
+            <h6>@logbyId.ActionType</h6>
+        </MudItem>
+        <MudItem xs="4">
+            <h6>@logbyId.ActrionTriggeredByUser</h6>
+        </MudItem>
+        <MudItem xs="4">
+            <h6>@logbyId.ActionTime</h6>
+        </MudItem>
+    </MudGrid>
+</MudAlert>
+
+<style>
+    table {
+        border-collapse: collapse;
+        font-family: Tahoma, Geneva, sans-serif;
+        font-size:small;
+    }
+
+        table td {
+            padding: 3px;
+        }
+
+        table thead td {
+            background-color: #54585d;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 13px;
+            border: 1px solid #54585d;
+            width:30rem;
+        }
+
+        table tbody td {
+            color: #636363;
+            border: 1px solid #dddfe1;
+        }
+
+        table tbody tr {
+            background-color: #f9fafb;
+        }
+
+            table tbody tr:nth-child(odd) {
+                background-color: #ffffff;
+            }
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <td>Field</td>
+            <td>Value</td>
+            <td>Field</td>
+            <td>Value</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Loc["lbAdDate"]</td>
+            <td>@logDetail.AdviceDate</td>
+       
+            <td>@Loc["lbReason"]</td>
+            <td>@logDetail.FgDelayReason</td>   
+        </tr>
+        <tr>
+            <td>@Loc["lbPickingstatus"]</td>
+            <td>@logDetail.PickingStatus</td>
+       
+            <td>@Loc["lbClient"]</td>
+            <td>@logDetail.Client</td>
+        </tr>
+        <tr>
+            <td>@Loc["lbShipment"]</td>
+            <td>@logDetail.Shipment</td>
+       
+            <td>@Loc["lbAdDate"]</td>
+            <td>@logDetail.Reference</td>
+        </tr>
+        <tr>
+            <td>@Loc["lbReference"]</td>
+            <td>@logDetail.Destination</td>
+       
+            <td>@Loc["lbDriverWH"]</td>
+            <td>@logDetail.DriverWh</td>
+        </tr>
+        <tr>
+            <td>@Loc["lbTruckplatesWH"]</td>
+            <td>@logDetail.TruckPlatesWh</td>
+       
+            <td>@Loc["lbCustomers"]</td>
+            <td>@logDetail.Forwarder</td>
+        </tr>
+        <tr>
+            <td>@Loc["lbAdDate"]</td>
+            <td>@logDetail.ForwarderInfo</td>
+       
+            <td>@Loc["lbEtdDate"]</td>
+            <td>@logDetail.Etd</td>
+        </tr>
+        <tr>
+            <td>@Loc["lbEntrybyWH"]</td>
+            <td>@logDetail.EntryByWh</td>
+        
+            <td>@Loc["lbRemarkWH"]</td>
+            <td>@logDetail.RemarksWh</td>
+        </tr>
+        <tr>
+            <td>@Loc["lbAta"]</td>
+            <td>@logDetail.Ata</td>
+            <td>@Loc["lbQuality"]</td>
+            <td>@logDetail.Quality</td>
+        </tr>
+        <tr>
+            <td>@Loc["lbTruckTypes"]</td>
+            <td>@logDetail.TruckType</td>
+            <td>@Loc["lbDriverS"]</td>
+            <td>@logDetail.DriverS</td>
+        </tr>
+        <tr>
+            <td>@Loc["lbPlates"]</td>
+            <td>@logDetail.TruckPlatesS</td>
+            <td>@Loc["lbTPVEntrytime"]</td>
+            <td>@logDetail.TpvEnterTime</td>
+        </tr>
+        <tr>
+            <td>@Loc["lbTpvExitTime"]</td>
+            <td>@logDetail.TpvExitTime</td>
+            <td>@Loc["lbLoadingplaces"]</td>
+            <td>@logDetail.LoadingDock</td>
+        </tr>
+        <tr>
+         
+            <td>@Loc["lbCallBy"]</td>
+            <td>@logDetail.CallBy</td>
+            <td>@Loc["lbRemarksS"]</td>
+            <td>@logDetail.RemarksS</td>
+        
+        </tr>
+        <tr>
+            <td>@Loc["lbleftdockdate"]</td>
+            <td>@logDetail.LeftTheDockTime</td>
+            <td>@Loc["lbEntryByS"]</td>
+            <td>@logDetail.EntryByS</td>
+        </tr>
+        <tr>
+
+            <td>@Loc["lbScannedtime"]</td>
+            <td>@logDetail.ScannedTime</td>
+            <td>@Loc["lbPickingtime"]</td>
+            <td>@logDetail.PickingTime</td>
+        </tr>
+
+    </tbody>
+</table>
+
+<hr />
+<MudGrid>
+    <MudItem xs="6">
+    </MudItem>
+    <MudItem xs="2">
+    </MudItem>
+    <MudItem xs="2">
+        <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Small" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
+    </MudItem>
+</MudGrid>
+
+<hr />
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string Id { get; set; }
+    CarAdviceMainTable logDetail = new();
+    LogAppReportingAction logbyId = new();
+   
+    
+    protected override async void OnInitialized()
+    {
+
+        string link = "/api/LogAppReportingActions/" + Id;
+        logbyId = await httpClient.GetFromJsonAsync<LogAppReportingAction>(link);
+        var options = new JsonSerializerOptions
+            {
+                IncludeFields = true,
+            };
+        logDetail = JsonSerializer.Deserialize<CarAdviceMainTable>(logbyId.ActionDetails, options);
+        StateHasChanged();
+    }
+
+    void CloseCancel() => MudDialog.Close(DialogResult.Cancel());
+
+}
