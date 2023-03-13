@@ -248,15 +248,16 @@ else
         tabs.ActivatePanel(0);
         if (returnedWHAction == "Deleted")
         {
-            await ReadData();
-            StateHasChanged();
+            navigationManager.NavigateTo("/caradvice", true);
+            //await ReadData();
+            //StateHasChanged();
         }
 
         if (returnedWHAction == "Save")
         {
-            await ReadData();
-            //   navigationManager.NavigateTo("/caradvice", true);
-            StateHasChanged();
+            navigationManager.NavigateTo("/caradvice", true);
+            //await ReadData();
+            //StateHasChanged();
         }
 
 
@@ -266,9 +267,9 @@ else
     public async void ReturnFromSecurity(string returnedSecurityAction)
     {
         tabs.ActivatePanel(0);
-        await ReadData();
-        StateHasChanged();
-        Console.WriteLine("Security close action " + returnedSecurityAction);
+        navigationManager.NavigateTo("/caradvice", true);
+        //await ReadData();
+        //StateHasChanged();
     }
 
 
