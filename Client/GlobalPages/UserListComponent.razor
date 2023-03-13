@@ -1,16 +1,15 @@
 ﻿@page "/UserListPage";
 
-@inject HttpClient httpClient
-@inject NavigationManager navigationManager
-@inject IDialogService DialogService
-@inject ISnackbar Snackbar
 @using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
 @using SCMDWH.Client.JGHttpClient;
 @using SCMDWH.Shared.Tools
 @using System.Security.Claims;
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
-
 @inject JGHttpClient http;
 @inject RecordLog rl;
 

@@ -32,7 +32,16 @@ namespace SCMDWH.Server.Controllers
           {
               return NotFound();
           }
-            return await _context.CarAdviceDictionaryCarriers.ToListAsync();
+            //return await _context.CarAdviceDictionaryCarriers.ToListAsync();
+
+            try
+            {
+                return await _context.CarAdviceDictionaryCarriers.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, ex.Message);
+            }
         }
 
 

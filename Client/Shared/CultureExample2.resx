@@ -168,6 +168,9 @@
   <data name="lbDelete" xml:space="preserve">
     <value>Usuń</value>
   </data>
+  <data name="lbDeleteAll" xml:space="preserve">
+    <value>Usuń wszystko</value>
+  </data>
   <data name="lbDestination" xml:space="preserve">
     <value>Kraj</value>
   </data>

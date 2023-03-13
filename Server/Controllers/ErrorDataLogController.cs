@@ -20,7 +20,23 @@ namespace SCMDWH.Server.Controllers
 
         }
 
-        [HttpGet]
+       [HttpDelete("DeleteAllErrors")]
+        public async Task<IActionResult> DeleteAllErrors()
+        {
+            try
+            {
+                await _context.ErrorDataLog.ExecuteDeleteAsync();
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, ex.Message);
+            }
+    }
+
+
+            [HttpGet]
         public async Task<ActionResult<IEnumerable<ErrorDataLog>>> GetErrorDataLog()
         {
             if (_context.ErrorDataLog == null)
