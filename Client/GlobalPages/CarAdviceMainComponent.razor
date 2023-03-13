@@ -106,7 +106,7 @@ else
             <MudTabPanel Icon="@Icons.Material.Filled.AccessTime" Style="width:550px" Text=@Loc["lbWarehouse"] BadgeDot="true" BadgeColor="Color.Error" @ref="panel03" ID="@("three")"
                  OnClick="Tab2Active">
 
-            <CarAdviceMainWHComponent Id="@selectedRow" DeleteItemWH="@ReturnFromWH"></CarAdviceMainWHComponent>
+                <CarAdviceMainWHComponentV2 Id="@selectedRow" DeleteItemWH="@ReturnFromWH"></CarAdviceMainWHComponentV2>
         </MudTabPanel>
         }
         @if(rolaSecurity)

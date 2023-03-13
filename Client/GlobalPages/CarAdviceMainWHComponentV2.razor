@@ -10,7 +10,7 @@
 @inject RecordLog rl;
 
 <style>
-    
+
     .demo-content {
         padding: 1px;
         font-size: 10px;
@@ -25,28 +25,27 @@
         }
 
     /*   .mud-input {
-/*        height: 0.6rem !important;
-        font: 100 !important;
-        font-size: medium !important;
-        font-weight: 500 !important;*/
+    /*        height: 0.6rem !important;
+            font: 100 !important;
+            font-size: medium !important;
+            font-weight: 500 !important;*/
     }
 
     /*    .form-control {
-       font-size: x-small !important;
-        font-weight: 600 !important;*/
+           font-size: x-small !important;
+            font-weight: 600 !important;*/
     }
 
-      .mud-grid-spacing-xs-3 > .mud-grid-item {
-                padding: 1px;
-
+    .mud-grid-spacing-xs-3 > .mud-grid-item {
+        padding: 1px;
     }
 </style>
 
 <MudGrid Style="background-color:#faf6f5!important">
     <MudItem xs="12">
-            <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbGeneralInfo"]</MudAlert>
-     </MudItem>
-     <MudItem xs="6" sm="1">
+        <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbGeneralInfo"]</MudAlert>
+    </MudItem>
+    <MudItem xs="6" sm="1">
         <MudTextField Label="Nr" @bind-Value="@CarAdviceMainTableWHEdit.Id" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="2">
@@ -74,7 +73,7 @@
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbSecurityEntryInfo"]</MudAlert>
     </MudItem>
     <MudItem xs="6" sm="3">
-            <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="@EtdTimeDate" DisableToolbar="true" ReadOnly="true" Editable="false" Margin="Margin.Normal" />
+        <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="@EtdTimeDate" DisableToolbar="true" ReadOnly="true" Editable="false" Margin="Margin.Normal" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
@@ -114,7 +113,7 @@
             <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="CopyButton1">@Loc["lbCopy"] </MudButton>
         </MudStack>
     </MudItem>
-        <MudItem xs="6" sm="6">
+    <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
             <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="CopyButton2">@Loc["lbCopy"] </MudButton>
@@ -214,7 +213,7 @@
             <MudButton Style="margin-top:1rem!important" Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
         </MudStack>
     </MudItem>
-    <MudItem xs="2">    
+    <MudItem xs="2">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbCallBy"] @bind-Value="CarAdviceMainTableWHEdit.CallBy" SearchFunc="@SearchCallBy"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
@@ -239,7 +238,7 @@
         <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton3">@Loc["lbNow"] </MudButton>
         </MudStack>
     </MudItem>
- 
+
 
 </MudGrid>
 <hr />
@@ -298,7 +297,7 @@
             <div class="demo-content">@Loc["lbDriverWH"]</div>
         </div>
         <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbPickingstatus"]</div> 
+            <div class="demo-content">@Loc["lbPickingstatus"]</div>
         </div>
         <div class="col-lg-2">
             <div class="demo-content">@Loc["lbPickingtime"]</div>
@@ -343,7 +342,7 @@
         <div class="col-lg-2">
             <div class="demo-content">@Loc["lbRemarkWH"]</div>
         </div>
-    
+
     </div>
     <div class="row " style="--bs-gutter-x: 0.5rem!important">
         <div class="col-lg-2">
@@ -395,7 +394,7 @@
     public string Id { get; set; }
 
     [Parameter]
-    public EventCallback<string> DeleteItem { get; set; }
+    public EventCallback<string> DeleteItemWH { get; set; }
 
     CarAdviceMainTable CarAdviceMainTableWHEdit = new CarAdviceMainTable();
 
@@ -450,7 +449,7 @@
     private async Task SaveWh()
     {
 
-        await DeleteItem.InvokeAsync("Save");
+        await DeleteItemWH.InvokeAsync("Save");
 
         CarAdviceMainTableWHEdit.EntryByS = UserName;
 
@@ -524,7 +523,7 @@
 
     private async Task CancelButton()
     {
-        await DeleteItem.InvokeAsync("Cancel");
+        await DeleteItemWH.InvokeAsync("Cancel");
     }
 
     private void NowButton1()
@@ -795,6 +794,6 @@
         return trucktype.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
- 
+
 
 }
