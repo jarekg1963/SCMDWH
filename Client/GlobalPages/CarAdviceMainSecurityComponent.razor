@@ -513,7 +513,7 @@
             CarAdviceMainTableWHEdit.TpvExitTime = TPVExitTimeDateNotNulable.Add(TPVExitTimeTimeNotNulable);
         }
 
-        string linkSave = "/api/CarAdviceMainTables/" + CarAdviceMainTableWHEdit.Id;
+        string linkSave = "/api/CarAdviceMainTables/BySH/" + CarAdviceMainTableWHEdit.Id;
         var Response = await httpClient.PutAsJsonAsync<CarAdviceMainTable>(linkSave, CarAdviceMainTableWHEdit);
 
         // zapisanie delete do logu operacji
