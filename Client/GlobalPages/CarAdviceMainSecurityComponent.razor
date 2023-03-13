@@ -38,23 +38,151 @@
 </style>
 
 <MudGrid Style="background-color:#faf6f5!important">
+    <MudItem xs="12">
+            <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbGeneralInfo"]</MudAlert>
+     </MudItem>
+     <MudItem xs="6" sm="1">
+        <MudTextField Label="Nr" @bind-Value="@CarAdviceMainTableWHEdit.Id" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="2">
+        <MudDatePicker Label=@Loc["lbAdDate"] @bind-Date="@CarAdviceMainTableWHEdit.AdviceDate" DisableToolbar="true" ReadOnly="true" Editable="false" Margin="Margin.Normal" />
+    </MudItem>
+    <MudItem xs="6" sm="2">
+        <MudTextField Label=@Loc["lbShipment"] @bind-Value="@CarAdviceMainTableWHEdit.Shipment" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="2">
+        <MudTextField Label=@Loc["lbReference"] @bind-Value="@CarAdviceMainTableWHEdit.Reference" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="2">
+        <MudTextField Label=@Loc["lbClient"] @bind-Value="@CarAdviceMainTableWHEdit.Client" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="2">
+        <MudTextField Label=@Loc["lbCarriers"] @bind-Value="@CarAdviceMainTableWHEdit.Forwarder" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="1">
+        <MudTextField Label=@Loc["lbDestination"] @bind-Value="@CarAdviceMainTableWHEdit.Destination" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="12" sm="6">
+        <MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>
+    </MudItem>
+    <MudItem xs="12" sm="6">
+        <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbSecurityEntryInfo"]</MudAlert>
+    </MudItem>
+    <MudItem xs="6" sm="3">
+            <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="@EtdTimeDate" DisableToolbar="true" ReadOnly="true" Editable="false" Margin="Margin.Normal" />
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" ReadOnly="true" Editable="false" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="NowButton1">@Loc["lbNow"]  </MudButton>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal" />
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudTextField Label=@Loc["lbPickingstatus"] @bind-Value="@CarAdviceMainTableWHEdit.PickingStatus" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbTruckType"] @bind-Value="CarAdviceMainTableWHEdit.TruckType" SearchFunc="@SearchTuruckType"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbQuality"] @bind-Value="CarAdviceMainTableWHEdit.Quality" SearchFunc="@SearchQuality"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+            <MudTextField Label=@Loc["lbDriverWH"] @bind-Value="@CarAdviceMainTableWHEdit.DriverWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="CopyButton1">@Loc["lbCopy"] </MudButton>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+            <MudTextField Label=@Loc["lbDriverS"] @bind-Value="@CarAdviceMainTableWHEdit.DriverS" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="CopyButton1">@Loc["lbCopy"] </MudButton>
+        </MudStack>
+    </MudItem>
+        <MudItem xs="6" sm="6">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+            <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="CopyButton2">@Loc["lbCopy"] </MudButton>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+            <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesS" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="CopyButton2">@Loc["lbCopy"] </MudButton>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudTextField Label=@Loc["lbDock"] @bind-Value="@CarAdviceMainTableWHEdit.LoadingDock" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbCallBy"] @bind-Value="CarAdviceMainTableWHEdit.CallBy" SearchFunc="@SearchCallBy"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+    </MudItem>
+    <MudItem xs="6" sm="6">
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudDatePicker Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal" />
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+            <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudDatePicker Label=@Loc["lbTPVExitdate"] @bind-Date="TPVExitTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal" />
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+            <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton3">@Loc["lbNow"] </MudButton>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudTextField Label=@Loc["lbRemarkWH"] @bind-Value="@CarAdviceMainTableWHEdit.RemarksWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudTextField Label=@Loc["lbRemarksS"] @bind-Value="@CarAdviceMainTableWHEdit.RemarksS" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudTextField Label=@Loc["lbEntrybyWH"] @bind-Value="@CarAdviceMainTableWHEdit.EntryByWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudTextField Label=@Loc["lbEntryByS"] @bind-Value="@CarAdviceMainTableWHEdit.EntryByS" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+</MudGrid>
+@*
+
+<MudGrid Style="background-color:#faf6f5!important">
      <MudItem xs="12">
 
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbSecurityEntryInfo"]</MudAlert>
 
      </MudItem>
     <MudItem xs="1">
-        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Id" Label="Nr" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField> @*dodane do excela*@
+        <MudTextField @bind-Value="@CarAdviceMainTableWHEdit.Id" Label="Nr" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
     </MudItem>
 
     <MudItem xs="2">
-        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal" /> @*dodane do excela*@
+        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal" />
 
     </MudItem>
     <MudItem xs="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" /> @*dodane do excela*@
-            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton> @*dodane do excela*@
+            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
         </MudStack>
 
     </MudItem>
@@ -70,7 +198,7 @@
         <MudTextField Margin="Margin.Normal"  @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesS" Label=@Loc["lbPlates"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
-        <MudTextField Margin="Margin.Normal" @bind-Value="@CarAdviceMainTableWHEdit.DriverS" Label=@Loc["lbDriverS"] Variant="Variant.Text"></MudTextField> @*dodane do excela*@
+        <MudTextField Margin="Margin.Normal" @bind-Value="@CarAdviceMainTableWHEdit.DriverS" Label=@Loc["lbDriverS"] Variant="Variant.Text"></MudTextField>
     </MudItem>
     <MudItem xs="2">
         <MudDatePicker Margin="Margin.Normal" Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Editable="true" />
@@ -116,53 +244,53 @@
 <div class="container">
     <div class="row " style="--bs-gutter-x: 0.5rem!important">
             <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbShipment"]</div> @*dodane do excela*@
+            <div class="demo-content">@Loc["lbShipment"]</div>
             </div>
             <div class="col-lg-2">
-            <div class="demo-content ">@Loc["lbReference"]</div> @*dodane do excela*@
+            <div class="demo-content ">@Loc["lbReference"]</div>
             </div>
             <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbAdDate"]</div> @*dodane do excela*@
+            <div class="demo-content">@Loc["lbAdDate"]</div>
             </div>
             <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbEtdDate"]</div> @*dodane do excela*@
+            <div class="demo-content">@Loc["lbEtdDate"]</div>
             </div>
             <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbDestination"]</div>  @*dodane do excela*@
+            <div class="demo-content">@Loc["lbDestination"]</div>
             </div>
             <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbCarriers"]</div> @*dodane do excela*@
+            <div class="demo-content">@Loc["lbCarriers"]</div>
             </div>
         </div>
     <div class="row " style="--bs-gutter-x: 0.5rem!important">
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Shipment</div>  @*dodane do excela*@
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Shipment</div>
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Reference</div>  @*dodane do excela*@
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Reference</div>
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.AdviceDate</div>  @*dodane do excela*@
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.AdviceDate</div>
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Etd</div> @*dodane do excela*@
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Etd</div>
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Destination</div>  @*dodane do excela*@
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Destination</div>
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Forwarder</div> @*dodane do excela*@
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Forwarder</div>
         </div>
     </div>
     <div class="row " style="--bs-gutter-x: 0.5rem!important">
         <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbClient"]</div>  @*dodane do excela*@
+            <div class="demo-content">@Loc["lbClient"]</div>
         </div>
         <div class="col-lg-2">
-            <div class="demo-content ">@Loc["lbPlates"]</div> @*dodane do excela*@
+            <div class="demo-content ">@Loc["lbPlates"]</div>
         </div>
         <div class="col-lg-2">
-            <div class="demo-content">@Loc["lbDriverWH"]</div> @*dodane do excela*@
+            <div class="demo-content">@Loc["lbDriverWH"]</div>
         </div>
         <div class="col-lg-2">
             <div class="demo-content">@Loc["lbPickingstatus"]</div> 
@@ -176,13 +304,13 @@
     </div>
     <div class="row " style="--bs-gutter-x: 0.5rem!important">
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Client</div>  @*dodane do excela*@
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.Client</div>
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.TruckPlatesWh</div> @*dodane do excela*@
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.TruckPlatesWh</div>
         </div>
         <div class="col-lg-2">
-            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.DriverWh</div> @*dodane do excela*@
+            <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.DriverWh</div>
         </div>
         <div class="col-lg-2">
             <div class="demo-content bg-alt">@CarAdviceMainTableWHEdit.PickingStatus</div>
@@ -234,6 +362,7 @@
 
 
 <hr />
+*@
 
 <MudGrid>
     <MudItem xs="6">
@@ -318,6 +447,8 @@
 
         await DeleteItem.InvokeAsync("Save");
 
+        CarAdviceMainTableWHEdit.EntryByS = UserName;
+
         // Picking date
         if (PickingTimeDate != null)
         {
@@ -374,7 +505,7 @@
 
         string linkSave = "/api/CarAdviceMainTables/" + CarAdviceMainTableWHEdit.Id;
         var Response = await httpClient.PutAsJsonAsync<CarAdviceMainTable>(linkSave, CarAdviceMainTableWHEdit);
-        
+
         // zapisanie delete do logu operacji
 
         string jsonStringCAEdit = JsonSerializer.Serialize(CarAdviceMainTableWHEdit);
@@ -413,7 +544,31 @@
         StateHasChanged();
     }
 
+    private void CopyButton1()
+    {
+        CarAdviceMainTableWHEdit.DriverS = CarAdviceMainTableWHEdit.DriverWh;
+        StateHasChanged();
+    }
 
+    private void CopyButton2()
+    {
+        CarAdviceMainTableWHEdit.TruckPlatesS = CarAdviceMainTableWHEdit.TruckPlatesWh;
+        StateHasChanged();
+    }
+
+    private string DriverMatch(string arg)
+    {
+        if (CarAdviceMainTableWHEdit.DriverWh != arg)
+            return @Loc["lbDriverMatchError"];
+        return null;
+    }
+
+    private string PlatesMatch(string arg)
+    {
+        if (CarAdviceMainTableWHEdit.DriverWh != arg)
+            return @Loc["lbPlatesMatchError"];
+        return null;
+    }
 
     protected async override void OnInitialized()
     {
@@ -578,7 +733,6 @@
 
         string linkForEdit = "/api/CarAdviceMainTables/" + Id;
         CarAdviceMainTableWHEdit = await httpClient.GetFromJsonAsync<CarAdviceMainTable>(linkForEdit);
-        CarAdviceMainTableWHEdit.EntryByS = UserName;
     }
 
 

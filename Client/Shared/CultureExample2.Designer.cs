@@ -187,6 +187,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kopiuj.
+        /// </summary>
+        public static string lbCopy {
+            get {
+                return ResourceManager.GetString("lbCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lista przewoźników .
         /// </summary>
         public static string lbCurrierList {
@@ -255,6 +264,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbDoYouRealyDelete {
             get {
                 return ResourceManager.GetString("lbDoYouRealyDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dane kierowcy się nie zgadzają.
+        /// </summary>
+        public static string lbDriverMatchError {
+            get {
+                return ResourceManager.GetString("lbDriverMatchError", resourceCulture);
             }
         }
         
@@ -349,7 +367,16 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Magazyn wyrobów gotowych.
+        ///   Looks up a localized string similar to Informacje ogólne.
+        /// </summary>
+        public static string lbGeneralInfo {
+            get {
+                return ResourceManager.GetString("lbGeneralInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dane magazynu.
         /// </summary>
         public static string lbGeneralWarehouseInfoprmation {
             get {
@@ -466,6 +493,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Numery auta są niezgodne.
+        /// </summary>
+        public static string lbPlatesMatchError {
+            get {
+                return ResourceManager.GetString("lbPlatesMatchError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Najpierw wybierz wysyłkę  .
         /// </summary>
         public static string lbPleaseSelectRow {
@@ -574,7 +610,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Informacje Ochrony.
+        ///   Looks up a localized string similar to Dane ochrony.
         /// </summary>
         public static string lbSecurityEntryInfo {
             get {

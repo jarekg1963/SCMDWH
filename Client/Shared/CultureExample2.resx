@@ -159,6 +159,9 @@
   <data name="lbColumns" xml:space="preserve">
     <value>Kolumny </value>
   </data>
+  <data name="lbCopy" xml:space="preserve">
+    <value>Kopiuj</value>
+  </data>
   <data name="lbCurrierList" xml:space="preserve">
     <value>Lista przewoźników </value>
   </data>
@@ -182,6 +185,9 @@
   </data>
   <data name="lbDoYouRealyDelete" xml:space="preserve">
     <value>Czy na prawdę chcesz usunąć ? Ta czynność jest nieodwracalna !!!</value>
+  </data>
+  <data name="lbDriverMatchError" xml:space="preserve">
+    <value>Dane kierowcy się nie zgadzają</value>
   </data>
   <data name="lbDriverS" xml:space="preserve">
     <value>Kierowca och.</value>
@@ -213,8 +219,11 @@
   <data name="lbEtdTime" xml:space="preserve">
     <value>ETD Godzina</value>
   </data>
+  <data name="lbGeneralInfo" xml:space="preserve">
+    <value>Informacje ogólne</value>
+  </data>
   <data name="lbGeneralWarehouseInfoprmation" xml:space="preserve">
-    <value>Magazyn wyrobów gotowych</value>
+    <value>Dane magazynu</value>
   </data>
   <data name="lbHome" xml:space="preserve">
     <value>Start</value>
@@ -251,6 +260,9 @@
   </data>
   <data name="lbPlates" xml:space="preserve">
     <value>Tablice</value>
+  </data>
+  <data name="lbPlatesMatchError" xml:space="preserve">
+    <value>Numery auta są niezgodne</value>
   </data>
   <data name="lbPleaseSelectRow" xml:space="preserve">
     <value>Najpierw wybierz wysyłkę  </value>
@@ -289,7 +301,7 @@
     <value>Ochrona</value>
   </data>
   <data name="lbSecurityEntryInfo" xml:space="preserve">
-    <value>Informacje Ochrony</value>
+    <value>Dane ochrony</value>
   </data>
   <data name="lbSecurityinfo" xml:space="preserve">
     <value>Informacje ochrony</value>
