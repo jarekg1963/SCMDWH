@@ -134,19 +134,19 @@ namespace SCMDWH.Server.Controllers
             try
             {
                 _context.Entry(carAdviceMainTable).Property("AdviceDate").IsModified = true;
-                _context.Entry(carAdviceMainTable).Property("FG_DelayReason").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("FgDelayReason").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("PickingStatus").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("Client").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("Shipment").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("Reference").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("Destination").IsModified = true;
-                _context.Entry(carAdviceMainTable).Property("DriverWH").IsModified = true;
-                _context.Entry(carAdviceMainTable).Property("TruckPlatesWH").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("DriverWh").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("TruckPlatesWh").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("Forwarder").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("ForwarderInfo").IsModified = true;
-                _context.Entry(carAdviceMainTable).Property("ETD").IsModified = true;
-                _context.Entry(carAdviceMainTable).Property("EntryByWH").IsModified = true;
-                _context.Entry(carAdviceMainTable).Property("RemarksWH").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("Etd").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("EntryByWh").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("RemarksWh").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("LoadingDock").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("LeftTheDockTime").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("PickingTime").IsModified = true;
@@ -172,13 +172,13 @@ namespace SCMDWH.Server.Controllers
             //_context.Entry(carAdviceMainTable).State = EntityState.Modified;
             try
             {
-                _context.Entry(carAdviceMainTable).Property("ATA").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("Ata").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("Quality").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("TruckType").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("DriverS").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("TruckPlatesS").IsModified = true;
-                _context.Entry(carAdviceMainTable).Property("TPV_EnterTime").IsModified = true;
-                _context.Entry(carAdviceMainTable).Property("TPV_ExitTime").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("TpvEnterTime").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("TpvExitTime").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("CallBy").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("RemarksS").IsModified = true;
                 _context.Entry(carAdviceMainTable).Property("EntryByS").IsModified = true;
