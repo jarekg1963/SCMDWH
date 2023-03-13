@@ -1,12 +1,14 @@
 ﻿@page "/ErroListpage"
 @using SCMDWH.Shared.Models;
+@using SCMDWH.Client.JGHttpClient;
+
 @inject HttpClient httpClient
+@inject IStringLocalizer<CultureExample2> Loc
+@inject ISnackbar Snackbar
+@inject JGHttpClient http;
 
 <style>
-/*    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
-        font-size: large !important;
-    }
-*/
+
     .mud-table-cell {
         padding: 0px !important;
         font-size: xx-small !important;
@@ -20,6 +22,10 @@
     <ToolBarContent>
         <MudGrid Style="background-color:#f5f8f8">
             <MudItem xs="3">
+                <MudButton Target="_blank" Variant="Variant.Filled" EndIcon="@Icons.Filled.Delete"
+                           Style="text-transform:none " OnClick="DeleteAll" Size="Size.Large">
+                    @Loc["lbDeleteAll"]
+                </MudButton>
             </MudItem>
             <MudItem xs="4">
                 <MudAlert Severity="Severity.Normal" Variant="Variant.Text">
@@ -97,6 +103,23 @@
         await ReadData();
 
     }
+
+    private async void DeleteAll()
+    {
+
+        try
+        {
+            string linkForDelete = "/api/ErrorDataLog/DeleteAllErrors";
+            var Res = await http.Delete<HttpResponseMessage>(linkForDelete);
+            await ReadData();
+            StateHasChanged();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1500; });
+        }
+    }
+
 
     private async Task ReadData()
     {

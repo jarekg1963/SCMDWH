@@ -1,11 +1,13 @@
 ﻿@page "/CADCarriersPage"
 
+@using SCMDWH.Shared.Models;
+@using SCMDWH.Client.JGHttpClient;
 @inject HttpClient httpClient;
 @inject NavigationManager navigationManager;
 @inject IDialogService DialogService;
 @inject ISnackbar Snackbar;
-@using SCMDWH.Shared.Models;
 @inject IStringLocalizer<CultureExample2> Loc
+@inject JGHttpClient http;
 
 
 
@@ -96,11 +98,13 @@
         string link = "/api/CarAdviceDictionaryCarriers";
         try
         {
-            carriersList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCarriers>>(link);
+            //carriersList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCarriers>>(link);
+
+            carriersList = await http.Get<List<CarAdviceDictionaryCarriers>>(link);
         }
         catch (Exception ex)
         {
-            Snackbar.Add("Error " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+            Snackbar.Add("Error " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
         }
     }
 
@@ -121,20 +125,34 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            string link = "/api/CarAdviceDictionaryCarriers/" + carrier.Id;
-            var Response = await httpClient.DeleteAsync(link);
-            await readData();
-            StateHasChanged();
-            if (Response.IsSuccessStatusCode)
+
+            try
             {
-                carriersList = carriersList.Where(u => u.Carrier != carrier.Carrier).ToList();
-                // Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+                string link = "/api/CarAdviceDictionaryCarriers/" + carrier.Id;
+                var Response = await httpClient.DeleteAsync(link);               
+                await readData();
                 StateHasChanged();
             }
-            else
+            catch(Exception ex)
             {
-                Snackbar.Add("Error !!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+                Snackbar.Add("Error !!!  " + ex.Message , Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });                
             }
+
+
+            //string link = "/api/CarAdviceDictionaryCarriers/" + carrier.Id;
+            //var Response = await httpClient.DeleteAsync(link);
+            //await readData();
+            //StateHasChanged();
+            //if (Response.IsSuccessStatusCode)
+            //{
+            //    carriersList = carriersList.Where(u => u.Carrier != carrier.Carrier).ToList();
+            //    // Snackbar.Add("OK", Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Transform; config.VisibleStateDuration = 500; });
+            //    StateHasChanged();
+            //}
+            //else
+            //{
+            //    Snackbar.Add("Error !!!", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+            //}
         }
     }
 

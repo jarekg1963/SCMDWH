@@ -223,6 +223,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Usuń wszystko.
+        /// </summary>
+        public static string lbDeleteAll {
+            get {
+                return ResourceManager.GetString("lbDeleteAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kraj.
         /// </summary>
         public static string lbDestination {
