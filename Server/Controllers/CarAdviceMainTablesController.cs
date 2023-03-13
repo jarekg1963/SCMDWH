@@ -122,6 +122,81 @@ namespace SCMDWH.Server.Controllers
         }
 
 
+
+        [HttpPut("ByWH/{id}")]
+        public async Task<IActionResult> PutCarAdviceMainTableByWH(long id, CarAdviceMainTable carAdviceMainTable)
+        {
+            if (id != carAdviceMainTable.Id)
+            {
+                return BadRequest();
+            }
+            //_context.Entry(carAdviceMainTable).State = EntityState.Modified;
+            try
+            {
+                _context.Entry(carAdviceMainTable).Property("AdviceDate").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("FG_DelayReason").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("PickingStatus").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("Client").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("Shipment").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("Reference").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("Destination").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("DriverWH").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("TruckPlatesWH").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("Forwarder").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("ForwarderInfo").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("ETD").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("EntryByWH").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("RemarksWH").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("LoadingDock").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("LeftTheDockTime").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("PickingTime").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("ScannedTime").IsModified = true;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, ex.Message);
+            }
+            return NoContent();
+        }
+
+
+
+        [HttpPut("BySH/{id}")]
+        public async Task<IActionResult> PutCarAdviceMainTableBySH(long id, CarAdviceMainTable carAdviceMainTable)
+        {
+            if (id != carAdviceMainTable.Id)
+            {
+                return BadRequest();
+            }
+            //_context.Entry(carAdviceMainTable).State = EntityState.Modified;
+            try
+            {
+                _context.Entry(carAdviceMainTable).Property("ATA").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("Quality").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("TruckType").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("DriverS").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("TruckPlatesS").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("TPV_EnterTime").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("TPV_ExitTime").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("CallBy").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("RemarksS").IsModified = true;
+                _context.Entry(carAdviceMainTable).Property("EntryByS").IsModified = true;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, ex.Message);
+            }
+            return NoContent();
+        }
+
+
+
+
+
+
+
         // POST: api/CarAdviceMainTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
