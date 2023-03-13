@@ -102,11 +102,6 @@ namespace SCMDWH.Server.Controllers
             {
                 return BadRequest();
             }
-
-            //var exitingCarAdviceMain = _context.CarAdviceMainTables.Find(id);
-            //if (exitingCarAdviceMain == null) return NotFound();
-			//_context.Entry(exitingCarAdviceMain).State = EntityState.Modified;
-			
             _context.Entry(carAdviceMainTable).State = EntityState.Modified;
 			try
 			{
@@ -123,9 +118,9 @@ namespace SCMDWH.Server.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
+
 
         // POST: api/CarAdviceMainTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
