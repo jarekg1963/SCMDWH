@@ -523,8 +523,9 @@
         jsonStringCAEdit,
         UserName, "Success");
 
-        await ReadData();
-        StateHasChanged();
+
+        //await ReadData();
+        //StateHasChanged();
     }
 
     private async Task CancelButton()
@@ -732,15 +733,11 @@
             TPVExitTimeTime = Convert.ToDateTime(CarAdviceMainTableWHEdit.TpvExitTime).TimeOfDay;
         }
         StateHasChanged();
-
     }
 
 
     private async Task ReadData()
     {
-
-
-
         string linkForEdit = "/api/CarAdviceMainTables/" + Id;
         CarAdviceMainTableWHEdit = await httpClient.GetFromJsonAsync<CarAdviceMainTable>(linkForEdit);
     }
