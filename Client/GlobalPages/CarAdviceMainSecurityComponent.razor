@@ -83,7 +83,7 @@
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" ReadOnly="true" Editable="false" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" ReadOnly="true" Editable="false" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
             <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="NowButton1">@Loc["lbNow"]  </MudButton>
         </MudStack>
     </MudItem>
@@ -523,7 +523,6 @@
         jsonStringCAEdit,
         UserName, "Success");
 
-
         //await ReadData();
         //StateHasChanged();
     }
@@ -576,7 +575,7 @@
 
     private string PlatesMatch(string arg)
     {
-        if (CarAdviceMainTableWHEdit.TruckPlatesS != arg)
+        if (CarAdviceMainTableWHEdit.TruckPlatesWh != arg)
             return @Loc["lbPlatesMatchError"];
         return null;
     }

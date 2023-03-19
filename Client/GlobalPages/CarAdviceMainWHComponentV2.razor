@@ -49,22 +49,28 @@
         <MudTextField Label="Nr" @bind-Value="@CarAdviceMainTableWHEdit.Id" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="2">
-        <MudDatePicker Label=@Loc["lbAdDate"] @bind-Date="@CarAdviceMainTableWHEdit.AdviceDate" DisableToolbar="true" ReadOnly="true" Editable="false" Margin="Margin.Normal" />
+        <MudDatePicker Label=@Loc["lbAdDate"] @bind-Date="@CarAdviceMainTableWHEdit.AdviceDate" DisableToolbar="true" ReadOnly="false" Editable="true" Margin="Margin.Normal" />
     </MudItem>
     <MudItem xs="6" sm="2">
-        <MudTextField Label=@Loc["lbShipment"] @bind-Value="@CarAdviceMainTableWHEdit.Shipment" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbShipment"] @bind-Value="@CarAdviceMainTableWHEdit.Shipment" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="2">
-        <MudTextField Label=@Loc["lbReference"] @bind-Value="@CarAdviceMainTableWHEdit.Reference" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbReference"] @bind-Value="@CarAdviceMainTableWHEdit.Reference" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="2">
-        <MudTextField Label=@Loc["lbClient"] @bind-Value="@CarAdviceMainTableWHEdit.Client" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbClient"] @bind-Value="@CarAdviceMainTableWHEdit.Client" SearchFunc="@SearchClient"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+        @*<MudTextField Label=@Loc["lbClient"] @bind-Value="@CarAdviceMainTableWHEdit.Client" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>*@
     </MudItem>
     <MudItem xs="6" sm="2">
-        <MudTextField Label=@Loc["lbCarriers"] @bind-Value="@CarAdviceMainTableWHEdit.Forwarder" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbCarriers"] @bind-Value="@CarAdviceMainTableWHEdit.Forwarder" SearchFunc="@SearchCurriers"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+@*        <MudTextField Label=@Loc["lbCarriers"] @bind-Value="@CarAdviceMainTableWHEdit.Forwarder" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>*@
     </MudItem>
     <MudItem xs="6" sm="1">
-        <MudTextField Label=@Loc["lbDestination"] @bind-Value="@CarAdviceMainTableWHEdit.Destination" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbDestination"] @bind-Value="@CarAdviceMainTableWHEdit.Destination" SearchFunc="@SearchDestination"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+ @*       <MudTextField Label=@Loc["lbDestination"] @bind-Value="@CarAdviceMainTableWHEdit.Destination" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>*@
     </MudItem>
     <MudItem xs="12" sm="6">
         <MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>
@@ -73,92 +79,97 @@
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbSecurityEntryInfo"]</MudAlert>
     </MudItem>
     <MudItem xs="6" sm="3">
-        <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="@EtdTimeDate" DisableToolbar="true" ReadOnly="true" Editable="false" Margin="Margin.Normal" />
+        <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="@EtdTimeDate" DisableToolbar="true" ReadOnly="false" Editable="true" Margin="Margin.Normal" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" ReadOnly="true" Editable="false" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="NowButton1">@Loc["lbNow"]  </MudButton>
+            <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" ReadOnly="false" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="false" OnClick="NowButton1">@Loc["lbNow"]  </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="3">
-        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal" />
+        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" ReadOnly="true" Editable="false" Margin="Margin.Normal" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
+            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="true" ReadOnly="true" Editable="false" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudTextField Label=@Loc["lbPickingstatus"] @bind-Value="@CarAdviceMainTableWHEdit.PickingStatus" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbPickingstatus"] @bind-Value="CarAdviceMainTableWHEdit.PickingStatus" SearchFunc="@SearchPickingStatus"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+@*        <MudTextField Label=@Loc["lbPickingstatus"] @bind-Value="@CarAdviceMainTableWHEdit.PickingStatus" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>*@
     </MudItem>
     <MudItem xs="6" sm="3">
-        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbTruckType"] @bind-Value="CarAdviceMainTableWHEdit.TruckType" SearchFunc="@SearchTuruckType"
-                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+        <MudTextField Label=@Loc["lbTruckType"] @bind-Value="@CarAdviceMainTableWHEdit.TruckType" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+@*        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbTruckType"] @bind-Value="CarAdviceMainTableWHEdit.TruckType" ReadOnly="true" SearchFunc="@SearchTuruckType"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />*@
     </MudItem>
     <MudItem xs="6" sm="3">
-        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbQuality"] @bind-Value="CarAdviceMainTableWHEdit.Quality" SearchFunc="@SearchQuality"
-                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+        <MudTextField Label=@Loc["lbQuality"] @bind-Value="@CarAdviceMainTableWHEdit.Quality" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+@*        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbQuality"] @bind-Value="CarAdviceMainTableWHEdit.Quality" SearchFunc="@SearchQuality"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />*@
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTextField Label=@Loc["lbDriverWH"] @bind-Value="@CarAdviceMainTableWHEdit.DriverWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
+            <MudTextField Label=@Loc["lbDriverWH"] @bind-Value="@CarAdviceMainTableWHEdit.DriverWh" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="false" OnClick="CopyButton1">@Loc["lbCopy"] </MudButton>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="6" sm="6">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+            <MudTextField Label=@Loc["lbDriverS"] @bind-Value="@CarAdviceMainTableWHEdit.DriverS" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
             <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="CopyButton1">@Loc["lbCopy"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTextField Label=@Loc["lbDriverS"] @bind-Value="@CarAdviceMainTableWHEdit.DriverS" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
-            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="CopyButton1">@Loc["lbCopy"] </MudButton>
+            <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesWh" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="false" OnClick="CopyButton2">@Loc["lbCopy"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
+            <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesS" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
             <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="CopyButton2">@Loc["lbCopy"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CarAdviceMainTableWHEdit.TruckPlatesS" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
-            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="CopyButton2">@Loc["lbCopy"] </MudButton>
-        </MudStack>
+        <MudTextField Label=@Loc["lbDock"] @bind-Value="@CarAdviceMainTableWHEdit.LoadingDock" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudTextField Label=@Loc["lbDock"] @bind-Value="@CarAdviceMainTableWHEdit.LoadingDock" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
-    </MudItem>
-    <MudItem xs="6" sm="6">
-        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbCallBy"] @bind-Value="CarAdviceMainTableWHEdit.CallBy" SearchFunc="@SearchCallBy"
-                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+        <MudTextField Label=@Loc["lbDock"] @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+@*        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbCallBy"] @bind-Value="CarAdviceMainTableWHEdit.CallBy" SearchFunc="@SearchCallBy"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" />*@
     </MudItem>
     <MudItem xs="6" sm="6">
     </MudItem>
     <MudItem xs="6" sm="3">
-        <MudDatePicker Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal" />
+        <MudDatePicker Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Editable="false" ReadOnly="true" Margin="Margin.Normal" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
+            <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Editable="false" ReadOnly="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
     </MudItem>
     <MudItem xs="6" sm="3">
-        <MudDatePicker Label=@Loc["lbTPVExitdate"] @bind-Date="TPVExitTimeDate" DisableToolbar="true" Editable="true" Margin="Margin.Normal" />
+        <MudDatePicker Label=@Loc["lbTPVExitdate"] @bind-Date="TPVExitTimeDate" DisableToolbar="true" Editable="false" ReadOnly="true" Margin="Margin.Normal" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" DisableToolbar="true" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton3">@Loc["lbNow"] </MudButton>
+            <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" DisableToolbar="true" Editable="false" ReadOnly="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="true" OnClick="NowButton3">@Loc["lbNow"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudTextField Label=@Loc["lbRemarkWH"] @bind-Value="@CarAdviceMainTableWHEdit.RemarksWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbRemarkWH"] @bind-Value="@CarAdviceMainTableWHEdit.RemarksWh" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudTextField Label=@Loc["lbRemarksS"] @bind-Value="@CarAdviceMainTableWHEdit.RemarksS" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbRemarksS"] @bind-Value="@CarAdviceMainTableWHEdit.RemarksS" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudTextField Label=@Loc["lbEntrybyWH"] @bind-Value="@CarAdviceMainTableWHEdit.EntryByWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
@@ -425,6 +436,12 @@
     List<CarAdviceDictionaryTruckType> truckTypeList = new List<CarAdviceDictionaryTruckType>();
     private List<string> trucktype;
 
+    private List<string> countryCode;
+    private List<string> carriers;
+
+    List<CarAdviceDictionaryCountryCode> countryList = new List<CarAdviceDictionaryCountryCode>();
+    List<CarAdviceDictionaryCarriers> carriersList = new List<CarAdviceDictionaryCarriers>();
+
     DateTime? LeftDockTimeDate;
     TimeSpan? LeftDockTimeTime;
 
@@ -451,7 +468,7 @@
 
         await DeleteItemWH.InvokeAsync("Save");
 
-        CarAdviceMainTableWHEdit.EntryByS = UserName;
+        CarAdviceMainTableWHEdit.EntryByWh = UserName;
 
         // Picking date
         if (PickingTimeDate != null)
@@ -550,19 +567,19 @@
 
     private void CopyButton1()
     {
-        CarAdviceMainTableWHEdit.DriverS = CarAdviceMainTableWHEdit.DriverWh;
+        CarAdviceMainTableWHEdit.DriverWh = CarAdviceMainTableWHEdit.DriverS;
         StateHasChanged();
     }
 
     private void CopyButton2()
     {
-        CarAdviceMainTableWHEdit.TruckPlatesS = CarAdviceMainTableWHEdit.TruckPlatesWh;
+        CarAdviceMainTableWHEdit.TruckPlatesWh = CarAdviceMainTableWHEdit.TruckPlatesS;
         StateHasChanged();
     }
 
     private string DriverMatch(string arg)
     {
-        if (CarAdviceMainTableWHEdit.DriverWh != arg)
+        if (CarAdviceMainTableWHEdit.DriverS != arg)
             return @Loc["lbDriverMatchError"];
         return null;
     }
@@ -746,6 +763,14 @@
             return customers;
         return customers.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
+
+    private async Task<IEnumerable<string>> SearchCarrier(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return carriers;
+        return carriers.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
 
     private async Task<IEnumerable<string>> SearchDestination(string value)
     {
