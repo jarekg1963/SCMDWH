@@ -293,7 +293,7 @@ else
     private async void Tab0Active()
     {
 
-        await ReadData();
+        //await ReadData();
 
         StateHasChanged();
     }
@@ -435,11 +435,11 @@ else
         //Console.WriteLine("clickCounter " + clickCounter);
         //if ( ileczasu > 0 &&   ileczasu < 3)
         //{
-            if (rolaAdmin) tabs.ActivatePanel(1);
-            if (rolaSecurity) tabs.ActivatePanel(1);
-            if (rolaWh) tabs.ActivatePanel(1);
-            _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
-            selectedRow = args.Item.Id.ToString();
+        if (rolaAdmin) tabs.ActivatePanel(1);
+        if (rolaSecurity) tabs.ActivatePanel(1);
+        if (rolaWh) tabs.ActivatePanel(1);
+        _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        selectedRow = args.Item.Id.ToString();
         //    clickCounter = 0;
         //    clickVerification.Clear();
         //}
@@ -551,6 +551,8 @@ else
 
         /// read colums for display main plan screen
 
+        columsForDisplayListDb.Clear();
+
         columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<CarAdviceMainPlanColumn>>(linkcoluser);
 
         foreach (var columienka in columsForDisplayListDb)
@@ -593,6 +595,8 @@ else
         hiddenScannedTime = verificationColumsVisibility("ScannedTime");
         #endregion setupColumsVisibility
 
+
+       
 
     }
 
