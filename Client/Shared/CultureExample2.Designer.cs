@@ -61,7 +61,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Czas awizacji.
+        ///   Looks up a localized string similar to Data wprowadzenia awizacji.
         /// </summary>
         public static string lbAdDate {
             get {
@@ -97,7 +97,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ata.
+        ///   Looks up a localized string similar to Rzeczywista data przyjazdu (ATA).
         /// </summary>
         public static string lbAta {
             get {
@@ -106,7 +106,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ata Czas.
+        ///   Looks up a localized string similar to Rzeczywisty czas przyjazdu.
         /// </summary>
         public static string lbAtaDateTime {
             get {
@@ -115,7 +115,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ata godziny .
+        ///   Looks up a localized string similar to Rzeczywisty czas przyjazdu.
         /// </summary>
         public static string lbAtaTime {
             get {
@@ -124,7 +124,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ata.
+        ///   Looks up a localized string similar to Rzeczywista data przyjazdu (ATA).
         /// </summary>
         public static string lbAtaTimeDate {
             get {
@@ -133,7 +133,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wywołujący .
+        ///   Looks up a localized string similar to Wywołujący na załadunek.
         /// </summary>
         public static string lbCallBy {
             get {
@@ -151,7 +151,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Samochody .
+        ///   Looks up a localized string similar to Samochody.
         /// </summary>
         public static string lbCarAdvice {
             get {
@@ -160,7 +160,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Przewoźnicy.
+        ///   Looks up a localized string similar to Przewoźnik.
         /// </summary>
         public static string lbCarriers {
             get {
@@ -178,7 +178,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kolumny .
+        ///   Looks up a localized string similar to Kolumny.
         /// </summary>
         public static string lbColumns {
             get {
@@ -196,7 +196,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lista przewoźników .
+        ///   Looks up a localized string similar to Lista przewoźników.
         /// </summary>
         public static string lbCurrierList {
             get {
@@ -250,7 +250,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dok.
+        ///   Looks up a localized string similar to Numer doku.
         /// </summary>
         public static string lbDock {
             get {
@@ -259,7 +259,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Czy na prawdę chcesz usunąć ? Ta czynność jest nieodwracalna !!!.
+        ///   Looks up a localized string similar to Czy na prawdę chcesz usunąć? Ta czynność jest nieodwracalna!.
         /// </summary>
         public static string lbDoYouRealyDelete {
             get {
@@ -268,7 +268,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dane kierowcy się nie zgadzają.
+        ///   Looks up a localized string similar to Dane kierowcy się nie zgadzają!.
         /// </summary>
         public static string lbDriverMatchError {
             get {
@@ -277,7 +277,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kierowca och..
+        ///   Looks up a localized string similar to Dane Kierowcy z ochrony.
         /// </summary>
         public static string lbDriverS {
             get {
@@ -286,7 +286,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kierowca-magazyn.
+        ///   Looks up a localized string similar to Dane Kierowcy z magazynu.
         /// </summary>
         public static string lbDriverWH {
             get {
@@ -304,7 +304,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edycja przewoźnika .
+        ///   Looks up a localized string similar to Edycja przewoźnika.
         /// </summary>
         public static string lbEditCurrier {
             get {
@@ -322,7 +322,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wjazd - ochrona.
+        ///   Looks up a localized string similar to Osoba kontaktowa ochrona.
         /// </summary>
         public static string lbEntryByS {
             get {
@@ -331,7 +331,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Magazynier.
+        ///   Looks up a localized string similar to Osoba kontaktowa magazyn.
         /// </summary>
         public static string lbEntrybyWH {
             get {
@@ -340,7 +340,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Zly format daty.
+        ///   Looks up a localized string similar to Zly format daty!.
         /// </summary>
         public static string lberrorDateTime {
             get {
@@ -349,7 +349,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ETD Dzień.
+        ///   Looks up a localized string similar to Awizowana data przyjazdu (ETD).
         /// </summary>
         public static string lbEtdDate {
             get {
@@ -358,7 +358,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ETD Godzina.
+        ///   Looks up a localized string similar to Awizowana godzina przyjazdu (ETD).
         /// </summary>
         public static string lbEtdTime {
             get {
@@ -412,7 +412,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uzytkownik.
+        ///   Looks up a localized string similar to Użytkownik.
         /// </summary>
         public static string lbLoggeduser {
             get {
@@ -448,7 +448,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data załadunku.
+        ///   Looks up a localized string similar to ---lbPickingdate---.
         /// </summary>
         public static string lbPickingdate {
             get {
@@ -466,7 +466,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Godzina załadunku.
+        ///   Looks up a localized string similar to ---lbPickingtime---.
         /// </summary>
         public static string lbPickingtime {
             get {
@@ -484,7 +484,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tablice.
+        ///   Looks up a localized string similar to Numery rejestracyjne pojazdu.
         /// </summary>
         public static string lbPlates {
             get {
@@ -493,7 +493,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Numery auta są niezgodne.
+        ///   Looks up a localized string similar to Numery pojazdu są niezgodne!.
         /// </summary>
         public static string lbPlatesMatchError {
             get {
@@ -502,7 +502,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Najpierw wybierz wysyłkę  .
+        ///   Looks up a localized string similar to Najpierw wybierz wysyłkę!.
         /// </summary>
         public static string lbPleaseSelectRow {
             get {
@@ -529,7 +529,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Numer.
+        ///   Looks up a localized string similar to Numer referencyjny.
         /// </summary>
         public static string lbReference {
             get {
@@ -538,7 +538,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uwagi ochrona.
+        ///   Looks up a localized string similar to Uwagi ochrony.
         /// </summary>
         public static string lbRemarksS {
             get {
@@ -547,7 +547,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Magazyn uwagi.
+        ///   Looks up a localized string similar to Uwagi magazynu.
         /// </summary>
         public static string lbRemarkWH {
             get {
@@ -637,7 +637,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wysyłka.
+        ///   Looks up a localized string similar to Numer wysyłki.
         /// </summary>
         public static string lbShipment {
             get {
@@ -646,7 +646,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Użytkowanik i hasło  .
+        ///   Looks up a localized string similar to Użytkownik i hasło  .
         /// </summary>
         public static string lbSignIn {
             get {
@@ -655,7 +655,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wejście.
+        ///   Looks up a localized string similar to Zaloguj się.
         /// </summary>
         public static string lbSingIn {
             get {
@@ -673,7 +673,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data wjazdu.
+        ///   Looks up a localized string similar to Data wjazdu do TPV.
         /// </summary>
         public static string lbTPVEntrydate {
             get {
@@ -682,7 +682,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Czas wjazdu.
+        ///   Looks up a localized string similar to Czas wjazdu do TPV.
         /// </summary>
         public static string lbTPVEntrytime {
             get {
@@ -691,7 +691,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wyjazd dzień.
+        ///   Looks up a localized string similar to Data wyjazdu z TPV.
         /// </summary>
         public static string lbTPVExitdate {
             get {
@@ -700,7 +700,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wyjazd z TPV.
+        ///   Looks up a localized string similar to Czas wyjazdu z TPV.
         /// </summary>
         public static string lbTpvExitTime {
             get {
@@ -709,7 +709,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tablice-magazyn.
+        ///   Looks up a localized string similar to Numery rejestracyjne pojazdu z magazynu.
         /// </summary>
         public static string lbTruckplatesWH {
             get {
@@ -754,7 +754,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Magazyn dane wysyłki .
+        ///   Looks up a localized string similar to Magazyn dane wysyłki.
         /// </summary>
         public static string lbWarehouseinformation {
             get {

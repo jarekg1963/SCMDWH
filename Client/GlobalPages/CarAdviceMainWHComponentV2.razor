@@ -84,7 +84,7 @@
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" ReadOnly="false" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="false" OnClick="NowButton1">@Loc["lbNow"]  </MudButton>
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="false" OnClick="NowButton4">@Loc["lbNow"]  </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="3">
@@ -562,6 +562,13 @@
     {
         TPVExitTimeDate = DateTime.Today;
         TPVExitTimeTime = DateTime.Now.TimeOfDay;
+        StateHasChanged();
+    }
+
+    private void NowButton4()
+    {
+        EtdTimeDate = DateTime.Today;
+        EtdTimeTime = DateTime.Now.TimeOfDay;
         StateHasChanged();
     }
 
