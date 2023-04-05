@@ -43,7 +43,12 @@
                             <div class="spinner-border text-light" role="status" />
                         </div>
                     }
+                    <div class="d-flex justify-content-center" role="alert" style="background-color:#708090!important">
+                        @lbBrakHasla
+                    </div>
                     <div class="hr"></div>
+                   
+                  
 
                 </div>
 
@@ -61,6 +66,8 @@
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
+    private string lbBrakHasla = "";
+
     protected override void OnInitialized()
     {
 
@@ -70,9 +77,9 @@
             _userForAuthentication.Password = "tpv12345!";
         }
 
-    
 
-       
+
+
     }
 
 
@@ -82,7 +89,8 @@
         // zaszyfrować uzytkownika i hasło przed przesłaniem do backendu . 
         var result = await AuthenticationService.Login(_userForAuthentication);
         if (!result.IsAuthSuccessful)
-        {    
+        {
+            lbBrakHasla = @Loc["lbWrongpassuser"];
             Snackbar.Add( @Loc["lbWrongpassuser"], Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
         }
         else
