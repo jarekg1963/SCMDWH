@@ -41,12 +41,17 @@ namespace SCMDWH.Server.Sevices
             return content;
         }
 
+
+        public void setupCelStyle(int ro , int co)
+        {
+
+        }
         public void CreateAuthorWorksheet(XLWorkbook package, string UserName)
         {
             List<CarAdviceMainTable> carListToExcel = new List<CarAdviceMainTable>();
             var worksheet = package.Worksheets.Add("CA");
             var datyDoRaportu = _context.GlobalAppUsersParameters.Where(c => c.UserName == UserName).FirstOrDefault();
-            var headerList = _context.CarAdviceMainPlanComum.Where(c=>c.UserName == UserName).ToList();
+            var headerList = _context.CarAdviceMainPlanComum.Where(c=>c.UserName == UserName).OrderBy(o=>o.OrderColumn).ToList();
             int i = 1;
             foreach (var header in headerList)
             {
@@ -54,7 +59,7 @@ namespace SCMDWH.Server.Sevices
                 {
                     worksheet.Cell(1, i).Style.Font.SetBold(true);
                     worksheet.Cell(1, i).Style.Fill.BackgroundColor = XLColor.CoolGrey;
-                    worksheet.Cell(1, i).Value = header.MainScreenColumn;
+                    worksheet.Cell(1, i).Value = header.plHeader;
                     i++;
                 }
             }
@@ -66,7 +71,11 @@ namespace SCMDWH.Server.Sevices
                 int j = 1;
                 foreach (var header in headerList)
                 {
-                 
+
+                    worksheet.Cell(index+1, j).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(index+1, j).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(index+1, j).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+
                     if (header.MainScreenColumn == "Id" && header.Hidden == false)
                     {
                         worksheet.Cell(index + 1, j).Value = item.Id;
@@ -204,9 +213,7 @@ namespace SCMDWH.Server.Sevices
                         worksheet.Cell(index + 1, j).Value = item.ForwarderInfo;
                         j++;
                     }
-                    worksheet.Cell(index, j).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                    worksheet.Cell(index, j).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-                    worksheet.Cell(index, j).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+              
                 }
                 index++;
               
