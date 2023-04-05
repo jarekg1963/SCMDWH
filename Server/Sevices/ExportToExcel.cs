@@ -1,27 +1,31 @@
 ﻿using ClosedXML.Excel;
+using MathNet.Numerics.LinearAlgebra.Factorization;
+using Microsoft.CodeAnalysis.Differencing;
 using NPOI.SS.UserModel;
 using SCMDWH.Server.Data;
+using SCMDWH.Shared.Models;
+using System.Data.Entity;
 
 namespace SCMDWH.Server.Sevices
 {
     public class ExportToExcel
     {
 
-        private readonly PurchasingContext _context;
+        private readonly CarAdviceContext _context;
 
-        public ExportToExcel(PurchasingContext context)
+        public ExportToExcel(CarAdviceContext context)
         {
             _context = context;
         }
 
 
-        public byte[] CreateAuthorExport(string UserName)
+        public byte[] CreateExcelExport(string UserName)
         {
             var workbook = new XLWorkbook();
-            workbook.Properties.Title = "Export from asn";
-            workbook.Properties.Author = "JG";
-            workbook.Properties.Subject = "Export from ASN";
-            workbook.Properties.Keywords = "asn, sky , blazor";
+            workbook.Properties.Title = "Export from CA";
+            workbook.Properties.Author = "MG";
+            workbook.Properties.Subject = "Export from CA";
+            workbook.Properties.Keywords = "CA, TPV , blazor";
 
             CreateAuthorWorksheet(workbook, UserName);
 
@@ -39,86 +43,175 @@ namespace SCMDWH.Server.Sevices
 
         public void CreateAuthorWorksheet(XLWorkbook package, string UserName)
         {
-
-            //SkyAsnHeader hh = new SkyAsnHeader();
-            //hh = _context.SkyAsnHeaders.Include(s => s.SkyAsnItems).Where(d => d.OemShipmentNumberTpvDn == DnNr).FirstOrDefault();
-
-
-            var listToExpor = _context.CarAdviceMainTable.ToList();
+            List<CarAdviceMainTable> carListToExcel = new List<CarAdviceMainTable>();
             var worksheet = package.Worksheets.Add("CA");
-
-
-            #region wczytanie dat do raportu 
-
             var datyDoRaportu = _context.GlobalAppUsersParameters.Where(c => c.UserName == UserName).FirstOrDefault();
-
-            #endregion wczytanie dat do raportu 
-
-
-
-            #region Zaczytanie nagłowków 
-
             var headerList = _context.CarAdviceMainPlanComum.Where(c=>c.UserName == UserName).ToList();
-
             int i = 1;
-            foreach ( var header in headerList ) 
+            foreach (var header in headerList)
             {
-                worksheet.Cell(1, i).Value = header.MainScreenColumn;
-
-                //worksheet.Cell(1, 1).Value = "Id";
-                //worksheet.Cell(1, 2).Value = "TvSerialNumber";
-
+                if (header.Hidden == false)
+                {
+                    worksheet.Cell(1, i).Style.Font.SetBold(true);
+                    worksheet.Cell(1, i).Style.Fill.BackgroundColor = XLColor.CoolGrey;
+                    worksheet.Cell(1, i).Value = header.MainScreenColumn;
+                    i++;
+                }
             }
-
-            #endregion Zaczytania nagłowków
-
-            
-            #region zaczytanie rekordow 
-
-
-            #endregion zaczytanie rekordow 
-
-
+            carListToExcel = _context.CarAdviceMainTables.Where(d => d.Etd >= datyDoRaportu.DateMainCAFrom && d.Etd <= datyDoRaportu.DateMainCATo)
+               .OrderByDescending(c => c.Id).ToList();
             int index = 1;
-            //foreach (var item in hh.SkyAsnItems)
-            //{
-            //    worksheet.Cell(index + 1, 1).Value = item.Id;
-            //    worksheet.Cell(index + 1, 2).Value = item.TvSerialNumber;
-            //    worksheet.Cell(index + 1, 3).Value = item.DeviceSerialNumber;
-            //    worksheet.Cell(index + 1, 4).Value = item.ManufacturersInternalSerialNumber;
-            //    worksheet.Cell(index + 1, 5).Value = item.EthernetMac;
-            //    worksheet.Cell(index + 1, 6).Value = item.WifiMac;
-            //    worksheet.Cell(index + 1, 7).Value = item.Wifi24Mac;
-            //    worksheet.Cell(index + 1, 8).Value = item.BluetoothMac;
+            foreach (var item in carListToExcel)
+            {
+                int j = 1;
+                foreach (var header in headerList)
+                {
+                 
+                    if (header.MainScreenColumn == "Id" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.Id;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "AdviceDate" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.AdviceDate;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "FgDelayReason" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.FgDelayReason;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "PickingStatus" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.PickingStatus;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "Client" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.Client;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "Shipment" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.Shipment;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "Reference" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.Reference;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "Destination" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.Destination;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "DriverWh" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.DriverWh;
+                        j++;
+                    }
 
-            //    worksheet.Cell(index + 1, 9).Value = item.SocId.ToString();
-            //    worksheet.Cell(index + 1, 9).Style.NumberFormat.SetNumberFormatId((int)XLPredefinedFormat.Number.Integer);
-            //    worksheet.Cell(index + 1, 10).Value = item.FirmwareVer;
-            //    worksheet.Cell(index + 1, 11).Value = item.HardwareVer;
-            //    worksheet.Cell(index + 1, 12).Value = item.DeviceStatus;
-            //    worksheet.Cell(index + 1, 13).Value = item.MasterCartonId;
-            //    worksheet.Cell(index + 1, 14).Value = item.PalletNo;
-            //    worksheet.Cell(index + 1, 15).Value = item.WpsPin;
-            //    worksheet.Cell(index + 1, 16).Value = item.SkyInitialPciversion;
-            //    worksheet.Cell(index + 1, 17).Value = item.SkyInitialPdriversion;
-            //    worksheet.Cell(index + 1, 18).Value = item.SkyInitialBdriversion;
-            //    worksheet.Cell(index + 1, 19).Value = item.SkyPsuSn;
-            //    worksheet.Cell(index + 1, 20).Value = item.SkyRcutype;
-            //    worksheet.Cell(index + 1, 21).Value = item.LcmSn;
-            //    worksheet.Cell(index + 1, 22).Value = item.PowerBoardSn;
-            //    worksheet.Cell(index + 1, 23).Value = item.DriverBoardSn;
-            //    worksheet.Cell(index + 1, 24).Value = item.TconNs;
-            //    worksheet.Cell(index + 1, 25).Value = item.TlUpfireSn;
-            //    worksheet.Cell(index + 1, 26).Value = item.TrUpfireSn;
-            //    worksheet.Cell(index + 1, 27).Value = item.SoundModuleSn;
-            //    worksheet.Cell(index + 1, 28).Value = item.RfBoardSn;
-            //    worksheet.Cell(index + 1, 29).Value = item.IrBoardSn;
-            //    worksheet.Cell(index + 1, 30).Value = item.SkyTunerBoardSn;
-            //    index++;
-            //}
+                    if (header.MainScreenColumn == "TruckPlatesWh" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.TruckPlatesWh;
+                        j++;
+                    }
 
+                    if (header.MainScreenColumn == "Forwarder" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.Forwarder;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "Etd" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.Etd;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "EntryByWh" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.EntryByWh;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "Ata" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.Ata;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "Quality" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.Quality;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "TruckType" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.TruckType;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "DriverS" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.DriverS;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "TpvEnterTime" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.TpvEnterTime;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "TpvExitTime" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.TpvExitTime;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "LoadingDock" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.LoadingDock;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "CallBy" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.CallBy;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "RemarksS" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.RemarksS;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "EntryByS" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.EntryByS;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "LeftTheDockTime" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.LeftTheDockTime;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "PickingTime" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.PickingTime;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "ScannedTime" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.ScannedTime;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "ForwarderInfo" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.ForwarderInfo;
+                        j++;
+                    }
+                    worksheet.Cell(index, j).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(index, j).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(index, j).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                }
+                index++;
+              
+            }
+           
         }
-
-
-        }
+    }
 }

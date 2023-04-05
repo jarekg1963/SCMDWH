@@ -32,6 +32,8 @@ public partial class CarAdviceContext : DbContext
 
     public virtual DbSet<CarAdviceMainTable> CarAdviceMainTables { get; set; }
 
+    public DbSet<GlobalAppUsersParameters> GlobalAppUsersParameters { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=172.17.80.141;Database=purchasing;User Id=purchasing;password=+I=wA9RlT6&tHuFUs*O7;Trusted_Connection=False;Encrypt=False;MultipleActiveResultSets=true;");
@@ -39,6 +41,19 @@ public partial class CarAdviceContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Polish_CI_AS");
+
+
+        modelBuilder.Entity<GlobalAppUsersParameters>(entity =>
+        {
+            entity.HasKey(e => e.UserName).HasName("PK_GlobalAppUsersParameters");
+
+            entity.Property(e => e.UserName)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.DateMainCAFrom).HasColumnName("DateMainCAFrom");
+            entity.Property(e => e.DateMainCATo).HasColumnName("DateMainCATo");
+
+        });
 
         modelBuilder.Entity<CarAdviceDictionaryCountryCode>(entity =>
         {

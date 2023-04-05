@@ -13,6 +13,7 @@
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
 @inject RecordLog rl;
+@inject IJSRuntime JSRuntime
 
 
 <style>
@@ -220,9 +221,17 @@ else
     private List<string> _events = new();
 
 
-    private async Task ExportToExcel()
+    private async void ExportToExcel()
     {
         
+        StateHasChanged();
+        var response = await httpClient.GetAsync("/api/Raport/ReportToExcel/" + UserName);
+        response.EnsureSuccessStatusCode();
+        var fileBytes = await response.Content.ReadAsByteArrayAsync();
+        var fileName = $"AsnData{DateTime.Now.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}.xlsx";
+        await JSRuntime.InvokeAsync<object>("saveAsFile", fileName, Convert.ToBase64String(fileBytes));
+      
+        StateHasChanged();
       
 
     }
