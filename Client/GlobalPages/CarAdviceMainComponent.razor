@@ -1,6 +1,8 @@
 ﻿@page "/caradvice"
 @using System.Net.Http.Json
 @using System.Text.Json.Serialization;
+@using NPOI.SS.UserModel;
+@using NPOI.XSSF.UserModel;
 @using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
 @using System.Security.Claims;
@@ -62,12 +64,13 @@ else
                                 Excel
                             </MudButton>
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem xs="1">
                             <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Filled.AddToDrive"
                                    Style="text-transform:none ; margin-top:25px!important" OnClick="NewItemsCarAdviceMain" Size="Size.Small">
                                @Loc["lbNew"] 
                             </MudButton>
                         </MudItem>
+                       
                         <MudItem xs="3">
                             <MudDateRangePicker DisableToolbar="true" IconSize="Size.Small" @ref="_picker"  @bind-DateRange="_dateRange" AutoClose="@_autoClose">
                                 <PickerActions>
@@ -104,7 +107,17 @@ else
                     }
                 </Columns>
                 <PagerContent>
-                    <MudDataGridPager T="CarAdviceMainTable" />
+                    <MudGrid>
+                    <MudItem xs="2">
+                        <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Filled.Exposure"
+                               Style="text-transform:none ; margin-top:10px!important" OnClick="ExportToExcel" Size="Size.Small">
+                            @Loc["lbExportExcel"]
+                        </MudButton>
+                    </MudItem>
+                    <MudItem xs="10">
+                            <MudDataGridPager T="CarAdviceMainTable" PageSizeOptions="new int[] { 20, 50}" RowsPerPageString=@Loc["lbRowPerPage"] />
+                        </MudItem>
+                    </MudGrid>
                 </PagerContent>
             </MudDataGrid>
 
@@ -205,6 +218,15 @@ else
     List<clickInterval> clickVerification = new List<clickInterval>();
 
     private List<string> _events = new();
+
+
+    private async Task ExportToExcel()
+    {
+        
+      
+
+    }
+
 
     private void Click(CarAdviceMainTable element)
     {

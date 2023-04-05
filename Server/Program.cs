@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using SCMDWH.Server.Data;
 using SCMDWH.Server.Logging;
 using SCMDWH.Server.Repository;
+using SCMDWH.Server.Sevices;
 using SCMDWH.Shared.Models;
 using System;
 using System.Globalization;
@@ -45,6 +46,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IRepoGlobalAppUsers, RepoGlobalAppUsers>();
 builder.Services.AddScoped<IRepoGlobalAppRoles, RepoGlobalAppRoles>();
+builder.Services.AddTransient<ExportToExcel>();
 
 
 //IRepoGlobalAppRoles

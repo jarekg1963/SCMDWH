@@ -216,6 +216,9 @@
   <data name="lbEtdTime" xml:space="preserve">
     <value>ETD time</value>
   </data>
+  <data name="lbExportExcel" xml:space="preserve">
+    <value>Export to excel</value>
+  </data>
   <data name="lbGeneralWarehouseInfoprmation" xml:space="preserve">
     <value>General warehouse information</value>
   </data>
@@ -275,6 +278,9 @@
   </data>
   <data name="lbRoles" xml:space="preserve">
     <value>Roles</value>
+  </data>
+  <data name="lbRowPerPage" xml:space="preserve">
+    <value>Rows per page</value>
   </data>
   <data name="lbSave" xml:space="preserve">
     <value>Save</value>

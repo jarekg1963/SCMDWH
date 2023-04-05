@@ -367,6 +367,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export do Excela.
+        /// </summary>
+        public static string lbExportExcel {
+            get {
+                return ResourceManager.GetString("lbExportExcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Informacje ogólne.
         /// </summary>
         public static string lbGeneralInfo {
@@ -561,6 +570,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbRoles {
             get {
                 return ResourceManager.GetString("lbRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wierszy na stronie.
+        /// </summary>
+        public static string lbRowPerPage {
+            get {
+                return ResourceManager.GetString("lbRowPerPage", resourceCulture);
             }
         }
         

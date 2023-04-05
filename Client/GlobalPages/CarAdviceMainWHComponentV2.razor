@@ -41,6 +41,8 @@
     }
 </style>
 
+
+
 <MudGrid Style="background-color:#faf6f5!important">
     <MudItem xs="12">
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbGeneralInfo"]</MudAlert>
@@ -84,7 +86,7 @@
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" ReadOnly="false" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="false" OnClick="NowButton1">@Loc["lbNow"]  </MudButton>
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="false" OnClick="NowButton0">@Loc["lbNow"]  </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="3">
@@ -466,7 +468,7 @@
     private async Task SaveWh()
     {
 
-        await DeleteItemWH.InvokeAsync("Save");
+      
 
         CarAdviceMainTableWHEdit.EntryByWh = UserName;
 
@@ -534,14 +536,25 @@
         jsonStringCAEdit,
         UserName, "Success");
 
-        //await ReadData();
-        //StateHasChanged();
+
+        // zmakniecie podformularza i wywołanie parent
+        await DeleteItemWH.InvokeAsync("Save");
+
     }
 
     private async Task CancelButton()
     {
         await DeleteItemWH.InvokeAsync("Cancel");
     }
+
+    private void NowButton0()
+    {
+
+        EtdTimeDate = DateTime.Today;
+        EtdTimeTime = DateTime.Now.TimeOfDay;
+        StateHasChanged();
+    }
+
 
     private void NowButton1()
     {

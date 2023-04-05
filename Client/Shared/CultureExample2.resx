@@ -219,6 +219,9 @@
   <data name="lbEtdTime" xml:space="preserve">
     <value>ETD Godzina</value>
   </data>
+  <data name="lbExportExcel" xml:space="preserve">
+    <value>Export do Excela</value>
+  </data>
   <data name="lbGeneralInfo" xml:space="preserve">
     <value>Informacje ogólne</value>
   </data>
@@ -284,6 +287,9 @@
   </data>
   <data name="lbRoles" xml:space="preserve">
     <value>Role</value>
+  </data>
+  <data name="lbRowPerPage" xml:space="preserve">
+    <value>Wierszy na stronie</value>
   </data>
   <data name="lbSave" xml:space="preserve">
     <value>Zapisz</value>

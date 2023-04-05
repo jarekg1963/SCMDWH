@@ -455,8 +455,7 @@
     private async Task SaveWh()
     {
 
-        await DeleteItem.InvokeAsync("Save");
-
+       
         CarAdviceMainTableWHEdit.EntryByS = UserName;
 
         // Picking date
@@ -516,6 +515,8 @@
         string linkSave = "/api/CarAdviceMainTables/BySH/" + CarAdviceMainTableWHEdit.Id;
         var Response = await httpClient.PutAsJsonAsync<CarAdviceMainTable>(linkSave, CarAdviceMainTableWHEdit);
 
+
+
         // zapisanie delete do logu operacji
 
         string jsonStringCAEdit = JsonSerializer.Serialize(CarAdviceMainTableWHEdit);
@@ -523,8 +524,10 @@
         jsonStringCAEdit,
         UserName, "Success");
 
-        //await ReadData();
-        //StateHasChanged();
+        // zmakniecie podformularza i wywołanie parent 
+
+        await DeleteItem.InvokeAsync("Save");
+
     }
 
     private async Task CancelButton()
