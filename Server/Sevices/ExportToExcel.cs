@@ -42,10 +42,6 @@ namespace SCMDWH.Server.Sevices
         }
 
 
-        public void setupCelStyle(int ro , int co)
-        {
-
-        }
         public void CreateAuthorWorksheet(XLWorkbook package, string UserName)
         {
             List<CarAdviceMainTable> carListToExcel = new List<CarAdviceMainTable>();
@@ -141,6 +137,11 @@ namespace SCMDWH.Server.Sevices
                     if (header.MainScreenColumn == "EntryByWh" && header.Hidden == false)
                     {
                         worksheet.Cell(index + 1, j).Value = item.EntryByWh;
+                        j++;
+                    }
+                    if (header.MainScreenColumn == "RemarksWh" && header.Hidden == false)
+                    {
+                        worksheet.Cell(index + 1, j).Value = item.RemarksWh;
                         j++;
                     }
                     if (header.MainScreenColumn == "Ata" && header.Hidden == false)
