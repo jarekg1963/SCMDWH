@@ -1,0 +1,181 @@
+﻿@using MudBlazor.Utilities;
+@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient;
+@inject IStringLocalizer<CultureExample2> Loc
+
+<style>
+/*		.mud-drop-item {
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+		font-size: xx-small !important;
+	}
+*/
+
+	.StylItemow {
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+		font-size: 1rem !important;
+	}
+
+</style>
+
+<div class="d-flex flex-column mud-width-full mud-height-full">
+	
+	<MudDropContainer T="DropItem" Items="@newdata" @ref="_container" ItemsSelector="@((item,dropzone) => item.Selector == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+		<ChildContent  >
+			<MudPaper Class="ma-2 flex-grow-1">
+				<MudList  Clickable="true" Class="d-flex flex-column mud-height-full">
+					<MudListSubheader Style="font-weight:bold !important; background-color:lightgray" >@Loc["lbVisible"]</MudListSubheader>
+					<MudDropZone  T="DropItem" Identifier="1" Class="flex-grow-1" AllowReorder="true" />
+				</MudList>
+			</MudPaper>
+			<MudPaper Class="ma-2 flex-grow-1">
+				<MudList Clickable="true" Class="d-flex flex-column mud-height-full">
+					<MudListSubheader Style="font-weight:bold !important; background-color:lightgray">@Loc["lbHiddens"]</MudListSubheader>
+					<MudDropZone T="DropItem" Identifier="2" Class="flex-grow-1"  AllowReorder="true" />
+				</MudList>
+			</MudPaper>
+		</ChildContent>
+		<ItemRenderer >
+			<MudListItem Class="StylItemow" Text="@($"{context.Name} ({context.Order})")" />
+		</ItemRenderer>
+	</MudDropContainer>
+	<MudGrid>
+
+		<MudItem xs="2"></MudItem>
+
+		<MudItem xs="4">
+			<MudButton OnClick="CancelData" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">Cancel</MudButton>
+		</MudItem>
+		<MudItem xs="4">
+			<MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="SaveData">Save</MudButton>
+		</MudItem>
+	</MudGrid>
+</div>
+
+
+
+@code {
+	[Parameter]
+	public string UserName { get; set; }
+	List<CarAdviceMainPlanColumn> columsForDisplayListDb = new List<CarAdviceMainPlanColumn>();
+	List<DropItem> newdata = new List<DropItem>();
+
+	[CascadingParameter]
+	MudDialogInstance MudDialog { get; set; }
+
+	//private List<DropItem> _dropzoneItems = new();
+
+	private MudDropContainer<DropItem> _container;
+
+
+	private async Task SaveData()
+	{
+		int i = 1;
+		foreach (var itemForupdate in newdata.OrderBy(o => o.Order))
+		{
+			CarAdviceMainPlanColumn columnForUpdate = new();
+
+			if (CultureInfo.CurrentCulture.Name == "en-US")
+			{
+				columnForUpdate = columsForDisplayListDb.FirstOrDefault(c => c.MainScreenColumn == itemForupdate.Name);
+			}
+
+			if (CultureInfo.CurrentCulture.Name == "pl-PL")
+			{
+				columnForUpdate = columsForDisplayListDb.FirstOrDefault(c => c.plHeader == itemForupdate.Name);
+			}
+
+			columnForUpdate.Hidden = itemForupdate.Selector == "2";
+
+			columnForUpdate.OrderColumn = i;
+			i++;
+
+			string linkcoluser = "/api/CarAdviceMainPlanColums/" + columnForUpdate.Id;
+			var res = await httpClient.PutAsJsonAsync<CarAdviceMainPlanColumn>(linkcoluser, columnForUpdate);
+			//await Task.Delay(50);
+
+		}
+		MudDialog.Close(DialogResult.Ok("OK"));
+
+	}
+
+
+	private void ItemUpdated(MudItemDropInfo<DropItem> dropItem)
+	{
+		dropItem.Item.Selector = dropItem.DropzoneIdentifier;
+
+		var indexOffset = dropItem.DropzoneIdentifier switch
+		{
+			"2" => newdata.Count(x => x.Selector == "1"),
+			_ => 0,
+		};
+
+		newdata.UpdateOrder(dropItem, item => item.Order, indexOffset);
+	}
+
+
+	protected async override Task OnInitializedAsync()
+	{
+
+		string linkcoluser = "/api/CarAdviceMainPlanColums/MainPlanComumByUser/" + UserName;
+		columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<CarAdviceMainPlanColumn>>(linkcoluser);
+
+
+		if (CultureInfo.CurrentCulture.Name == "en-US")
+		{
+			int i = 1;
+			foreach (var item in columsForDisplayListDb)
+			{
+				if (item.Hidden)
+					newdata.Add(new DropItem() { Order = i, Name = item.MainScreenColumn, Selector = "2" });
+				if (!item.Hidden)
+					newdata.Add(new DropItem() { Order = i, Name = item.MainScreenColumn, Selector = "1" });
+				i++;
+			}
+		
+		}
+
+
+		if (CultureInfo.CurrentCulture.Name == "pl-PL")
+		{
+			int i = 1;
+			foreach (var item in columsForDisplayListDb)
+			{
+				if (item.Hidden)
+					newdata.Add(new DropItem() { Order = i, Name = item.plHeader, Selector = "2" });
+				if (!item.Hidden)
+					newdata.Add(new DropItem() { Order = i, Name = item.plHeader, Selector = "1" });
+				i++;
+			}
+		}
+		//		_dropzoneItems = newdata;
+		RefreshContainer();
+
+	}
+
+	
+
+	private void RefreshContainer()
+	{
+		//update the binding to the container
+		StateHasChanged();
+
+		//the container refreshes the internal state
+		_container.Refresh();
+	}
+	
+
+    private void CancelData()
+    {
+        MudDialog.Close(DialogResult.Cancel());
+    }
+
+
+    public class DropItem
+    {
+        public string Name { get; init; }
+        public string Selector { get; set; }
+        public int Order { get; set; }
+    }
+}

@@ -33,7 +33,6 @@
 }
 else
 {
-
     <MudTable RowStyleFunc="@_rowStyleFunc" Items="@listCarAdviceMainTableNew" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"400px":"")">
         <HeaderContent>
             <MudTh>Id</MudTh>
@@ -49,7 +48,6 @@ else
             <MudTh>@Loc["lbRemarkWH"]</MudTh>
             <MudTh>@Loc["lbEdit"]</MudTh>
             <MudTh>@Loc["lbDelete"]</MudTh>
-
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Nr">@context.ForwarderInfo</MudTd>
@@ -105,6 +103,7 @@ else
     CarAdviceMainTable CarAdviceMainTableNew = new CarAdviceMainTable();
     CarAdviceMainTable UpdatedCarAdviceMainTableNew = new CarAdviceMainTable();
     List<CarAdviceMainTable> listCarAdviceMainTableNew = new List<CarAdviceMainTable>();
+    private int quantityItemsSaved;
 
 
     protected async override void OnInitialized()
@@ -141,27 +140,25 @@ else
 
     private async Task  CloseSave()
     {
+       
         string[] tabForDelete =  new string[1000];
         int licznikTabeli = 0;
 
         foreach (var listforSave in  listCarAdviceMainTableNew)
         {
+           
             listforSave.Quality = null;
             listforSave.EntryByS = null;
             listforSave.TruckType = null;
             listforSave.FgDelayReason = null;
             listforSave.PickingStatus = null;
             listforSave.ClientNavigation = null;
-            // CarAdviceMainTableNew.QualityNavigation = null;
-            //listforSave.EntryBySNavigation = null;
             listforSave.TruckTypeNavigation = null;
             listforSave.DestinationNavigation = null;
             listforSave.FgDelayReasonNavigation = null;
             listforSave.PickingStatusNavigation = null;
             listforSave.Id = null;
-            //DateTime EtaDateNotNulable = (DateTime)newEtadate;
-            //TimeSpan EtaTimeNotNulable = (TimeSpan)newEtatime;
-            //CarAdviceMainTableNew.Etd = EtaDateNotNulable.Add(EtaTimeNotNulable);
+
             // Sprawdzenie czy istnieje reference 
             bool exitref = await ExitByReference(listforSave.Reference);
             if (exitref)
@@ -172,32 +169,29 @@ else
             {
                 string linkpostca = "/api/CarAdviceMainTables";
                 var Response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkpostca, listforSave);
-
                 // zapisanie delete do logu operacji
-
                 string jsonStringCAEdit = JsonSerializer.Serialize(listforSave);
                 rl.RecordOperationLog("New excel item",
                 jsonStringCAEdit,
                 UserName, 
                 "Success");
-
                 if (!Response.IsSuccessStatusCode)
                 {
                     Snackbar.Add("Error Excel in row " + listforSave.ForwarderInfo, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 2500; });
                 }
                 else
                 {
+                   
                     tabForDelete[licznikTabeli] = listforSave.ForwarderInfo;
                     licznikTabeli++;
                 }
             }
         }
-
         for (int i = 0 ; i <= tabForDelete.Length-1 ; i ++)
         {
             listCarAdviceMainTableNew.RemoveAll(c => c.ForwarderInfo == tabForDelete[i]);
         }
-        StateHasChanged();
+        StateHasChanged();       
         if (listCarAdviceMainTableNew.Count == 0) navigationManager.NavigateTo("/caradvice", true);
     }
 

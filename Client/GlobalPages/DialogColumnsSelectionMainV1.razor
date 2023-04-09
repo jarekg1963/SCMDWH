@@ -13,12 +13,10 @@
 <MudDialog DisableSidePadding="true">
     <DialogContent>
         <MudContainer Style="max-height: 650px; overflow-y: scroll">
-			<MudAlert Severity="Severity.Normal" AlertTextPosition="AlertTextPosition.Center">Display colums</MudAlert>
+			@*<MudAlert Severity="Severity.Normal" AlertTextPosition="AlertTextPosition.Center">Display colums</MudAlert>*@
 <div class="d-flex flex-column mud-width-full mud-height-full">
-	
 	<MudDropContainer T="DropItem" Items="@_dropzoneItems" @ref="_container" ItemsSelector="@((item,dropzone) => item.Selector == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
 		<ChildContent>
-		
 					<MudPaper Class="ma-4 flex-grow-1">
 				<MudList Clickable="true" Class="d-flex flex-column mud-height-full" Dense=true >
 							<MudListSubheader Style="background-color:aliceblue">On screen</MudListSubheader>

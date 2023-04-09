@@ -394,6 +394,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kolumny ukryte.
+        /// </summary>
+        public static string lbHiddens {
+            get {
+                return ResourceManager.GetString("lbHiddens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start.
         /// </summary>
         public static string lbHome {
@@ -457,7 +466,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ---lbPickingdate---.
+        ///   Looks up a localized string similar to Data załądunku.
         /// </summary>
         public static string lbPickingdate {
             get {
@@ -475,7 +484,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ---lbPickingtime---.
+        ///   Looks up a localized string similar to Czas załadunku.
         /// </summary>
         public static string lbPickingtime {
             get {
@@ -759,6 +768,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbusername {
             get {
                 return ResourceManager.GetString("lbusername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kolumny widoczne .
+        /// </summary>
+        public static string lbVisible {
+            get {
+                return ResourceManager.GetString("lbVisible", resourceCulture);
             }
         }
         

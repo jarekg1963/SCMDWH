@@ -228,6 +228,9 @@
   <data name="lbGeneralWarehouseInfoprmation" xml:space="preserve">
     <value>Dane magazynu</value>
   </data>
+  <data name="lbHiddens" xml:space="preserve">
+    <value>Kolumny ukryte</value>
+  </data>
   <data name="lbHome" xml:space="preserve">
     <value>Start</value>
   </data>
@@ -250,13 +253,13 @@
     <value>Hasło</value>
   </data>
   <data name="lbPickingdate" xml:space="preserve">
-    <value>---lbPickingdate---</value>
+    <value>Data załądunku</value>
   </data>
   <data name="lbPickingstatus" xml:space="preserve">
     <value>Status</value>
   </data>
   <data name="lbPickingtime" xml:space="preserve">
-    <value>---lbPickingtime---</value>
+    <value>Czas załadunku</value>
   </data>
   <data name="lbPlan" xml:space="preserve">
     <value>Lista aut</value>
@@ -350,6 +353,9 @@
   </data>
   <data name="lbusername" xml:space="preserve">
     <value>Użytkownik</value>
+  </data>
+  <data name="lbVisible" xml:space="preserve">
+    <value>Kolumny widoczne </value>
   </data>
   <data name="lbWarehouse" xml:space="preserve">
     <value>Magazyn</value>

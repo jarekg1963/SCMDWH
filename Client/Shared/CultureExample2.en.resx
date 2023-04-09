@@ -222,6 +222,9 @@
   <data name="lbGeneralWarehouseInfoprmation" xml:space="preserve">
     <value>General warehouse information</value>
   </data>
+  <data name="lbHiddens" xml:space="preserve">
+    <value>Hiddens</value>
+  </data>
   <data name="lbHome" xml:space="preserve">
     <value>Home</value>
   </data>
@@ -341,6 +344,9 @@
   </data>
   <data name="lbusername" xml:space="preserve">
     <value>User name</value>
+  </data>
+  <data name="lbVisible" xml:space="preserve">
+    <value>Visible</value>
   </data>
   <data name="lbWarehouse" xml:space="preserve">
     <value>Warehouse</value>
