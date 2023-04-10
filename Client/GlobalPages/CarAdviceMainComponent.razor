@@ -54,19 +54,19 @@ else
                      Hideable="true" RowClick="@RowClicked" RowStyleFunc="@_rowStyleFunc"  FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
                 <ToolBarContent >
                     <MudGrid >
-                        <MudItem xs="1">
+                        <MudItem xs="2">
                             <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ViewColumn" 
                             Style="text-transform:none ; margin-top:25px!important" OnClick="ShowColumsForSelection" Size="Size.Small">
                                 @Loc["lbColumns"]
                             </MudButton>
                         </MudItem>
-                        <MudItem xs="1">
+                        <MudItem xs="2">
                             <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ImportExport"
                                    Style="text-transform:none ; margin-top:25px!important" OnClick="ImportFromExcel" Size="Size.Small">
                                 Excel
                             </MudButton>
                         </MudItem>
-                        <MudItem xs="1">
+                        <MudItem xs="2">
                             <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.AddToDrive"
                                    Style="text-transform:none ; margin-top:25px!important" OnClick="NewItemsCarAdviceMain" Size="Size.Small">
                                @Loc["lbNew"] 
@@ -82,10 +82,10 @@ else
                                 </PickerActions>
                             </MudDateRangePicker>
                         </MudItem>              
-                        <MudItem xs="4">
+                       @* <MudItem xs="4">
                             <MudTextField @bind-Value="_searchString" Placeholder=@Loc["lbSearch"] Adornment="Adornment.Start" Immediate="true"
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                        </MudItem>
+                        </MudItem>*@
                     </MudGrid>
                 </ToolBarContent>
                 <ColGroup>
