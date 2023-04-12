@@ -90,279 +90,206 @@ else
                 </ToolBarContent>
                 <ColGroup>
                 </ColGroup>
-
                  <Columns>
-                  
-        
                     @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
                     {
                      
                         @foreach (var ii in listGridColums)
                         {
-                             @if (ii.fieldName == "Id")
+                            @switch (ii.fieldName)
                             {
-                                <PropertyColumn Property="x => x.Id" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "AdviceDate")
-                            {
-                                <PropertyColumn Property="x => x.AdviceDate" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
-                            }
-                            @if (ii.fieldName == "FgDelayReason")
-                            {
-                                <PropertyColumn Property="x => x.FgDelayReason" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "PickingStatus")
-                            {
-                                <PropertyColumn Property="x => x.PickingStatus" Title="@ii.plHeader"  Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "Client")
-                            {
-                                <PropertyColumn Property="x => x.Client" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "Shipment")
-                            {
-                                <PropertyColumn Property="x => x.Shipment" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
 
-                            @if (ii.fieldName == "Reference")
-                            {
-                                <PropertyColumn Property="x => x.Reference" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "Destination")
-                            {
-                                <PropertyColumn Property="x => x.Destination" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "DriverWh")
-                            {
-                                <PropertyColumn Property="x => x.DriverWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "TruckPlatesWh")
-                            {
-                                <PropertyColumn Property="x => x.TruckPlatesWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "Forwarder")
-                            {
-                                <PropertyColumn Property="x => x.Forwarder" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "Etd")
-                            {
-                                <PropertyColumn Property="x => x.Etd" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "EntryByWh")
-                            {
-                                <PropertyColumn Property="x => x.EntryByWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "RemarksWh")
-                            {
-                                <PropertyColumn Property="x => x.RemarksWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "Ata")
-                            {
-                                <PropertyColumn Property="x => x.Ata" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
-                            }
-
-                            @if (ii.fieldName == "Quality")
-                            {
-                                <PropertyColumn Property="x => x.Quality" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "TruckType")
-                            {
-                                <PropertyColumn Property="x => x.Quality" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "DriverS")
-                            {
-                                <PropertyColumn Property="x => x.DriverS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "TpvEnterTime")
-                            {
-                                <PropertyColumn Property="x => x.TpvEnterTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                             @if (ii.fieldName == "TpvExitTime")
-                            {
-                                <PropertyColumn Property="x => x.TpvExitTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                              @if (ii.fieldName == "LoadingDock")
-                            {
-                                <PropertyColumn Property="x => x.LoadingDock" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                               @if (ii.fieldName == "CallBy")
-                            {
-                                <PropertyColumn Property="x => x.CallBy" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "RemarksS")
-                            {
-                                <PropertyColumn Property="x => x.RemarksS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                             @if (ii.fieldName == "EntryByS")
-                            {
-                                <PropertyColumn Property="x => x.EntryByS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                              @if (ii.fieldName == "LeftTheDockTime")
-                            {
-                                <PropertyColumn Property="x => x.LeftTheDockTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "PickingTime")
-                            {
-                                <PropertyColumn Property="x => x.PickingTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
-                            }
-                             @if (ii.fieldName == "ScannedTime")
-                            {
-                                <PropertyColumn Property="x => x.ScannedTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
-                            }
-                             @if (ii.fieldName == "ForwarderInfo")
-                            {
-                                <PropertyColumn Property="x => x.ForwarderInfo" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "TruckPlatesS")
-                            {
-                                <PropertyColumn Property="x => x.TruckPlatesS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                         
-                         @*    <PropertyColumn Property="x => x.GetType().GetProperty(ii.fieldName).GetValue(x)" Title="@ii.plHeader" Sortable="true"  Hidden="ii.filedHiden" />*@
-   
+                                case "Id":
+                                    <PropertyColumn Property="x => x.Id" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "AdviceDate":
+                                    <PropertyColumn Property="x => x.AdviceDate" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "FgDelayReason":
+                                    <PropertyColumn Property="x => x.FgDelayReason" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "PickingStatus":
+                                    <PropertyColumn Property="x => x.PickingStatus" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Client":
+                                    <PropertyColumn Property="x => x.Client" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Shipment":
+                                    <PropertyColumn Property="x => x.Shipment" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Reference":
+                                    <PropertyColumn Property="x => x.Reference" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Destination":
+                                    <PropertyColumn Property="x => x.Destination" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "DriverWh":
+                                    <PropertyColumn Property="x => x.DriverWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "TruckPlatesWh":
+                                    <PropertyColumn Property="x => x.TruckPlatesWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Forwarder":
+                                    <PropertyColumn Property="x => x.Forwarder" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Etd":
+                                    <PropertyColumn Property="x => x.Etd" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "EntryByWh":
+                                    <PropertyColumn Property="x => x.EntryByWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "RemarksWh":
+                                    <PropertyColumn Property="x => x.RemarksWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Ata":
+                                    <PropertyColumn Property="x => x.Ata" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "Quality":
+                                    <PropertyColumn Property="x => x.Quality" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "TruckType":
+                                    <PropertyColumn Property="x => x.TruckType" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "DriverS":
+                                    <PropertyColumn Property="x => x.DriverS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "TpvEnterTime":
+                                    <PropertyColumn Property="x => x.TpvEnterTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "TpvExitTime":
+                                    <PropertyColumn Property="x => x.TpvExitTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "LoadingDock":
+                                    <PropertyColumn Property="x => x.LoadingDock" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "CallBy":
+                                    <PropertyColumn Property="x => x.CallBy" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "RemarksS":
+                                    <PropertyColumn Property="x => x.RemarksS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "EntryByS":
+                                    <PropertyColumn Property="x => x.EntryByS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "LeftTheDockTime":
+                                    <PropertyColumn Property="x => x.LeftTheDockTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "PickingTime":
+                                    <PropertyColumn Property="x => x.PickingTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "ScannedTime":
+                                    <PropertyColumn Property="x => x.ScannedTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "ForwarderInfo":
+                                    <PropertyColumn Property="x => x.ForwarderInfo" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "TruckPlatesS":
+                                    <PropertyColumn Property="x => x.TruckPlatesS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                            }         
                         }
                     }
                     else
                     {
                         @foreach (var ii in listGridColums)
                         {
-                            @if (ii.fieldName == "Id")
+                             @switch (ii.fieldName)
                             {
-                                <PropertyColumn Property="x => x.Id" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                case "Id":
+                                    <PropertyColumn Property="x => x.Id" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "AdviceDate":
+                                    <PropertyColumn Property="x => x.AdviceDate" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "FgDelayReason":
+                                    <PropertyColumn Property="x => x.FgDelayReason" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "PickingStatus":
+                                    <PropertyColumn Property="x => x.PickingStatus" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Client":
+                                    <PropertyColumn Property="x => x.Client" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Shipment":
+                                    <PropertyColumn Property="x => x.Shipment" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Reference":
+                                    <PropertyColumn Property="x => x.Reference" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Destination":
+                                    <PropertyColumn Property="x => x.Destination" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "DriverWh":
+                                    <PropertyColumn Property="x => x.DriverWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "TruckPlatesWh":
+                                    <PropertyColumn Property="x => x.TruckPlatesWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Forwarder":
+                                    <PropertyColumn Property="x => x.Forwarder" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Etd":
+                                    <PropertyColumn Property="x => x.Etd" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "EntryByWh":
+                                    <PropertyColumn Property="x => x.EntryByWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "RemarksWh":
+                                    <PropertyColumn Property="x => x.RemarksWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "Ata":
+                                    <PropertyColumn Property="x => x.Ata" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "Quality":
+                                    <PropertyColumn Property="x => x.Quality" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "TruckType":
+                                    <PropertyColumn Property="x => x.TruckType" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "DriverS":
+                                    <PropertyColumn Property="x => x.DriverS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "TpvEnterTime":
+                                    <PropertyColumn Property="x => x.TpvEnterTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "TpvExitTime":
+                                    <PropertyColumn Property="x => x.TpvExitTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "LoadingDock":
+                                    <PropertyColumn Property="x => x.LoadingDock" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "CallBy":
+                                    <PropertyColumn Property="x => x.CallBy" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "RemarksS":
+                                    <PropertyColumn Property="x => x.RemarksS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "EntryByS":
+                                    <PropertyColumn Property="x => x.EntryByS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "LeftTheDockTime":
+                                    <PropertyColumn Property="x => x.LeftTheDockTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "PickingTime":
+                                    <PropertyColumn Property="x => x.PickingTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "ScannedTime":
+                                    <PropertyColumn Property="x => x.ScannedTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                                    break;
+                                case "ForwarderInfo":
+                                    <PropertyColumn Property="x => x.ForwarderInfo" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
+                                case "TruckPlatesS":
+                                    <PropertyColumn Property="x => x.TruckPlatesS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                                    break;
                             }
-                            @if (ii.fieldName == "AdviceDate")
-                            {
-                                <PropertyColumn Property="x => x.AdviceDate" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
-                            }
-                            @if (ii.fieldName == "FgDelayReason")
-                            {
-                                <PropertyColumn Property="x => x.FgDelayReason" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "PickingStatus")
-                            {
-                                <PropertyColumn Property="x => x.PickingStatus" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "Client")
-                            {
-                                <PropertyColumn Property="x => x.Client" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "Shipment")
-                            {
-                                <PropertyColumn Property="x => x.Shipment" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "Reference")
-                            {
-                                <PropertyColumn Property="x => x.Reference" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "Destination")
-                            {
-                                <PropertyColumn Property="x => x.Destination" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "DriverWh")
-                            {
-                                <PropertyColumn Property="x => x.DriverWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "TruckPlatesWh")
-                            {
-                                <PropertyColumn Property="x => x.TruckPlatesWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "Forwarder")
-                            {
-                                <PropertyColumn Property="x => x.Forwarder" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                            @if (ii.fieldName == "Etd")
-                            {
-                                <PropertyColumn Property="x => x.Etd" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "EntryByWh")
-                            {
-                                <PropertyColumn Property="x => x.EntryByWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "RemarksWh")
-                            {
-                                <PropertyColumn Property="x => x.RemarksWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "Ata")
-                            {
-                                <PropertyColumn Property="x => x.Ata" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
-                            }
-
-                            @if (ii.fieldName == "Quality")
-                            {
-                                <PropertyColumn Property="x => x.Quality" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "TruckType")
-                            {
-                                <PropertyColumn Property="x => x.Quality" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "DriverS")
-                            {
-                                <PropertyColumn Property="x => x.DriverS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "TpvEnterTime")
-                            {
-                                <PropertyColumn Property="x => x.TpvEnterTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "TpvExitTime")
-                            {
-                                <PropertyColumn Property="x => x.TpvExitTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "LoadingDock")
-                            {
-                                <PropertyColumn Property="x => x.LoadingDock" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "CallBy")
-                            {
-                                <PropertyColumn Property="x => x.CallBy" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "RemarksS")
-                            {
-                                <PropertyColumn Property="x => x.RemarksS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "EntryByS")
-                            {
-                                <PropertyColumn Property="x => x.EntryByS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "LeftTheDockTime")
-                            {
-                                <PropertyColumn Property="x => x.LeftTheDockTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "PickingTime")
-                            {
-                                <PropertyColumn Property="x => x.PickingTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
-                            }
-                            @if (ii.fieldName == "ScannedTime")
-                            {
-                                <PropertyColumn Property="x => x.ScannedTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
-                            }
-                            @if (ii.fieldName == "ForwarderInfo")
-                            {
-                                <PropertyColumn Property="x => x.ForwarderInfo" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-                            @if (ii.fieldName == "TruckPlatesS")
-                            {
-                                <PropertyColumn Property="x => x.TruckPlatesS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            }
-
-                          @*  <PropertyColumn Property="x => x.GetType().GetProperty(ii.fieldName).GetValue(x)" Title="@ii.fieldName" Sortable="true" Filterable="true" Hidden="ii.filedHiden" />*@
                         }
                     }
                 </Columns>
                 <PagerContent>
                     <MudGrid>
                     <MudItem xs="2">
-                        <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Filled.Exposure"
+                        <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.Exposure"
                                Style="text-transform:none ; margin-top:10px!important" OnClick="ExportToExcel" Size="Size.Small">
                             @Loc["lbExportExcel"]
                         </MudButton>
@@ -417,8 +344,6 @@ else
     List<string> listColumnsWidth = new();
 
     private MudDateRangePicker _picker;
-    // private DateRange _dateRange = new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(5).Date);
-
     private DateRange _dateRange = new DateRange();
 
     MudTabs tabs;
@@ -495,8 +420,7 @@ else
 
         if (rolaAdmin) tabs.ActivatePanel(1);
         if (rolaSecurity) tabs.ActivatePanel(1);
-        if (rolaWh) tabs.ActivatePanel(1);
-        //_events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        if (rolaWh) tabs.ActivatePanel(1);      
         selectedRow = element.Id.ToString();
     }
 
@@ -535,37 +459,32 @@ else
       };
 
 
-    public async void ReturnFromWH(string returnedWHAction)
+    public  void ReturnFromWH(string returnedWHAction)
     {   
         tabs.ActivatePanel(0);
         if (returnedWHAction == "Deleted")
         {
             navigationManager.NavigateTo("/caradvice", true);
-            //await ReadData();
-            //StateHasChanged();
         }
 
         if (returnedWHAction == "Save")
         {
             navigationManager.NavigateTo("/caradvice", true);
-            //await ReadData();
-            //StateHasChanged();
         }
 
 
     }
 
 
-    public async void ReturnFromSecurity(string returnedSecurityAction)
+    public  void ReturnFromSecurity(string returnedSecurityAction)
     {
         tabs.ActivatePanel(0);
         navigationManager.NavigateTo("/caradvice", true);
-        //await ReadData();
-        //StateHasChanged();
+
     }
 
 
-    public async void ReturnFromAdmin(string returnedAdminAction)
+    public  void ReturnFromAdmin(string returnedAdminAction)
     {
         tabs.ActivatePanel(0);
         StateHasChanged();
@@ -573,11 +492,8 @@ else
     }
 
 
-    private async void Tab0Active()
+    private  void Tab0Active()
     {
-
-        //await ReadData();
-
         StateHasChanged();
     }
 
@@ -652,8 +568,6 @@ else
             rl.RecordOperationLog("New item",
             jsonStringCANew,
             UserName,"Success");
-
-            // koniec log
 
             await ReadData();
             StateHasChanged();

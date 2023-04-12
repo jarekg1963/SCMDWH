@@ -421,6 +421,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading.
+        /// </summary>
+        public static string lbLoadingMemu {
+            get {
+                return ResourceManager.GetString("lbLoadingMemu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Miejsca załadunku.
         /// </summary>
         public static string lbLoadingplaces {
@@ -615,6 +624,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbScannedtime {
             get {
                 return ResourceManager.GetString("lbScannedtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SCM Narzędzia.
+        /// </summary>
+        public static string lbScmTools {
+            get {
+                return ResourceManager.GetString("lbScmTools", resourceCulture);
             }
         }
         

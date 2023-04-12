@@ -231,6 +231,9 @@
   <data name="lbleftdockdate" xml:space="preserve">
     <value>Left dock date</value>
   </data>
+  <data name="lbLoadingMemu" xml:space="preserve">
+    <value>Loading</value>
+  </data>
   <data name="lbLoadingplaces" xml:space="preserve">
     <value>Loading places</value>
   </data>
@@ -293,6 +296,9 @@
   </data>
   <data name="lbScannedtime" xml:space="preserve">
     <value>Scanned time</value>
+  </data>
+  <data name="lbScmTools" xml:space="preserve">
+    <value>SCM tools</value>
   </data>
   <data name="lbSearch" xml:space="preserve">
     <value>Search</value>

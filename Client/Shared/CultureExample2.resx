@@ -237,6 +237,9 @@
   <data name="lbleftdockdate" xml:space="preserve">
     <value>Data opuszczenia doku</value>
   </data>
+  <data name="lbLoadingMemu" xml:space="preserve">
+    <value>Loading</value>
+  </data>
   <data name="lbLoadingplaces" xml:space="preserve">
     <value>Miejsca załadunku</value>
   </data>
@@ -302,6 +305,9 @@
   </data>
   <data name="lbScannedtime" xml:space="preserve">
     <value>Godzina skanowania</value>
+  </data>
+  <data name="lbScmTools" xml:space="preserve">
+    <value>SCM Narzędzia</value>
   </data>
   <data name="lbSearch" xml:space="preserve">
     <value>Szukaj</value>

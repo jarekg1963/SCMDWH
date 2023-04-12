@@ -1,0 +1,63 @@
+﻿@page "/ListLoadingPlannig"
+@inject NavigationManager navigationManager
+
+@inject HttpClient httpClient
+
+<h3>Imported file list</h3>
+
+
+    <table class="table">
+     <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Operation</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+
+        @for (int i = 0; i <= fileImportedList .Count() - 1; i++)
+            {
+                <tr>
+                    <td>@fileImportedList[i] </td>
+                <td><MudButton Variant="Variant.Filled" OnClick="()=> DeleteRecords(i)">Delete</MudButton></td>
+                </tr>
+            }        
+    </tbody>
+</table>
+
+
+
+@code {
+    List<string> fileImportedList = new();
+
+
+    private async Task ReadData()
+    {
+        string link = "/api/PlanningLoading/ListImports";
+        fileImportedList = await httpClient.GetFromJsonAsync<List<string>>(link);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReadData();
+
+    }
+
+    private async Task DeleteRecords(int iii)
+    {
+        string fileName = fileImportedList[iii-1];
+        string link = "/api/PlanningLoading/DeleteListImports/" + fileName;
+
+        var resposnse = httpClient.DeleteAsync(link);
+   
+        navigationManager.NavigateTo("/scmToolsMainPage");
+
+    }
+
+    public class listFile
+    {
+        public string fileName { get; set; }
+    }
+
+}

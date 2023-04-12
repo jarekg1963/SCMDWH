@@ -46,6 +46,9 @@ public partial class PurchasingContext : DbContext
 
     public DbSet<SCMDWH.Shared.Models.CarAdviceDictionaryQuality> CarAdviceDictionaryQuality { get; set; } = default!;
 
+    public DbSet<SCMDWH.Shared.Models.PlanningLoading> PlanningLoading { get; set; } = default!;
+    //PlanningLoading
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

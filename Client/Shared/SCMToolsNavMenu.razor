@@ -1,0 +1,12 @@
+﻿@inject IStringLocalizer<CultureExample2> Loc
+
+
+<MudNavGroup Title=@Loc["lbScmTools"] Icon="@Icons.Material.Filled.PanTool" @bind-Expanded=_isExpanded>
+	<MudNavLink Href="/scmToolsMainPage" Icon="@Icons.Material.Filled.Downloading">@Loc["lbLoadingMemu"]</MudNavLink>
+
+
+</MudNavGroup>
+
+@code {
+	bool _isExpanded = false;
+}

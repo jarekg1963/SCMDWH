@@ -1,0 +1,157 @@
+﻿@page "/scmToolsMainPage"
+@using NPOI.SS.UserModel;
+@using NPOI.XSSF.UserModel;
+@using SCMDWH.Client.Tools;
+@using SCMDWH.Shared.Models;
+@using System.Security.Claims;
+@inject NavigationManager navigationManager
+@inject HttpClient httpClient
+@inject ISnackbar Snackbar
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Operation</th>
+            <th scope="col">Button</th>
+            <th scope="col">Others</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Import loading </td>
+            <td>
+                <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+                    <ButtonTemplate>
+                        <MudButton HtmlTag="label"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Default"
+                                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                                   Disabled = "DisabledButtonLoadingPlan"
+                                   for="@context">
+                            Upload Files
+                        </MudButton>
+                    </ButtonTemplate>
+                </MudFileUpload>
+            </td>
+            <td><MudButton Variant="Variant.Filled" Disabled="DisabledButtonLoadingPlan" OnClick="GoToImportFileList">View</MudButton></td>
+        </tr>
+        
+    </tbody>
+</table>
+
+<MudProgressLinear Color="Color.Default"  Indeterminate="true" Class="my-7" hidden="@hiddedProgersBar"/>
+@if(DisabledButtonLoadingPlan)
+{
+    <h2>Please wait....</h2>
+}
+
+@code {
+    private string UserName = "";
+    List<PlanningLoading> Listplaningloading = new();
+    bool hiddedProgersBar = true;
+    bool DisabledButtonLoadingPlan = false;
+
+    IList<IBrowserFile> files = new List<IBrowserFile>();
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+
+    private void GoToImportFileList()
+    {
+        navigationManager.NavigateTo("/ListLoadingPlannig");
+    }
+
+
+    protected async override void OnInitialized()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+        }
+
+    }
+
+    private async void UploadFiles(IBrowserFile file)
+    {
+        DisabledButtonLoadingPlan = true;
+
+        hiddedProgersBar = false;
+        var filestream = file.OpenReadStream(3000000);
+        var ms = new MemoryStream();
+        await filestream.CopyToAsync(ms);
+        ms.Position = 0;
+        ISheet sheet;
+        var xsswb = new XSSFWorkbook(ms);
+        sheet = xsswb.GetSheetAt(3);
+        IRow hr = sheet.GetRow(0);
+
+        var rl = new List<string>();
+
+        int cc = hr.LastCellNum;
+        int counterId = 1;
+
+
+        try
+        {
+
+            for (var j = sheet.FirstRowNum + 1; j <= sheet.LastRowNum; j++)
+            {
+                PlanningLoading planingloadingRecord = new();
+                var r = sheet.GetRow(j);
+
+                //planingloadingRecord.Id = Convert.ToDouble( r.GetCell(0).StringCellValue);
+                planingloadingRecord.Plant = r.GetCell(0).StringCellValue;
+                planingloadingRecord.Year = r.GetCell(1).NumericCellValue.ToString();
+                planingloadingRecord.Month = r.GetCell(2).StringCellValue;
+                planingloadingRecord.Week = r.GetCell(3).StringCellValue;
+                planingloadingRecord.Customer = r.GetCell(4).StringCellValue;
+                planingloadingRecord.Tpvdmodel = r.GetCell(5).StringCellValue;
+                planingloadingRecord.Ctv = r.GetCell(6).StringCellValue;
+                double tmpAty = r.GetCell(7).NumericCellValue;
+                planingloadingRecord.Quantity = (int)tmpAty;
+                planingloadingRecord.System = NpoiExtension.GetFormattedCellValue(r.GetCell(8));
+                planingloadingRecord.Project = r.GetCell(9).StringCellValue;
+                planingloadingRecord.Inch = r.GetCell(10).StringCellValue;
+                planingloadingRecord.Category = r.GetCell(11).StringCellValue;
+                planingloadingRecord.ProductType = r.GetCell(12).StringCellValue;
+                planingloadingRecord.Factory = r.GetCell(13).StringCellValue;
+                planingloadingRecord.FileName = file.Name;
+                planingloadingRecord.LoadingDate = DateTime.Now;
+                planingloadingRecord.LoadingOwner = UserName;
+
+                Listplaningloading.Add(planingloadingRecord);
+                string linkpostca = "/api/PlanningLoading";
+                var Response = await httpClient.PostAsJsonAsync<PlanningLoading>(linkpostca, planingloadingRecord);
+                counterId++;
+
+            }
+
+        }
+        catch (Exception ex)
+        {
+            //hiddedProgersBar = true;
+            //DisabledButtonLoadingPlan = false;
+            Snackbar.Add("Error -> " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Material.Rounded.ImportantDevices; config.VisibleStateDuration = 3500; });
+        }
+
+        Snackbar.Add("Operation finished" , Severity.Info, config => { config.ShowCloseIcon = false; config.Icon = Icons.Material.Rounded.ImportantDevices; config.VisibleStateDuration = 3500; });
+        hiddedProgersBar = true;
+        DisabledButtonLoadingPlan = false;
+        StateHasChanged();
+    }
+
+   
+
+  
+}
+
+

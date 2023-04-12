@@ -11,12 +11,17 @@
 	<MudNavMenu>
 		<MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Filled.Home">@Loc["lbHome"]</MudNavLink>
 		
-		       <CarAdviceNavMenu></CarAdviceNavMenu>	
+		<CarAdviceNavMenu></CarAdviceNavMenu>
 
-			@if (rolaAdministrator)
-				{
-					<GlobalNavMenu></GlobalNavMenu>
-				}
+		@if (rolaScmTools)
+		{
+			<SCMToolsNavMenu></SCMToolsNavMenu>
+		}
+
+		@if (rolaAdministrator)
+		{
+			<GlobalNavMenu></GlobalNavMenu>
+		}
 
 		<GlobalCompanyInfoNavMenu></GlobalCompanyInfoNavMenu>
 
@@ -28,6 +33,7 @@
 	public bool SideBarOpen { get; set; }
 	private bool rolaAdministrator = true;
 	private bool rolaDictionary = true;
+	private bool rolaScmTools;
 
 	[CascadingParameter]
 	public Task<AuthenticationState> AuthState { get; set; }
@@ -47,6 +53,7 @@
 			claims = user.Claims;
 			string rolesForDisplay = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
 			rolaAdministrator = rolesForDisplay.Contains("Administrator");
+			rolaScmTools = rolesForDisplay.Contains("SCMTOOLS");
 		}
 	}
 }
