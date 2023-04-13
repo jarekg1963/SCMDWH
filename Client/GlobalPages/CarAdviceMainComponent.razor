@@ -49,7 +49,7 @@ else
     <MudTabs  Elevation="2" Rounded="true"  Centered="true" Class="my-6" Color="Color.Dark" @ref="tabs" >
         <MudTabPanel Icon="@Icons.Material.Filled.Api" Style="width:550px" Text=@Loc["lbCarAdvice"] BadgeData='"!"' BadgeColor="Color.Error" @ref="panel01" ID="@("pn_one")"
                  OnClick="Tab0Active">
-            <MudDataGrid   T="CarAdviceMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+            <MudDataGrid T="CarAdviceMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                      Height="35em" RowsPerPage="30" MultiSelection="false" Items="@ListCAMainTable" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
                      Hideable="true" RowClick="@RowClicked" RowStyleFunc="@_rowStyleFunc"  FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
                 <ToolBarContent >
@@ -100,7 +100,7 @@ else
                             {
 
                                 case "Id":
-                                    <PropertyColumn Property="x => x.Id" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                <PropertyColumn  Property="x => x.Id" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
                                     break;
                                 case "AdviceDate":
                                     <PropertyColumn Property="x => x.AdviceDate" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
@@ -112,7 +112,7 @@ else
                                     <PropertyColumn Property="x => x.PickingStatus" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
                                     break;
                                 case "Client":
-                                    <PropertyColumn Property="x => x.Client" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    <PropertyColumn  Property="x => x.Client" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
                                     break;
                                 case "Shipment":
                                     <PropertyColumn Property="x => x.Shipment" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
@@ -324,6 +324,9 @@ else
 
 
 @code {
+   
+ 
+
     private DateTime ldStart;
     private DateTime ldEnd;
     GlobalAppUsersParameters userParametersDates = new();
@@ -400,7 +403,7 @@ else
 
     private async void ExportToExcel()
     {
-        
+
         StateHasChanged();
         var response = await httpClient.GetAsync("/api/Raport/ReportToExcel/" + UserName);
         response.EnsureSuccessStatusCode();
