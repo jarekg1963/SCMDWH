@@ -51,7 +51,7 @@ else
                  OnClick="Tab0Active">
             <MudDataGrid T="CarAdviceMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                      Height="35em" RowsPerPage="30" MultiSelection="false" Items="@ListCAMainTable" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
-                     Hideable="true" RowClick="@RowClicked" RowStyleFunc="@_rowStyleFunc"  FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
+                     RowClick="@RowClicked" RowStyleFunc="@_rowStyleFunc"  FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
                 <ToolBarContent >
                     <MudGrid >
                         <MudItem xs="2">
@@ -71,8 +71,7 @@ else
                                    Style="text-transform:none ; margin-top:25px!important" OnClick="NewItemsCarAdviceMain" Size="Size.Small">
                                @Loc["lbNew"] 
                             </MudButton>
-                        </MudItem>
-                       
+                        </MudItem>           
                         <MudItem xs="3">
                             <MudDateRangePicker DisableToolbar="true" IconSize="Size.Small" @ref="_picker"  @bind-DateRange="_dateRange" AutoClose="@_autoClose">
                                 <PickerActions>
@@ -88,8 +87,6 @@ else
                         </MudItem>*@
                     </MudGrid>
                 </ToolBarContent>
-                <ColGroup>
-                </ColGroup>
                  <Columns>
                     @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
                     {
@@ -98,7 +95,6 @@ else
                         {
                             @switch (ii.fieldName)
                             {
-
                                 case "Id":
                                 <PropertyColumn  Property="x => x.Id" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
                                     break;
@@ -109,7 +105,8 @@ else
                                     <PropertyColumn Property="x => x.FgDelayReason" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
                                     break;
                                 case "PickingStatus":
-                                    <PropertyColumn Property="x => x.PickingStatus" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                                    <PropertyColumn Property="x => x.PickingStatus" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" >                                                                        
+                                    </PropertyColumn>
                                     break;
                                 case "Client":
                                     <PropertyColumn  Property="x => x.Client" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
@@ -324,8 +321,6 @@ else
 
 
 @code {
-   
- 
 
     private DateTime ldStart;
     private DateTime ldEnd;
@@ -403,24 +398,18 @@ else
 
     private async void ExportToExcel()
     {
-
         StateHasChanged();
         var response = await httpClient.GetAsync("/api/Raport/ReportToExcel/" + UserName);
         response.EnsureSuccessStatusCode();
         var fileBytes = await response.Content.ReadAsByteArrayAsync();
         var fileName = $"CarAdviceData{DateTime.Now.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}.xlsx";
         await JSRuntime.InvokeAsync<object>("saveAsFile", fileName, Convert.ToBase64String(fileBytes));
-      
         StateHasChanged();
-      
-
     }
 
 
     private void Click(CarAdviceMainTable element)
     {
-        Console.WriteLine($"Clicked: {element.Id}");
-
         if (rolaAdmin) tabs.ActivatePanel(1);
         if (rolaSecurity) tabs.ActivatePanel(1);
         if (rolaWh) tabs.ActivatePanel(1);      
@@ -436,8 +425,9 @@ else
     private Func<CarAdviceMainTable, int, string> _rowStyleFunc => (x, i) =>
       {
           // Skan OK
-          if (x.PickingStatus == "Skan OK")
-              return "background-color:#83f752";
+          if (x.PickingStatus == "Scan OK")
+              return "background-color:#c0f752";
+
 
           //Picking
           if (x.PickingStatus == "Picking")
@@ -447,7 +437,10 @@ else
           if (x.PickingStatus == "Loading")
               return "background-color:#52d1f7";
 
-          // Szaey -- Paper work
+          // Szaey -- Paper work Paper work
+
+          if (x.PickingStatus == "Paper work")
+              return "background-color:#CDCDCD";
 
           // Ciemno zielony - sent
           if (x.PickingStatus == "Sent")

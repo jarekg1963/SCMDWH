@@ -179,7 +179,7 @@
 
 
     <MudItem xs="2">
-
+        <MudButton Color="Color.Error" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="DeleteButton">@Loc["lbDelete"]</MudButton>
     </MudItem>
     <MudItem xs="2">
         <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">@Loc["lbCancel"]</MudButton>
@@ -259,7 +259,7 @@
     private async Task SaveWh()
     {
 
-      
+
 
         CarAdviceMainTableWHEdit.EntryByWh = UserName;
 
@@ -332,6 +332,39 @@
         await DeleteItemWH.InvokeAsync("Save");
 
     }
+
+    private async Task DeleteButton()
+    {
+        var parameters = new DialogParameters();
+        string MessageDialog = Loc["lbDoYouRealyDelete"];
+        parameters.Add("ContentText", MessageDialog);
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+        var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
+        string textDelete = Loc["lbDelete"];
+        var dialog = DialogService.Show<DialogUserDeleteComponent>(textDelete, parameters, options);
+        var result = await dialog.Result;
+        string jsonStringCADelete = JsonSerializer.Serialize(CarAdviceMainTableWHEdit);
+        if (!result.Canceled)
+        {         
+            try
+            {
+                string link = "/api/CarAdviceMainTables/" + Id;
+                var Res = await httpClient.DeleteAsync(link);
+                // zapisanie log
+                rl.RecordOperationLog("Deleted item",
+                jsonStringCADelete,
+                UserName, "Success");
+            }
+            catch (Exception e)
+            {
+                Snackbar.Add(e.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Material.Rounded.Error; config.VisibleStateDuration = 1500; });
+            }
+        }
+
+        await DeleteItemWH.InvokeAsync("Save");
+    }
+
 
     private async Task CancelButton()
     {

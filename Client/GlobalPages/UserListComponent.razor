@@ -181,7 +181,7 @@
     private async void Delete(GlobalAppUsers user)
     {
         var parameters = new DialogParameters();
-        parameters.Add("ContentText", $"Do you really want to delete user {user.UserName}? This process cannot be undone.");
+        parameters.Add("ContentText", Loc["lbDoYouRealyDelete"]);
         parameters.Add("ButtonText", "Delete");
         parameters.Add("Color", Color.Error);
         var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
