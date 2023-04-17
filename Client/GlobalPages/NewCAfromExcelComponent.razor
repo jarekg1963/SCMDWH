@@ -2,6 +2,7 @@
 @using System.Data;
 @using NPOI.SS.UserModel;
 @using NPOI.XSSF.UserModel;
+@using Newtonsoft.Json;
 @using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
 @using System.Text.Json;
@@ -20,6 +21,10 @@
         text-transform: uppercase !important;
         text-align: left !important;
     }
+    .Nag {
+       font-size:xx-small!important;
+    }
+    
 </style>
 
 <hr />
@@ -35,19 +40,19 @@ else
 {
     <MudTable RowStyleFunc="@_rowStyleFunc" Items="@listCarAdviceMainTableNew" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"400px":"")">
         <HeaderContent>
-            <MudTh>Id</MudTh>
-            <MudTh>@Loc["lbAdDate"]</MudTh>
-            <MudTh>@Loc["lbClient"]</MudTh>
-            <MudTh>@Loc["lbShipment"]</MudTh>
-            <MudTh>@Loc["lbReference"]</MudTh>
-            <MudTh>@Loc["lbDestination"]</MudTh>
-            <MudTh>@Loc["lbCarriers"]</MudTh>
-            <MudTh>@Loc["lbEtdDate"]</MudTh>
-            <MudTh>@Loc["lbDriverWH"]</MudTh>
-            <MudTh>@Loc["lbTruckplatesWH"]</MudTh>
-            <MudTh>@Loc["lbRemarkWH"]</MudTh>
-            <MudTh>@Loc["lbEdit"]</MudTh>
-            <MudTh>@Loc["lbDelete"]</MudTh>
+            <MudTh Class="Nag">Id</MudTh>
+            <MudTh Class="Nag">@Loc["lbAdDate"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbClient"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbShipment"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbReference"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbDestination"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbCarriers"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbEtdDate"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbDriverWH"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbTruckplatesWH"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbRemarkWH"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbEdit"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbDelete"]</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Nr">@context.ForwarderInfo</MudTd>
@@ -140,13 +145,14 @@ else
 
     private async Task  CloseSave()
     {
-       
+
         string[] tabForDelete =  new string[1000];
         int licznikTabeli = 0;
 
         foreach (var listforSave in  listCarAdviceMainTableNew)
         {
-           
+            CarAdviceMainTable CarAdviceMainTablejsonCamel = new();
+
             listforSave.Quality = null;
             listforSave.EntryByS = null;
             listforSave.TruckType = null;
@@ -170,9 +176,17 @@ else
                 string linkpostca = "/api/CarAdviceMainTables";
                 var Response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkpostca, listforSave);
                 // zapisanie delete do logu operacji
-                string jsonStringCAEdit = JsonSerializer.Serialize(listforSave);
+
+             // odczytanie Id a odpowiedzi POST - do przetestowania 
+                var jsonResposeWithId = await Response.Content.ReadAsStringAsync();
+                // zamiana camel na pacal 
+
+               
+                CarAdviceMainTablejsonCamel = JsonConvert.DeserializeObject<CarAdviceMainTable>(jsonResposeWithId);
+                string jsonStringCANew = System.Text.Json.JsonSerializer.Serialize(CarAdviceMainTablejsonCamel);
+
                 rl.RecordOperationLog("New excel item",
-                jsonStringCAEdit,
+                jsonStringCANew,
                 UserName, 
                 "Success");
                 if (!Response.IsSuccessStatusCode)
@@ -245,8 +259,10 @@ else
             CarAdviceMainTableNew.Id = counterId;
             CarAdviceMainTableNew.AdviceDate = r.GetCell(0).DateCellValue;
             CarAdviceMainTableNew.Client = r.GetCell(1).StringCellValue;
-            CarAdviceMainTableNew.Shipment = r.GetCell(2).StringCellValue;
-            CarAdviceMainTableNew.Reference = r.GetCell(3).StringCellValue;
+           // CarAdviceMainTableNew.Shipment = r.GetCell(2).StringCellValue;
+            CarAdviceMainTableNew.Shipment= NpoiExtension.GetFormattedCellValue(r.GetCell(2));
+           // CarAdviceMainTableNew.Reference = r.GetCell(3).StringCellValue;
+            CarAdviceMainTableNew.Reference = NpoiExtension.GetFormattedCellValue(r.GetCell(3));
             CarAdviceMainTableNew.Destination = r.GetCell(4).StringCellValue;
             CarAdviceMainTableNew.Forwarder = r.GetCell(5).StringCellValue;
 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,8 +23,39 @@ namespace SCMDWH.Server.Controllers
             _context = context;
         }
 
+
+
+        [HttpGet("GetListLogChanges/{Id}")]
+        public async Task<ActionResult<IEnumerable<CarAdviceMainTable>>> GetListLogChanges(int Id)
+        {
+            List<LogAppReportingAction> listLog = new();
+
+            List<CarAdviceMainTable> listMainScreen = new();
+
+            CarAdviceMainTable oneMainScreen = new();
+
+
+            listLog = await _context.LogAppReportingActions.ToListAsync();
+
+            foreach( var lo in listLog)
+            {
+                var options = new JsonSerializerOptions
+                {
+                    IncludeFields = true,
+                };
+                oneMainScreen = JsonSerializer.Deserialize<CarAdviceMainTable>(lo.ActionDetails, options);
+
+                if(oneMainScreen.Id == Id)
+                    listMainScreen.Add(oneMainScreen);
+            }
+
+            return listMainScreen;
+
+        }
+            
+        
         // GET: api/LogAppReportingActions
-        [HttpGet]
+            [HttpGet]
         public async Task<ActionResult<IEnumerable<LogAppReportingAction>>> GetLogAppReportingAction()
         {
           if (_context.LogAppReportingActions == null)
@@ -60,6 +93,8 @@ namespace SCMDWH.Server.Controllers
                 return BadRequest();
             }
 
+            
+
             _context.Entry(logAppReportingAction).State = EntityState.Modified;
 
             try
@@ -90,6 +125,8 @@ namespace SCMDWH.Server.Controllers
           {
               return Problem("Entity set 'PurchasingContext.LogAppReportingAction'  is null.");
           }
+
+          
             _context.LogAppReportingActions.Add(logAppReportingAction);
             await _context.SaveChangesAsync();
 

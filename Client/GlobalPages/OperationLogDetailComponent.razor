@@ -162,6 +162,7 @@
     </tbody>
 </table>
 
+
 <hr />
 <MudGrid>
     <MudItem xs="6">
@@ -192,6 +193,9 @@
                 IncludeFields = true,
             };
         logDetail = JsonSerializer.Deserialize<CarAdviceMainTable>(logbyId.ActionDetails, options);
+
+       
+
         StateHasChanged();
     }
 

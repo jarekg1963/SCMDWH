@@ -1,8 +1,10 @@
 ﻿@page "/caradvice"
-@using System.Net.Http.Json
+@*@using System.Net.Http.Json*@
 @using System.Text.Json.Serialization;
 @using NPOI.SS.UserModel;
 @using NPOI.XSSF.UserModel;
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Serialization;
 @using SCMDWH.Client.GlobalPages;
 @using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
@@ -549,6 +551,7 @@ else
     private async Task NewItemsCarAdviceMain()
     {
         CarAdviceMainTable CarAdviceMainTableNewForSave = new CarAdviceMainTable();
+        CarAdviceMainTable CarAdviceMainTablejsonCamel = new CarAdviceMainTable();
         var parameters = new DialogParameters { ["Id"] = "XXX" };
         var dialog = DialogService.Show<NewCarAdviceMainComponent>("", parameters);
         var result = await dialog.Result;
@@ -558,9 +561,11 @@ else
 
             string linkAddNew = "/api/CarAdviceMainTables";
             var response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkAddNew, CarAdviceMainTableNewForSave);
-
-            string jsonStringCANew = JsonSerializer.Serialize(CarAdviceMainTableNewForSave);
-
+            // zamiana jsona Camel na Pascal 
+            var jsonResposeWithId = await response.Content.ReadAsStringAsync();
+            CarAdviceMainTablejsonCamel = JsonConvert.DeserializeObject<CarAdviceMainTable>(jsonResposeWithId);
+            string jsonStringCANew = System.Text.Json.JsonSerializer.Serialize(CarAdviceMainTablejsonCamel);
+            
             rl.RecordOperationLog("New item",
             jsonStringCANew,
             UserName,"Success");

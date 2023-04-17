@@ -44,6 +44,7 @@
         <col style="width: 10%;" />
         <col style="width: 10%;" />
         <col style="width: 1%;" />
+        <col style="width: 1%;" />
         
     </ColGroup>
     <HeaderContent>
@@ -63,8 +64,10 @@
         <MudTd DataLabel="Remark">@context.ActionTime</MudTd>
         <MudTd DataLabel="Remark">@context.ActrionTriggeredByUser</MudTd>
         <MudTd DataLabel="Methods">
-            <MudIconButton @onclick="@(()=>ShowLogItem(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.RemoveRedEye" Size="Size.Small" IconSize="Size.Small" />
-           
+            <MudIconButton @onclick="@(()=>ShowLogItem(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.RemoveRedEye" Size="Size.Small" IconSize="Size.Small" />  
+        </MudTd>
+        <MudTd DataLabel="Methods">
+            <MudIconButton @onclick="@(()=>ShowLogList(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.List" Size="Size.Small" IconSize="Size.Small" />
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -79,9 +82,18 @@
     private bool striped = true;
     private bool bordered = true;
     private string searchString = "";
-    
+
 
     private List<LogAppReportingAction> LogActivityList = new List<LogAppReportingAction>();
+
+
+    private async void ShowLogList(LogAppReportingAction logItem)
+    {
+        long paId = logItem.Id;
+        string link = "/api/LogAppReportingActions/GetListLogChanges/" + paId;
+        navigationManager.NavigateTo($"/OperationLogPage/{paId}");
+
+    }
 
 
     private async void ShowLogItem(LogAppReportingAction logItem)

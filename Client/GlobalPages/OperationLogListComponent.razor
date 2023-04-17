@@ -1,0 +1,40 @@
+﻿@using SCMDWH.Shared.Models;
+@using System.Text.Json;
+@inject HttpClient httpClient;
+@inject IStringLocalizer<CultureExample2> Loc
+
+@page "/OperationLogPage/{id}"
+
+<h3>OperationLogListComponent @iloscRekordow</h3>
+
+
+@code {
+    [Parameter] public string Id { get; set; }
+    CarAdviceMainTable logDetail = new();
+    LogAppReportingAction logbyId = new();
+    List<CarAdviceMainTable> listMainScreen = new();
+    int iloscRekordow = 0;
+
+    protected override async void OnInitialized()
+    {
+        string link = "/api/LogAppReportingActions/" + Id;
+        logbyId = await httpClient.GetFromJsonAsync<LogAppReportingAction>(link);
+        var options = new JsonSerializerOptions
+            {
+                IncludeFields = true,
+            };
+        logDetail = JsonSerializer.Deserialize<CarAdviceMainTable>(logbyId.ActionDetails, options);
+
+        await Task.Delay(100);
+
+        string idDetail = logDetail.Id.ToString();
+
+        string linkListMain = "/api/LogAppReportingActions/GetListLogChanges/" + idDetail;
+
+        listMainScreen = await httpClient.GetFromJsonAsync<List<CarAdviceMainTable>>(linkListMain);
+
+        iloscRekordow = listMainScreen.Count();
+
+    }
+
+}
