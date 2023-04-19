@@ -1,40 +1,391 @@
-﻿@using SCMDWH.Shared.Models;
+﻿@page "/OperationLogPage/{id}"
+@using SCMDWH.Shared.Models;
 @using System.Text.Json;
+@using System.Security.Claims;
+@using static SCMDWH.Client.GlobalPages.CarAdviceMainComponent;
 @inject HttpClient httpClient;
 @inject IStringLocalizer<CultureExample2> Loc
+@inject NavigationManager navigationManager
+@inject IDialogService DialogService;
 
-@page "/OperationLogPage/{id}"
+<h3>Operation log</h3>
 
-<h3>OperationLogListComponent @iloscRekordow</h3>
+
+<MudDataGrid T="CarAdviceMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+             Height="35em" RowsPerPage="30" MultiSelection="false" Items="@ListCAMainTable" SortMode="SortMode.Multiple" Filterable="true" 
+           FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
+    <ToolBarContent>
+        <MudGrid>
+            <MudItem xs="2">
+                <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ViewColumn"
+                           Style="text-transform:none ; margin-top:25px!important" OnClick="ShowColumsForSelection" Size="Size.Small">
+                    @Loc["lbColumns"]
+                </MudButton>
+            </MudItem>
+         
+            @* <MudItem xs="4">
+            <MudTextField @bind-Value="_searchString" Placeholder=@Loc["lbSearch"] Adornment="Adornment.Start" Immediate="true"
+            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </MudItem>*@
+        </MudGrid>
+    </ToolBarContent>
+    <Columns>
+        @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
+        {
+
+            @foreach (var ii in listGridColums)
+            {
+                @switch (ii.fieldName)
+                {
+                    case "Id":
+                        <PropertyColumn Property="x => x.Id" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "AdviceDate":
+                        <PropertyColumn Property="x => x.AdviceDate" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "FgDelayReason":
+                        <PropertyColumn Property="x => x.FgDelayReason" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "PickingStatus":
+                        <PropertyColumn Property="x => x.PickingStatus" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true">
+                        </PropertyColumn>
+                        break;
+                    case "Client":
+                        <PropertyColumn Property="x => x.Client" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Shipment":
+                        <PropertyColumn Property="x => x.Shipment" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Reference":
+                        <PropertyColumn Property="x => x.Reference" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Destination":
+                        <PropertyColumn Property="x => x.Destination" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "DriverWh":
+                        <PropertyColumn Property="x => x.DriverWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "TruckPlatesWh":
+                        <PropertyColumn Property="x => x.TruckPlatesWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Forwarder":
+                        <PropertyColumn Property="x => x.Forwarder" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Etd":
+                        <PropertyColumn Property="x => x.Etd" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "EntryByWh":
+                        <PropertyColumn Property="x => x.EntryByWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "RemarksWh":
+                        <PropertyColumn Property="x => x.RemarksWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Ata":
+                        <PropertyColumn Property="x => x.Ata" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "Quality":
+                        <PropertyColumn Property="x => x.Quality" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "TruckType":
+                        <PropertyColumn Property="x => x.TruckType" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "DriverS":
+                        <PropertyColumn Property="x => x.DriverS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "TpvEnterTime":
+                        <PropertyColumn Property="x => x.TpvEnterTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "TpvExitTime":
+                        <PropertyColumn Property="x => x.TpvExitTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "LoadingDock":
+                        <PropertyColumn Property="x => x.LoadingDock" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "CallBy":
+                        <PropertyColumn Property="x => x.CallBy" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "RemarksS":
+                        <PropertyColumn Property="x => x.RemarksS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "EntryByS":
+                        <PropertyColumn Property="x => x.EntryByS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "LeftTheDockTime":
+                        <PropertyColumn Property="x => x.LeftTheDockTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "PickingTime":
+                        <PropertyColumn Property="x => x.PickingTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "ScannedTime":
+                        <PropertyColumn Property="x => x.ScannedTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "ForwarderInfo":
+                        <PropertyColumn Property="x => x.ForwarderInfo" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "TruckPlatesS":
+                        <PropertyColumn Property="x => x.TruckPlatesS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                }
+            }
+        }
+        else
+        {
+            @foreach (var ii in listGridColums)
+            {
+                @switch (ii.fieldName)
+                {
+                    case "Id":
+                        <PropertyColumn Property="x => x.Id" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "AdviceDate":
+                        <PropertyColumn Property="x => x.AdviceDate" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "FgDelayReason":
+                        <PropertyColumn Property="x => x.FgDelayReason" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "PickingStatus":
+                        <PropertyColumn Property="x => x.PickingStatus" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Client":
+                        <PropertyColumn Property="x => x.Client" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Shipment":
+                        <PropertyColumn Property="x => x.Shipment" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Reference":
+                        <PropertyColumn Property="x => x.Reference" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Destination":
+                        <PropertyColumn Property="x => x.Destination" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "DriverWh":
+                        <PropertyColumn Property="x => x.DriverWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "TruckPlatesWh":
+                        <PropertyColumn Property="x => x.TruckPlatesWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Forwarder":
+                        <PropertyColumn Property="x => x.Forwarder" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Etd":
+                        <PropertyColumn Property="x => x.Etd" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "EntryByWh":
+                        <PropertyColumn Property="x => x.EntryByWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "RemarksWh":
+                        <PropertyColumn Property="x => x.RemarksWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "Ata":
+                        <PropertyColumn Property="x => x.Ata" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "Quality":
+                        <PropertyColumn Property="x => x.Quality" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "TruckType":
+                        <PropertyColumn Property="x => x.TruckType" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "DriverS":
+                        <PropertyColumn Property="x => x.DriverS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "TpvEnterTime":
+                        <PropertyColumn Property="x => x.TpvEnterTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "TpvExitTime":
+                        <PropertyColumn Property="x => x.TpvExitTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "LoadingDock":
+                        <PropertyColumn Property="x => x.LoadingDock" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "CallBy":
+                        <PropertyColumn Property="x => x.CallBy" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "RemarksS":
+                        <PropertyColumn Property="x => x.RemarksS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "EntryByS":
+                        <PropertyColumn Property="x => x.EntryByS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "LeftTheDockTime":
+                        <PropertyColumn Property="x => x.LeftTheDockTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "PickingTime":
+                        <PropertyColumn Property="x => x.PickingTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "ScannedTime":
+                        <PropertyColumn Property="x => x.ScannedTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                        break;
+                    case "ForwarderInfo":
+                        <PropertyColumn Property="x => x.ForwarderInfo" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                    case "TruckPlatesS":
+                        <PropertyColumn Property="x => x.TruckPlatesS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                        break;
+                }
+            }
+        }
+    </Columns>
+   
+</MudDataGrid>
 
 
 @code {
     [Parameter] public string Id { get; set; }
-    CarAdviceMainTable logDetail = new();
-    LogAppReportingAction logbyId = new();
-    List<CarAdviceMainTable> listMainScreen = new();
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    List<CarAdviceMainPlanColumn> columsForDisplayListDb = new List<CarAdviceMainPlanColumn>();
+
+    List<CarAdviceMainTable> ListCAMainTable = new();
     int iloscRekordow = 0;
+
+    private string UserName = "";
+
+    List<gridColums> listGridColums = new();
+
+    #region hiddedcolumsdefinision
+
+    private bool hiddenId = false;
+    private bool hiddenAdviceDate = false;
+    private bool hiddenFG_DelayReason = false;
+    private bool hiddenPickingStatus = false;
+    private bool hiddenClient = false;
+    private bool hiddenShipment = false;
+    private bool hiddenReference = false;
+    private bool hiddenDestination = false;
+    private bool hiddenDriverWh = false;
+    private bool hiddenTruckPlatesWh = false;
+    private bool hiddenForwarder = false;
+    private bool hiddenForwarderInfo = false;
+    private bool hiddenEtd = false;
+    private bool hiddenEntryByWh = false;
+    private bool hiddenRemarksWh = false;
+    private bool hiddenAta = false;
+    private bool hiddenQuality = false;
+    private bool hiddenTruckType = false;
+    private bool hiddenDriverS = false;
+    private bool hiddenTruckPlatesS = false;
+    private bool hiddenTpvEnterTime = false;
+    private bool hiddenTpvExitTime = false;
+    private bool hiddenLoadingDock = false;
+    private bool hiddenCallBy = false;
+    private bool hiddenRemarksS = false;
+    private bool hiddenEntryByS = false;
+    private bool hiddenLeftTheDockTime = false;
+    private bool hiddenPickingTime = false;
+    private bool hiddenScannedTime = false;
+
+    #endregion hiddedcolumsdefinision
+
 
     protected override async void OnInitialized()
     {
-        string link = "/api/LogAppReportingActions/" + Id;
-        logbyId = await httpClient.GetFromJsonAsync<LogAppReportingAction>(link);
-        var options = new JsonSerializerOptions
-            {
-                IncludeFields = true,
-            };
-        logDetail = JsonSerializer.Deserialize<CarAdviceMainTable>(logbyId.ActionDetails, options);
 
-        await Task.Delay(100);
+        IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+            claims = user.Claims;
+            string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
 
-        string idDetail = logDetail.Id.ToString();
+        }
 
-        string linkListMain = "/api/LogAppReportingActions/GetListLogChanges/" + idDetail;
+        //////////Kolumny 
 
-        listMainScreen = await httpClient.GetFromJsonAsync<List<CarAdviceMainTable>>(linkListMain);
+        string linkcoluser = "/api/CarAdviceMainPlanColums/MainPlanComumByUser/" + UserName;
 
-        iloscRekordow = listMainScreen.Count();
+        /// read colums for display main plan screen
 
+        columsForDisplayListDb.Clear();
+
+        columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<CarAdviceMainPlanColumn>>(linkcoluser);
+
+        foreach (var columienka in columsForDisplayListDb)
+        {
+            listGridColums.Add(new gridColums()
+                {
+                    fieldName = columienka.MainScreenColumn,
+                    fieldTitle = columienka.MainScreenColumn,
+                    filedfirterable = true,
+                    filedSortable = true,
+                    filedHiden = columienka.Hidden,
+                    plHeader = columienka.plHeader
+                });
+
+        }
+
+
+        #region setupColumsVisibility
+        hiddenId = verificationColumsVisibility("Id");
+        hiddenAdviceDate = verificationColumsVisibility("AdviceDate");
+        hiddenFG_DelayReason = verificationColumsVisibility("FG_DelayReason");
+        hiddenPickingStatus = verificationColumsVisibility("PickingStatus");
+        hiddenClient = verificationColumsVisibility("Client");
+        hiddenShipment = verificationColumsVisibility("Shipment");
+        hiddenReference = verificationColumsVisibility("Reference");
+        hiddenDestination = verificationColumsVisibility("Destination");
+        hiddenDriverWh = verificationColumsVisibility("DriverWh");
+        hiddenTruckPlatesWh = verificationColumsVisibility("TruckPlatesWh");
+        hiddenForwarder = verificationColumsVisibility("Forwarder");
+        hiddenForwarderInfo = verificationColumsVisibility("ForwarderInfo");
+        hiddenEtd = verificationColumsVisibility("Etd");
+        hiddenEntryByWh = verificationColumsVisibility("EntryByWh");
+        hiddenRemarksWh = verificationColumsVisibility("RemarksWh");
+        hiddenAta = verificationColumsVisibility("Ata");
+        hiddenQuality = verificationColumsVisibility("Quality");
+        hiddenTruckType = verificationColumsVisibility("TruckType");
+        hiddenDriverS = verificationColumsVisibility("DriverS");
+        hiddenTruckPlatesS = verificationColumsVisibility("TruckPlatesS");
+        hiddenTpvEnterTime = verificationColumsVisibility("TpvEnterTime");
+        hiddenTpvExitTime = verificationColumsVisibility("TpvExitTime");
+        hiddenLoadingDock = verificationColumsVisibility("LoadingDock");
+        hiddenCallBy = verificationColumsVisibility("CallBy");
+        hiddenRemarksS = verificationColumsVisibility("RemarksS");
+        hiddenEntryByS = verificationColumsVisibility("EntryByS");
+        hiddenLeftTheDockTime = verificationColumsVisibility("LeftTheDockTime");
+        hiddenPickingTime = verificationColumsVisibility("PickingTime");
+        hiddenScannedTime = verificationColumsVisibility("ScannedTime");
+   
+        
+        #endregion setupColumsVisibility
+
+        string linkListMain = "/api/LogAppReportingActions/GetListLogChanges/" + Id;
+
+        ListCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceMainTable>>(linkListMain);
+
+        iloscRekordow = ListCAMainTable.Count();
+        StateHasChanged();
+    }
+
+    private bool verificationColumsVisibility(string comumnName)
+    {
+        if (columsForDisplayListDb.Count(c => c.MainScreenColumn == comumnName && c.Hidden == true) != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private async Task ShowColumsForSelection()
+    {
+        var parameters = new DialogParameters { ["Username"] = UserName };
+        var dialog = DialogService.Show<DialogColumnsSelectionMainV2>("", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            navigationManager.NavigateTo("/caradvice", true);
+            StateHasChanged();
+        }
     }
 
 }

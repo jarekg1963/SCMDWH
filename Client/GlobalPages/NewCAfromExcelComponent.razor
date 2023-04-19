@@ -177,11 +177,11 @@ else
                 var Response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkpostca, listforSave);
                 // zapisanie delete do logu operacji
 
-             // odczytanie Id a odpowiedzi POST - do przetestowania 
+                // odczytanie Id a odpowiedzi POST - do przetestowania 
                 var jsonResposeWithId = await Response.Content.ReadAsStringAsync();
                 // zamiana camel na pacal 
 
-               
+
                 CarAdviceMainTablejsonCamel = JsonConvert.DeserializeObject<CarAdviceMainTable>(jsonResposeWithId);
                 string jsonStringCANew = System.Text.Json.JsonSerializer.Serialize(CarAdviceMainTablejsonCamel);
 
@@ -195,7 +195,7 @@ else
                 }
                 else
                 {
-                   
+
                     tabForDelete[licznikTabeli] = listforSave.ForwarderInfo;
                     licznikTabeli++;
                 }
@@ -259,17 +259,22 @@ else
             CarAdviceMainTableNew.Id = counterId;
             CarAdviceMainTableNew.AdviceDate = r.GetCell(0).DateCellValue;
             CarAdviceMainTableNew.Client = r.GetCell(1).StringCellValue;
-           // CarAdviceMainTableNew.Shipment = r.GetCell(2).StringCellValue;
+            // CarAdviceMainTableNew.Shipment = r.GetCell(2).StringCellValue;
             CarAdviceMainTableNew.Shipment= NpoiExtension.GetFormattedCellValue(r.GetCell(2));
-           // CarAdviceMainTableNew.Reference = r.GetCell(3).StringCellValue;
+            // CarAdviceMainTableNew.Reference = r.GetCell(3).StringCellValue;
             CarAdviceMainTableNew.Reference = NpoiExtension.GetFormattedCellValue(r.GetCell(3));
-            CarAdviceMainTableNew.Destination = r.GetCell(4).StringCellValue;
-            CarAdviceMainTableNew.Forwarder = r.GetCell(5).StringCellValue;
+            CarAdviceMainTableNew.Destination = NpoiExtension.GetFormattedCellValue(r.GetCell(4));
+            CarAdviceMainTableNew.Forwarder = NpoiExtension.GetFormattedCellValue(r.GetCell(5));
 
 
-            CarAdviceMainTableNew.DriverWh = r.GetCell(8).ToString();
-            CarAdviceMainTableNew.TruckPlatesWh = r.GetCell(9).ToString();
-            CarAdviceMainTableNew.RemarksWh = r.GetCell(10).ToString();
+            CarAdviceMainTableNew.DriverWh = NpoiExtension.GetFormattedCellValue(r.GetCell(8));
+
+           
+            CarAdviceMainTableNew.TruckPlatesWh = NpoiExtension.GetFormattedCellValue(r.GetCell(9));
+
+            CarAdviceMainTableNew.RemarksWh = NpoiExtension.GetFormattedCellValue(r.GetCell(10));
+           
+            
 
             TimeSpan EtdExcelTime = r.GetCell(7).DateCellValue.TimeOfDay;
             DateTime EtdExcelFullDate = r.GetCell(6).DateCellValue.Add(EtdExcelTime);

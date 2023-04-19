@@ -87,6 +87,9 @@ else
                             <MudTextField @bind-Value="_searchString" Placeholder=@Loc["lbSearch"] Adornment="Adornment.Start" Immediate="true"
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                         </MudItem>*@
+                        <MudItem xs="3">
+                            <MudCheckBox Style="margin-top:20px!important" Size="Size.Small" Dense="true" @bind-Checked="CheckTest">@Loc["lbPickingstatusCheckBox"]</MudCheckBox>
+                    </MudItem>
                     </MudGrid>
                 </ToolBarContent>
                  <Columns>
@@ -397,6 +400,48 @@ else
 
     private List<string> _events = new();
 
+    // ListCAMainTable
+
+   
+
+    private bool _checkTest;
+
+    private bool CheckTest
+    {
+        get { return _checkTest; }
+        set { _checkTest = value; HandleCheck(value); }
+    }
+
+    async void HandleCheck(bool IsChecked)
+    {
+    
+        if (IsChecked)
+            await ReadData(true);
+        if (!IsChecked)
+            await ReadData(false);
+    
+    }
+
+    public bool Basic_CheckBox1 { get; set; } = true;
+
+    private void SelectPickingStatus(ChangeEventArgs arg)
+    {
+         bool IsChecked = (bool)arg.Value;
+
+         if(IsChecked)
+         Console.WriteLine("Klikniete");
+        if (!IsChecked)
+            Console.WriteLine("Nie Klikniete");
+
+    }
+
+    
+    private async void SetOwnFilter()
+    {
+        await ReadData(true);
+
+    }
+
 
     private async void ExportToExcel()
     {
@@ -565,12 +610,12 @@ else
             var jsonResposeWithId = await response.Content.ReadAsStringAsync();
             CarAdviceMainTablejsonCamel = JsonConvert.DeserializeObject<CarAdviceMainTable>(jsonResposeWithId);
             string jsonStringCANew = System.Text.Json.JsonSerializer.Serialize(CarAdviceMainTablejsonCamel);
-            
+
             rl.RecordOperationLog("New item",
             jsonStringCANew,
             UserName,"Success");
 
-            await ReadData();
+            await ReadData(false);
             StateHasChanged();
         }
 
@@ -619,13 +664,13 @@ else
 
     void RowClicked(DataGridRowClickEventArgs<CarAdviceMainTable> args)
     {
-       
+
         if (rolaAdmin) tabs.ActivatePanel(1);
         if (rolaSecurity) tabs.ActivatePanel(1);
         if (rolaWh) tabs.ActivatePanel(1);
         _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
         selectedRow = args.Item.Id.ToString();
-     
+
     }
 
 
@@ -655,7 +700,7 @@ else
     {
         try
         {
-            await ReadData();
+            await ReadData(false);
             StateHasChanged();
         }
         catch(Exception ex)
@@ -667,7 +712,7 @@ else
     }
 
 
-    private async Task ReadData()
+    private async Task ReadData(bool NoSent)
     {
         IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
         var authState = await AuthState;
@@ -706,7 +751,16 @@ else
 
         _dateRange = new DateRange(ldStart, ldEnd);
 
-        string linkLoad = "/api/CarAdviceMainTables/GetbyDate/" + Helpers.ChangeDateToString(ldStart) + "/" + Helpers.ChangeDateToString(ldEnd);
+        string linkLoad = "";
+
+        if (NoSent)
+        {
+            linkLoad = "/api/CarAdviceMainTables/GetbyDateNoSent/" + Helpers.ChangeDateToString(ldStart) + "/" + Helpers.ChangeDateToString(ldEnd);
+        }
+        else
+        {
+            linkLoad = "/api/CarAdviceMainTables/GetbyDate/" + Helpers.ChangeDateToString(ldStart) + "/" + Helpers.ChangeDateToString(ldEnd);
+        }
         ListCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceMainTable>>(linkLoad);
         string linkcoluser = "/api/CarAdviceMainPlanColums/MainPlanComumByUser/" + UserName;
 
@@ -757,7 +811,7 @@ else
         #endregion setupColumsVisibility
 
 
-       
+        StateHasChanged();
 
     }
 

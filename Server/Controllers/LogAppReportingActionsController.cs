@@ -25,9 +25,11 @@ namespace SCMDWH.Server.Controllers
 
 
 
-        [HttpGet("GetListLogChanges/{Id}")]
-        public async Task<ActionResult<IEnumerable<CarAdviceMainTable>>> GetListLogChanges(int Id)
+        [HttpGet("GetListLogChanges/{IdError}")]
+        public async Task<ActionResult<IEnumerable<CarAdviceMainTable>>> GetListLogChanges(int IdError)
         {
+            LogAppReportingAction recordLog = new();
+
             List<LogAppReportingAction> listLog = new();
 
             List<CarAdviceMainTable> listMainScreen = new();
@@ -35,18 +37,27 @@ namespace SCMDWH.Server.Controllers
             CarAdviceMainTable oneMainScreen = new();
 
 
+            recordLog = await _context.LogAppReportingActions.Where(c=>c.Id == IdError).FirstOrDefaultAsync();
+
+            oneMainScreen = JsonSerializer.Deserialize<CarAdviceMainTable>(recordLog.ActionDetails);
+
+            long idMainForSelect = (long)oneMainScreen.Id;
+
             listLog = await _context.LogAppReportingActions.ToListAsync();
 
-            foreach( var lo in listLog)
+            foreach (LogAppReportingAction action in listLog)
             {
-                var options = new JsonSerializerOptions
-                {
-                    IncludeFields = true,
-                };
-                oneMainScreen = JsonSerializer.Deserialize<CarAdviceMainTable>(lo.ActionDetails, options);
 
-                if(oneMainScreen.Id == Id)
-                    listMainScreen.Add(oneMainScreen);
+                try
+                {
+                    oneMainScreen = JsonSerializer.Deserialize<CarAdviceMainTable>(action.ActionDetails);
+                    if (oneMainScreen.Id == idMainForSelect)
+                        listMainScreen.Add(oneMainScreen);
+                }
+                catch (Exception ex) 
+                {
+                  // return BadRequest(ex.Message);
+                }
             }
 
             return listMainScreen;

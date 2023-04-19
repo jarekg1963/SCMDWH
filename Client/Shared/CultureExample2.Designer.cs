@@ -493,6 +493,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bez statusu SENT.
+        /// </summary>
+        public static string lbPickingstatusCheckBox {
+            get {
+                return ResourceManager.GetString("lbPickingstatusCheckBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Czas załadunku.
         /// </summary>
         public static string lbPickingtime {

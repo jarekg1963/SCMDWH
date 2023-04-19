@@ -255,6 +255,9 @@
   <data name="lbPickingstatus" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="lbPickingstatusCheckBox" xml:space="preserve">
+    <value>Exclude SENT </value>
+  </data>
   <data name="lbPickingtime" xml:space="preserve">
     <value>Picking time</value>
   </data>
