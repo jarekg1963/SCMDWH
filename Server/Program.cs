@@ -39,9 +39,6 @@ builder.Services.AddDbContext<CarAdviceContext>
 
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-//				.AddEntityFrameworkStores<PurchasingContext>();
-
 //Repositories 
 
 builder.Services.AddScoped<IRepoGlobalAppUsers, RepoGlobalAppUsers>();
@@ -52,6 +49,7 @@ builder.Services.AddTransient<ExportToExcel>();
 //IRepoGlobalAppRoles
 //End of repositories
 
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.Configure<GlobalAppInfo>(builder.Configuration.GetSection("GlobalAppInfoAppJson"));
 

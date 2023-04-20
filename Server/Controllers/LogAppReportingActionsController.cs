@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using AutoMapper;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SCMDWH.Server.Data;
+using SCMDWH.Shared.DTO;
 using SCMDWH.Shared.Models;
 
 namespace SCMDWH.Server.Controllers
@@ -17,42 +19,41 @@ namespace SCMDWH.Server.Controllers
     public class LogAppReportingActionsController : ControllerBase
     {
         private readonly PurchasingContext _context;
+        private readonly IMapper _mapper;
 
-        public LogAppReportingActionsController(PurchasingContext context)
+        public LogAppReportingActionsController(PurchasingContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
 
 
         [HttpGet("GetListLogChanges/{IdError}")]
-        public async Task<ActionResult<IEnumerable<CarAdviceMainTable>>> GetListLogChanges(int IdError)
+        public async Task<ActionResult<IEnumerable<CarAdviceLogExtended>>> GetListLogChanges(int IdError)
         {
             LogAppReportingAction recordLog = new();
 
             List<LogAppReportingAction> listLog = new();
-
-            List<CarAdviceMainTable> listMainScreen = new();
-
+            List<CarAdviceLogExtended> listMainScreenExtender = new();
             CarAdviceMainTable oneMainScreen = new();
-
-
+            CarAdviceLogExtended oneMainScreenExtended = new();
             recordLog = await _context.LogAppReportingActions.Where(c=>c.Id == IdError).FirstOrDefaultAsync();
-
             oneMainScreen = JsonSerializer.Deserialize<CarAdviceMainTable>(recordLog.ActionDetails);
-
             long idMainForSelect = (long)oneMainScreen.Id;
-
             listLog = await _context.LogAppReportingActions.ToListAsync();
-
             foreach (LogAppReportingAction action in listLog)
             {
-
                 try
                 {
                     oneMainScreen = JsonSerializer.Deserialize<CarAdviceMainTable>(action.ActionDetails);
                     if (oneMainScreen.Id == idMainForSelect)
-                        listMainScreen.Add(oneMainScreen);
+                    {
+                        oneMainScreenExtended = _mapper.Map<CarAdviceLogExtended>(oneMainScreen);
+                        oneMainScreenExtended.operationUser = action.ActrionTriggeredByUser;
+                        oneMainScreenExtended.operationDate = action.ActionTime;
+                        listMainScreenExtender.Add(oneMainScreenExtended);
+                    }
                 }
                 catch (Exception ex) 
                 {
@@ -60,7 +61,7 @@ namespace SCMDWH.Server.Controllers
                 }
             }
 
-            return listMainScreen;
+            return listMainScreenExtender;
 
         }
             

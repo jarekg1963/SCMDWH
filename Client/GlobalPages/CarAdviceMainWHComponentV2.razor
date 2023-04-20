@@ -178,14 +178,15 @@
 
     </MudItem>
     <MudItem xs="2">
-        <MudButton Color="Color.Error" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="DeleteButton">@Loc["lbDelete"]</MudButton>
+
+        <MudButton Disabled="@rolaCAReadOnly" Color="Color.Error" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="DeleteButton">@Loc["lbDelete"]</MudButton>
     </MudItem>
     <MudItem xs="2">
         <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">@Loc["lbCancel"]</MudButton>
     </MudItem>
 
     <MudItem xs="2">
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Size="Size.Small" OnClick="SaveWh">@Loc["lbSave"]</MudButton>
+        <MudButton Disabled="@rolaCAReadOnly" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Size="Size.Small" OnClick="SaveWh">@Loc["lbSave"]</MudButton>
     </MudItem>
 </MudGrid>
 
@@ -203,6 +204,7 @@
 
     private bool resetValueOnEmptyText;
     string UserName = "";
+    private bool rolaCAReadOnly; 
 
     List<CarAdviceDictionaryCustomers> customerList = new List<CarAdviceDictionaryCustomers>();
     private List<string> customers;
@@ -257,8 +259,6 @@
 
     private async Task SaveWh()
     {
-
-
 
         CarAdviceMainTableWHEdit.EntryByWh = UserName;
 
@@ -445,6 +445,8 @@
         else
         {
             UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+            string rolesForDisplay = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+            rolaCAReadOnly = rolesForDisplay.Contains("CAReadOnly");
         }
 
 

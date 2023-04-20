@@ -1,4 +1,5 @@
 ﻿@page "/OperationLogPage/{id}"
+@using SCMDWH.Shared.DTO;
 @using SCMDWH.Shared.Models;
 @using System.Text.Json;
 @using System.Security.Claims;
@@ -11,7 +12,7 @@
 <h3>Operation log</h3>
 
 
-<MudDataGrid T="CarAdviceMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+<MudDataGrid T="CarAdviceLogExtended" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
              Height="35em" RowsPerPage="30" MultiSelection="false" Items="@ListCAMainTable" SortMode="SortMode.Multiple" Filterable="true" 
            FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
     <ToolBarContent>
@@ -22,14 +23,14 @@
                     @Loc["lbColumns"]
                 </MudButton>
             </MudItem>
-         
-            @* <MudItem xs="4">
-            <MudTextField @bind-Value="_searchString" Placeholder=@Loc["lbSearch"] Adornment="Adornment.Start" Immediate="true"
-            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-            </MudItem>*@
+ 
         </MudGrid>
     </ToolBarContent>
     <Columns>
+
+        <PropertyColumn Property="x => x.operationUser" Title="User"  Sortable="true" />
+        <PropertyColumn Property="x => x.operationDate" Title="Date" Sortable="true" />
+
         @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
         {
 
@@ -236,7 +237,7 @@
 
     List<CarAdviceMainPlanColumn> columsForDisplayListDb = new List<CarAdviceMainPlanColumn>();
 
-    List<CarAdviceMainTable> ListCAMainTable = new();
+    List<CarAdviceLogExtended> ListCAMainTable = new();
     int iloscRekordow = 0;
 
     private string UserName = "";
@@ -357,7 +358,7 @@
 
         string linkListMain = "/api/LogAppReportingActions/GetListLogChanges/" + Id;
 
-        ListCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceMainTable>>(linkListMain);
+        ListCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceLogExtended>>(linkListMain);
 
         iloscRekordow = ListCAMainTable.Count();
         StateHasChanged();

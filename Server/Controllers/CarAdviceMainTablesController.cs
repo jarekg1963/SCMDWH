@@ -61,7 +61,7 @@ namespace SCMDWH.Server.Controllers
             DateTime endDt = new DateTime(eYear, eMc, eDay);
 
             return await _context.CarAdviceMainTables.Where(d => d.Etd >= startDt && d.Etd <= endDt && d.PickingStatus != "Sent")
-                .OrderByDescending(c => c.Id).ToListAsync();
+                .OrderByDescending(c => c.Etd).ToListAsync();
         }
 
 
@@ -87,7 +87,7 @@ namespace SCMDWH.Server.Controllers
             DateTime endDt = new DateTime(eYear, eMc, eDay);
 
             return await _context.CarAdviceMainTables.Where(d=>d.Etd >= startDt && d.Etd <= endDt)
-                .OrderByDescending(c => c.Id).ToListAsync();
+                .OrderByDescending(c => c.Etd).ToListAsync();
         }
 
         // GET: api/CarAdviceMainTables

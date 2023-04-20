@@ -52,8 +52,6 @@ namespace SCMDWH.Client.Services
             ((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(result.Token);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
             return new AuthResponseDto { IsAuthSuccessful = true };
-
-
         }
 
         public async Task Logout()

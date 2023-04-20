@@ -5,14 +5,14 @@
 
 <MudDrawer @bind-Open="SideBarOpen" Elevation="1">
 	<MudDrawerHeader>
-		<MudAvatar Color="Color.Transparent" Size="Size.Large" Image="tpv-logo.png" />
+		<MudAvatar Color="Color.Transparent" Size="Size.Large" >
+			<MudImage Src="tpv-logo.png"></MudImage>
+		</MudAvatar>
 		<MudText Typo="Typo.h5" Color="Color.Primary" Style="margin-top:10px; margin-left:15px;">SCMportal</MudText>
 	</MudDrawerHeader>
 	<MudNavMenu>
 		<MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">@Loc["lbHome"]</MudNavLink>
-		
-		<CarAdviceNavMenu></CarAdviceNavMenu>
-
+		<CarAdviceNavMenu></CarAdviceNavMenu>	
 		@if (rolaScmTools)
 		{
 			<SCMToolsNavMenu></SCMToolsNavMenu>
@@ -22,9 +22,7 @@
 		{
 			<GlobalNavMenu></GlobalNavMenu>
 		}
-
 		<GlobalCompanyInfoNavMenu></GlobalCompanyInfoNavMenu>
-
 	</MudNavMenu>
 </MudDrawer>
 
@@ -55,5 +53,7 @@
 			rolaAdministrator = rolesForDisplay.Contains("Administrator");
 			rolaScmTools = rolesForDisplay.Contains("SCMTOOLS");
 		}
+
+
 	}
 }

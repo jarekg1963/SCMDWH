@@ -422,26 +422,6 @@ else
     
     }
 
-    public bool Basic_CheckBox1 { get; set; } = true;
-
-    private void SelectPickingStatus(ChangeEventArgs arg)
-    {
-         bool IsChecked = (bool)arg.Value;
-
-         if(IsChecked)
-         Console.WriteLine("Klikniete");
-        if (!IsChecked)
-            Console.WriteLine("Nie Klikniete");
-
-    }
-
-    
-    private async void SetOwnFilter()
-    {
-        await ReadData(true);
-
-    }
-
 
     private async void ExportToExcel()
     {
@@ -473,7 +453,7 @@ else
       {
           // Skan OK
           if (x.PickingStatus == "Scan OK")
-              return "background-color:#c0f752";
+              return "background-color:#c0f752" ;
 
 
           //Picking
