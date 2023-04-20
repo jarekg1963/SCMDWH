@@ -33,7 +33,6 @@ namespace SCMDWH.Server.Controllers
         public async Task<ActionResult<IEnumerable<CarAdviceLogExtended>>> GetListLogChanges(int IdError)
         {
             LogAppReportingAction recordLog = new();
-
             List<LogAppReportingAction> listLog = new();
             List<CarAdviceLogExtended> listMainScreenExtender = new();
             CarAdviceMainTable oneMainScreen = new();
