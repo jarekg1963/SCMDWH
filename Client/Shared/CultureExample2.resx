@@ -279,6 +279,9 @@
   <data name="lbPleaseSelectRow" xml:space="preserve">
     <value>Najpierw wybierz wysyłkę!</value>
   </data>
+  <data name="lbPrintWH" xml:space="preserve">
+    <value>Wydruk</value>
+  </data>
   <data name="lbQuality" xml:space="preserve">
     <value>Jakość</value>
   </data>

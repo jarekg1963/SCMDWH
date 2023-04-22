@@ -1,0 +1,174 @@
+﻿@page "/PrintWHTable/{Id}"
+@using Append.Blazor.Printing
+@using SCMDWH.Shared.Models;
+@inject IPrintingService PrintingService
+@inject HttpClient httpClient
+@inject IStringLocalizer<CultureExample2> Loc
+@inject NavigationManager navigationManager
+
+<style>
+    row {
+        height:50px!important;
+    }
+
+    .card-body {
+        padding:2px!important;
+    }
+ 
+</style>
+
+<form id="printable-form">
+    <div class="container text-center">
+        <div class="row">
+        </div>
+        <hr />
+        <div class="row">
+            <div class="card" style="width: 20rem;background-color:lightgrey">
+                <div class="card-body">
+                    <h4>Nr dokumentu </h4>
+                </div>
+
+            </div>
+            <div class="card" style="width: 25rem;">
+                <div class="card-body">
+                    <h1 class="card-title">@Id</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="card" style="width: 20rem;">
+                <div class="card-body" >
+                    <h6>Nr  </h6>
+                </div>
+
+            </div>
+            <div class="card" style="width: 25rem;">
+                <div class="card-body">
+                    <div class="card-title">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                    <h6>Data awizacji  </h6>
+                </div>
+
+            </div>
+            <div class="card" style="width: 25rem;">
+                <div class="card-body">
+                    <h6 class="card-title">@CarAdviceMainTablePrint.Etd</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                    <h6>Nr wysyłki  </h6>
+                </div>
+
+            </div>
+            <div class="card" style="width: 25rem;">
+                <div class="card-body">
+                    <h6 class="card-title">@CarAdviceMainTablePrint.Shipment</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                    <h6>Numer referencyjny  </h6>
+                </div>
+
+            </div>
+            <div class="card" style="width: 25rem;">
+                <div class="card-body">
+                    <h6 class="card-title">@CarAdviceMainTablePrint.Reference</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                    <h6>Kraj  </h6>
+                </div>
+
+            </div>
+            <div class="card" style="width: 25rem;">
+                <div class="card-body">
+                    <h6 class="card-title">@CarAdviceMainTablePrint.Destination</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                    <h6>Kierowca - magazyn  </h6>
+                </div>
+
+            </div>
+            <div class="card" style="width: 25rem;">
+                <div class="card-body">
+                    <h6 class="card-title">@CarAdviceMainTablePrint.DriverWh</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                    <h6>Tablice - magazyn  </h6>
+                </div>
+
+            </div>
+            <div class="card" style="width: 25rem;">
+                <div class="card-body">
+                    <h6 class="card-title">@CarAdviceMainTablePrint.TruckPlatesWh</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<hr />
+@*<button  @onclick="@(_ => PrintingService.Print("printable-form", PrintType.Html))">Print</button>*@
+
+<hr />
+
+<MudGrid>
+    <MudItem xs="2">
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Print" Size="Size.Small" OnClick="@(_ => PrintingService.Print("printable-form", PrintType.Html))">Print</MudButton>
+    </MudItem>
+    <MudItem xs="2">
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">@Loc["lbCancel"]</MudButton>
+    </MudItem>
+</MudGrid>
+<hr />
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    CarAdviceMainTable CarAdviceMainTablePrint = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        string linkForEdit = "/api/CarAdviceMainTables/" + Id;
+        CarAdviceMainTablePrint = await httpClient.GetFromJsonAsync<CarAdviceMainTable>(linkForEdit);
+    }
+
+    private async Task CancelButton()
+    {
+        navigationManager.NavigateTo("/caradvice");
+    }
+
+
+}
+
+
+<style>
+    @@page {
+        margin: 0px;
+    }
+</style>

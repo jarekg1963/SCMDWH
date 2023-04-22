@@ -8,6 +8,7 @@
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
 @inject RecordLog rl;
+@inject IJSRuntime IJS;
 
 <style>
 
@@ -176,6 +177,7 @@
 <MudGrid>
     <MudItem xs="6">
 
+        <MudButton Disabled="@rolaCAReadOnly"  Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="PrintWH">@Loc["lbPrintWH"]</MudButton>
     </MudItem>
     <MudItem xs="2">
 
@@ -256,6 +258,13 @@
 
     DateTime? TPVExitTimeDate;
     TimeSpan? TPVExitTimeTime;
+
+
+    private async Task PrintWH()
+    {
+
+        navigationManager.NavigateTo($"/PrintWHTable/{Id}");
+    }
 
     private async Task SaveWh()
     {

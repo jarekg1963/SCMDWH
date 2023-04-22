@@ -13,6 +13,7 @@ using System.Globalization;
 using Microsoft.JSInterop;
 using SCMDWH.Client.JGHttpClient;
 using SCMDWH.Client.Tools;
+using Append.Blazor.Printing;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -31,7 +32,7 @@ builder.Services.AddLogging(logging => {
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddAuthorizationCore();
-//builder.Services.AddScoped<AuthenticationStateProvider, TestAuthStateProvider>();
+builder.Services.AddScoped<IPrintingService, PrintingService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 

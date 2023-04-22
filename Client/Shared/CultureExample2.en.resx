@@ -270,6 +270,9 @@
   <data name="lbPleaseSelectRow" xml:space="preserve">
     <value>Please select row</value>
   </data>
+  <data name="lbPrintWH" xml:space="preserve">
+    <value>Print</value>
+  </data>
   <data name="lbQuality" xml:space="preserve">
     <value>Quality</value>
   </data>

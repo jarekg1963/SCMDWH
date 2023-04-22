@@ -547,6 +547,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wydruk.
+        /// </summary>
+        public static string lbPrintWH {
+            get {
+                return ResourceManager.GetString("lbPrintWH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jakość.
         /// </summary>
         public static string lbQuality {
