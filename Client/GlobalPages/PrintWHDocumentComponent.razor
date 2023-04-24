@@ -1,33 +1,22 @@
-﻿@page "/PrintWHTable/{Id}"
-@using Append.Blazor.Printing
+﻿@layout BlankLayout
+@page "/PrintWHTable/{Id}"
 @using SCMDWH.Shared.Models;
-@inject IPrintingService PrintingService
 @inject HttpClient httpClient
 @inject IStringLocalizer<CultureExample2> Loc
 @inject NavigationManager navigationManager
+@inject IJSRuntime IJS;
 
-<style>
-    row {
-        height:50px!important;
-    }
-
-    .card-body {
-        padding:2px!important;
-    }
- 
-</style>
 
 <form id="printable-form">
-    <div class="container text-center">
+    <div class="container text-left">
         <div class="row">
         </div>
         <hr />
         <div class="row">
             <div class="card" style="width: 20rem;background-color:lightgrey">
                 <div class="card-body">
-                    <div style="font-size:xx-large">Nr dokumentu </div>
+                     <p style="font-size:xx-large">Nr dokumentu </p>
                 </div>
-
             </div>
             <div class="card" style="width: 25rem;">
                 <div class="card-body">
@@ -40,12 +29,10 @@
                 <div class="card-body" >
                     <h6>Nr  </h6>
                 </div>
-
             </div>
             <div class="card" style="width: 25rem;">
                 <div class="card-body">
                     <div class="card-title">
-                        
                     </div>
                 </div>
             </div>
@@ -125,25 +112,25 @@
             <div class="card" style="width: 25rem;">
                 <div class="card-body">
                     <h6 class="card-title">@CarAdviceMainTablePrint.TruckPlatesWh</h6>
-                </div>
-            </div>
-        </div>
-    </div>
+                    </div>
+</div>
+</div>
+</div>
 </form>
-<hr />
-@*<button  @onclick="@(_ => PrintingService.Print("printable-form", PrintType.Html))">Print</button>*@
+
+
 
 <hr />
 
-<MudGrid>
+  <MudGrid Class="hideWhenPrint">
     <MudItem xs="2">
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Print" Size="Size.Small" OnClick="@(_ => PrintingService.Print("printable-form", PrintType.Html))">Print</MudButton>
+        <MudButton  Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Print" Size="Size.Small" OnClick="PrintLabel">Print</MudButton>
     </MudItem>
     <MudItem xs="2">
         <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">@Loc["lbCancel"]</MudButton>
     </MudItem>
 </MudGrid>
-<hr />
+
 
 
 @code {
@@ -158,17 +145,17 @@
         CarAdviceMainTablePrint = await httpClient.GetFromJsonAsync<CarAdviceMainTable>(linkForEdit);
     }
 
+    private void PrintLabel()
+    {
+        IJS.InvokeVoidAsync("Print");
+    }
+
     private async Task CancelButton()
     {
         navigationManager.NavigateTo("/caradvice");
+
     }
 
 
 }
 
-
-<style>
-    @@page {
-        margin: 0px;
-    }
-</style>
