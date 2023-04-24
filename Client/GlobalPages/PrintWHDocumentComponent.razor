@@ -15,7 +15,7 @@
         <div class="row">
             <div class="card" style="width: 20rem;background-color:lightgrey">
                 <div class="card-body">
-                     <p style="font-size:xx-large">Nr dokumentu </p>
+                    <p style="font-size:xx-large">Nr dokumentu </p>
                 </div>
             </div>
             <div class="card" style="width: 25rem;">
@@ -24,9 +24,9 @@
                 </div>
             </div>
         </div>
-        <div class="row" >
+        <div class="row">
             <div class="card" style="width: 20rem;">
-                <div class="card-body" >
+                <div class="card-body">
                     <h6>Nr  </h6>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" >
+        <div class="row">
             <div class="card" style="width: 20rem;">
                 <div class="card-body">
                     <h6>Data awizacji  </h6>
@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" >
+        <div class="row">
             <div class="card" style="width: 20rem;">
                 <div class="card-body">
                     <h6>Nr wysyłki  </h6>
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" >
+        <div class="row">
             <div class="card" style="width: 20rem;">
                 <div class="card-body">
                     <h6>Numer referencyjny  </h6>
@@ -89,7 +89,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" >
+        <div class="row">
             <div class="card" style="width: 20rem;">
                 <div class="card-body">
                     <h6>Kierowca - magazyn  </h6>
@@ -102,7 +102,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" >
+        <div class="row">
             <div class="card" style="width: 20rem;">
                 <div class="card-body">
                     <h6>Tablice - magazyn  </h6>
@@ -112,22 +112,20 @@
             <div class="card" style="width: 25rem;">
                 <div class="card-body">
                     <h6 class="card-title">@CarAdviceMainTablePrint.TruckPlatesWh</h6>
-                    </div>
-</div>
-</div>
-</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
-
-
-
-<hr />
 
   <MudGrid Class="hideWhenPrint">
     <MudItem xs="2">
-        <MudButton  Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Print" Size="Size.Small" OnClick="PrintLabel">Print</MudButton>
     </MudItem>
     <MudItem xs="2">
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">@Loc["lbCancel"]</MudButton>
+        <button type="button" class="btn btn-secondary" @onclick="PrintLabel">Primary</button>
+    </MudItem>
+    <MudItem xs="2">
+        <button type="button" class="btn btn-secondary" @onclick="CancelButton">@Loc["lbCancel"]</button>
     </MudItem>
 </MudGrid>
 
