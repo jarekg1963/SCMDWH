@@ -37,7 +37,6 @@
             {
                 var js = (IJSInProcessRuntime)JS;
                 js.InvokeVoid("blazorCulture.set", value.Name);
-
                 Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
             }
         }

@@ -105,9 +105,9 @@
 
         newEtadate = DateTime.Now;
         newEtatime = Convert.ToDateTime(DateTime.Now).TimeOfDay;
-     
+
         // Customers
-       
+
         string linkCu = "/api/CarAdviceDictionaryCustomers/GetCarAdviceDictionaryActiveCustomer";
         customerList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCustomers>>(linkCu);
         customers =  customerList.Select(c => c.Customer).ToList();
@@ -198,6 +198,20 @@
             return;
         }
 
+
+        // sprawdzenie czy istnieje juz references 
+
+        bool exitref = await ExitByReference(CarAdviceMainTableNew.Reference);
+
+        if (exitref)
+        {
+            Snackbar.Add($" Car/reference already exist ", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            return;
+        }
+
+
+        // koniec sprawdzenia references
+
        
         CarAdviceMainTableNew.Quality = null;
         CarAdviceMainTableNew.EntryByS = null;
@@ -212,21 +226,29 @@
         CarAdviceMainTableNew.DestinationNavigation = null;
         CarAdviceMainTableNew.FgDelayReasonNavigation = null;
         CarAdviceMainTableNew.PickingStatusNavigation = null;
-
-
         DateTime EtaDateNotNulable = (DateTime)newEtadate;
         TimeSpan EtaTimeNotNulable = (TimeSpan)newEtatime;
-
-
-
         CarAdviceMainTableNew.Etd = EtaDateNotNulable.Add(EtaTimeNotNulable);
-
-        //var response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkAddNew, CarAdviceMainTableNew);
 
         MudDialog.Close(DialogResult.Ok(CarAdviceMainTableNew));
 
 
        
+    }
+
+    private async Task<bool> ExitByReference(string references)
+    {
+        string linkver = "/api/CarAdviceMainTables/FoundByReference/" + references;
+        bool refExit = await httpClient.GetFromJsonAsync<bool>(linkver);
+        if (refExit)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
 }
