@@ -178,7 +178,10 @@
     <value>Kraj</value>
   </data>
   <data name="lbDictionary" xml:space="preserve">
-    <value>Słowniki</value>
+    <value>Słowniki FG</value>
+  </data>
+  <data name="lbDictionaryGR" xml:space="preserve">
+    <value>Słowniki GR</value>
   </data>
   <data name="lbDock" xml:space="preserve">
     <value>Numer doku</value>
@@ -268,7 +271,10 @@
     <value>Czas załadunku</value>
   </data>
   <data name="lbPlan" xml:space="preserve">
-    <value>Lista aut</value>
+    <value>Lista aut FG</value>
+  </data>
+  <data name="lbPlanGR" xml:space="preserve">
+    <value>Lista aut GR</value>
   </data>
   <data name="lbPlates" xml:space="preserve">
     <value>Numery rejestracyjne pojazdu</value>

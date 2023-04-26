@@ -241,11 +241,20 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Słowniki.
+        ///   Looks up a localized string similar to Słowniki FG.
         /// </summary>
         public static string lbDictionary {
             get {
                 return ResourceManager.GetString("lbDictionary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Słowniki GR.
+        /// </summary>
+        public static string lbDictionaryGR {
+            get {
+                return ResourceManager.GetString("lbDictionaryGR", resourceCulture);
             }
         }
         
@@ -511,11 +520,20 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lista aut.
+        ///   Looks up a localized string similar to Lista aut FG.
         /// </summary>
         public static string lbPlan {
             get {
                 return ResourceManager.GetString("lbPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista aut GR.
+        /// </summary>
+        public static string lbPlanGR {
+            get {
+                return ResourceManager.GetString("lbPlanGR", resourceCulture);
             }
         }
         

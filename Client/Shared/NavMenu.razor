@@ -12,7 +12,48 @@
 	</MudDrawerHeader>
 	<MudNavMenu>
 		<MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">@Loc["lbHome"]</MudNavLink>
-		<CarAdviceNavMenu></CarAdviceNavMenu>	
+		
+		
+		<MudNavGroup Title=@Loc["lbCarAdvice"] Icon="@Icons.Material.Filled.EmojiTransportation" @bind-Expanded=_isExpanded>
+			
+			
+			@if (rolaFGOperator ^ rolaFGAdmin)
+			{
+				<MudNavLink Href="/caradvice" Icon="@Icons.Material.Filled.LibraryBooks">@Loc["lbPlan"]</MudNavLink>
+			}
+
+			@if (rolaGrOperator ^ rolaGrAdmin)
+			{
+				<MudNavLink Href="/caradvice" Icon="@Icons.Material.Filled.LibraryBooks">@Loc["lbPlanGR"]</MudNavLink>
+			}
+
+
+			@if (rolaGrAdmin)
+			{
+				<MudNavGroup Title=@Loc["lbDictionaryGR"] Icon="@Icons.Material.Filled.Settings" Expanded="false">
+					<MudNavLink Href="CADCarriersPage" Icon="@Icons.Material.Filled.TimeToLeave">@Loc["lbCarriers"]</MudNavLink>
+					<MudNavLink Href="CADTrackTypes" Icon="@Icons.Material.Filled.LocalShipping">@Loc["lbTruckType"]</MudNavLink>
+					<MudNavLink Href="CADCustomersPage" Icon="@Icons.Material.Filled.Payments">@Loc["lbCustomers"]</MudNavLink>
+				
+				</MudNavGroup>
+			}
+
+
+			@if (rolaFGAdmin)
+			{
+				<MudNavGroup Title=@Loc["lbDictionary"] Icon="@Icons.Material.Filled.Settings" Expanded="false">
+					<MudNavLink Href="CADCarriersPage" Icon="@Icons.Material.Filled.TimeToLeave">@Loc["lbCarriers"]</MudNavLink>
+					<MudNavLink Href="CADTrackTypes" Icon="@Icons.Material.Filled.LocalShipping">@Loc["lbTruckType"]</MudNavLink>
+					<MudNavLink Href="CADCustomersPage" Icon="@Icons.Material.Filled.Payments">@Loc["lbCustomers"]</MudNavLink>
+					<MudNavLink Href="CADLoadingPlacePage" Icon="@Icons.Material.Filled.Domain">@Loc["lbLoadingplaces"]</MudNavLink>
+					<MudNavLink Href="CADStatuCode" Icon="@Icons.Material.Filled.FactCheck">@Loc["lbStatuscodes"]</MudNavLink>
+					<MudNavLink Href="CADReasonsPage" Icon="@Icons.Material.Filled.PermDeviceInformation">@Loc["lbReason"]</MudNavLink>
+					<MudNavLink Href="CADQualityPage" Icon="@Icons.Material.Filled.HighQuality">@Loc["lbQuality"]</MudNavLink>
+				</MudNavGroup>
+			}
+		</MudNavGroup>
+
+
 		@if (rolaScmTools)
 		{
 			<SCMToolsNavMenu></SCMToolsNavMenu>
@@ -23,15 +64,24 @@
 			<GlobalNavMenu></GlobalNavMenu>
 		}
 		<GlobalCompanyInfoNavMenu></GlobalCompanyInfoNavMenu>
+
+	
+
 	</MudNavMenu>
 </MudDrawer>
 
 @code {
 	[Parameter]
 	public bool SideBarOpen { get; set; }
-	private bool rolaAdministrator = true;
+	private bool rolaAdministrator;
 	private bool rolaDictionary = true;
 	private bool rolaScmTools;
+	private bool rolaGrOperator;
+	private bool rolaGrAdmin;
+	private bool rolaFGOperator;
+	private bool rolaFGAdmin;
+
+	bool _isExpanded = false;
 
 	[CascadingParameter]
 	public Task<AuthenticationState> AuthState { get; set; }
@@ -52,6 +102,13 @@
 			string rolesForDisplay = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
 			rolaAdministrator = rolesForDisplay.Contains("Administrator");
 			rolaScmTools = rolesForDisplay.Contains("SCMTOOLS");
+
+			// Nowe role do wsprowadzenia GR 
+
+			rolaGrOperator = rolesForDisplay.Contains("GROp");
+			rolaGrAdmin = rolesForDisplay.Contains("GRAdmin");
+			rolaFGAdmin = rolesForDisplay.Contains("FGAdmin");
+			rolaFGOperator = rolesForDisplay.Contains("FGOp");
 		}
 
 

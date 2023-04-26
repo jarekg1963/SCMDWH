@@ -47,12 +47,180 @@ public partial class PurchasingContext : DbContext
     public DbSet<SCMDWH.Shared.Models.CarAdviceDictionaryQuality> CarAdviceDictionaryQuality { get; set; } = default!;
 
     public DbSet<SCMDWH.Shared.Models.PlanningLoading> PlanningLoading { get; set; } = default!;
-    //PlanningLoading
+
+    public virtual DbSet<CarAdviceGrDictionaryCarStatuses> CarAdviceGrDictionaryCarStatuses { get; set; }
+
+    public virtual DbSet<CarAdviceGrDictionarySender> CarAdviceGrDictionarySender { get; set; }
+
+    public virtual DbSet<CarAdviceGrDictionaryUnloadingPlace> CarAdviceGrDictionaryUnloadingPlace { get; set; }
+
+    public virtual DbSet<CarAdviceGrMainPlanComum> CarAdviceGrMainPlanComum { get; set; }
+
+    public virtual DbSet<CarAdviceGrTruckItems> CarAdviceGrTruckItems { get; set; }
+
+    public virtual DbSet<CarAdviceGrTruckMainTable> CarAdviceGrTruckMainTable { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Polish_CI_AS");
+
+        modelBuilder.Entity<CarAdviceGrDictionaryCarStatuses>(entity =>
+        {
+            entity.HasIndex(e => e.Status, "IX_CarAdviceGrDictionaryCarStatuses").IsUnique();
+
+            entity.Property(e => e.ActiveFlag)
+                .IsRequired()
+                .HasDefaultValueSql("((1))");
+            entity.Property(e => e.AddByUser)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasDefaultValueSql("('')");
+            entity.Property(e => e.AddTime)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Status)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasDefaultValueSql("(N'Nie dojechał')");
+        });
+
+        modelBuilder.Entity<CarAdviceGrDictionarySender>(entity =>
+        {
+            entity.HasIndex(e => e.SenderName, "IX_CarAdviceGrDictionarySender").IsUnique();
+
+            entity.Property(e => e.ActiveFlag)
+                .IsRequired()
+                .HasDefaultValueSql("((1))");
+            entity.Property(e => e.AddByUser)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.AddTime)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Remark)
+                .IsRequired()
+                .HasMaxLength(200)
+                .HasDefaultValueSql("('')");
+            entity.Property(e => e.SenderName)
+                .IsRequired()
+                .HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<CarAdviceGrDictionaryUnloadingPlace>(entity =>
+        {
+            entity.HasIndex(e => e.UnloadingPlace, "IX_CarAdviceGrDictionaryUnloadingPlace").IsUnique();
+
+            entity.Property(e => e.ActiveFlag)
+                .IsRequired()
+                .HasDefaultValueSql("((1))");
+            entity.Property(e => e.AddByUser)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.AddTime)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Remark)
+                .IsRequired()
+                .HasMaxLength(200)
+                .HasDefaultValueSql("('')");
+            entity.Property(e => e.UnloadingPlace)
+                .IsRequired()
+                .HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<CarAdviceGrMainPlanComum>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_CarAdviceGrMainPlanComums");
+
+            entity.Property(e => e.MainScreenColumn)
+                .IsRequired()
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.PlHeader)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("plHeader");
+            entity.Property(e => e.UserName)
+                .IsRequired()
+                .HasMaxLength(30)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<CarAdviceGrTruckItems>(entity =>
+        {
+            entity.Property(e => e.ContainerNo).HasMaxLength(50);
+            entity.Property(e => e.InvoiceNo).HasMaxLength(50);
+            entity.Property(e => e.Material)
+                .IsRequired()
+                .HasMaxLength(18);
+            entity.Property(e => e.PalletNo).HasMaxLength(50);
+            entity.Property(e => e.Remark).HasMaxLength(500);
+            entity.Property(e => e.SapGrMarDoc).HasMaxLength(50);
+            entity.Property(e => e.SapGrTime).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Truck).WithMany(p => p.CarAdviceGrTruckItems)
+                .HasForeignKey(d => d.TruckId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CarAdviceGrTruckItems_CarAdviceGrTruckMainTable");
+        });
+
+        modelBuilder.Entity<CarAdviceGrTruckMainTable>(entity =>
+        {
+            entity.Property(e => e.AddByUser)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.AddDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.CallBy).HasMaxLength(50);
+            entity.Property(e => e.CarRemark).HasMaxLength(500);
+            entity.Property(e => e.DriverS).HasMaxLength(150);
+            entity.Property(e => e.DriverWh).HasMaxLength(150);
+            entity.Property(e => e.EnterTime).HasColumnType("datetime");
+            entity.Property(e => e.ExitTime).HasColumnType("datetime");
+            entity.Property(e => e.PlanDeliveryTime).HasColumnType("datetime");
+            entity.Property(e => e.Reference).HasMaxLength(50);
+            entity.Property(e => e.RemarkS).HasMaxLength(255);
+            entity.Property(e => e.RemarkWh).HasMaxLength(255);
+            entity.Property(e => e.SenderName)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.Status)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.TruckPlatesS)
+                .HasMaxLength(100)
+                .IsFixedLength();
+            entity.Property(e => e.TruckPlatesWh)
+                .HasMaxLength(100)
+                .IsFixedLength();
+            entity.Property(e => e.UnloadingDock)
+                .HasMaxLength(5)
+                .IsUnicode(false);
+            entity.Property(e => e.UnloadingPlace)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.UnloadingTime).HasColumnType("datetime");
+
+            entity.HasOne(d => d.SenderNameNavigation).WithMany(p => p.CarAdviceGrTruckMainTable)
+                .HasPrincipalKey(p => p.SenderName)
+                .HasForeignKey(d => d.SenderName)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CarAdviceGrTruckMainTable_CarAdviceGrDictionarySender");
+
+            entity.HasOne(d => d.StatusNavigation).WithMany(p => p.CarAdviceGrTruckMainTable)
+                .HasPrincipalKey(p => p.Status)
+                .HasForeignKey(d => d.Status)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CarAdviceGrTruckMainTable_CarAdviceGrDictionaryCarStatuses");
+
+            entity.HasOne(d => d.UnloadingPlaceNavigation).WithMany(p => p.CarAdviceGrTruckMainTable)
+                .HasPrincipalKey(p => p.UnloadingPlace)
+                .HasForeignKey(d => d.UnloadingPlace)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CarAdviceGrTruckMainTable_CarAdviceGrDictionaryUnloadingPlace");
+        });
 
 
         modelBuilder.Entity<GlobalAppUsersParameters>(entity =>

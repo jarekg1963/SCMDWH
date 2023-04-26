@@ -1,5 +1,5 @@
 ﻿@baseUrl = http://localhost:5195/api/
-GET {{baseUrl}}CarAdviceDictionaryCarriers
+GET {{baseUrl}}GetCarAdviceGrDictionaryCarStatuses
 
 ###
 

@@ -178,7 +178,10 @@
     <value>Destination</value>
   </data>
   <data name="lbDictionary" xml:space="preserve">
-    <value>Dictionary</value>
+    <value>Dictionary FG</value>
+  </data>
+  <data name="lbDictionaryGR" xml:space="preserve">
+    <value>Dictionary GR</value>
   </data>
   <data name="lbDock" xml:space="preserve">
     <value>Dock</value>
@@ -262,7 +265,10 @@
     <value>Picking time</value>
   </data>
   <data name="lbPlan" xml:space="preserve">
-    <value>Plan</value>
+    <value>Plan FG</value>
+  </data>
+  <data name="lbPlanGR" xml:space="preserve">
+    <value>Plan GR</value>
   </data>
   <data name="lbPlates" xml:space="preserve">
     <value>Plates</value>
