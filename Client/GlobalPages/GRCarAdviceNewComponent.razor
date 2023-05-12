@@ -3,7 +3,7 @@
 @inject HttpClient httpClient;
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
-@*
+
 <MudDialog Style="min-width: 1400px;">
     <DialogContent>
         <MudCard Outlined="true" Elevation="20">
@@ -23,7 +23,7 @@
              <table>
 
                 <tr>
-                    <th>Id</th>
+                    <th>Lp</th>
                     <th>Invoice</th>
                     <th>Container</th>
                     <th>Material</th>
@@ -57,11 +57,11 @@
                         </td>
 
                         <td>
-                            <MudButton Variant="Variant.Filled" OnClick="() => NewTrackItem(trItem)">New</MudButton>
+                            <MudButton Variant="Variant.Filled" OnClick="() => NewTrackItem()">New</MudButton>
                         </td>
 
                         <td>
-                            <MudButton Variant="Variant.Filled" OnClick="() => DeleteTrackItem(trItem.Id)">Delete</MudButton>
+                            <MudButton Variant="Variant.Filled" OnClick="() => DeleteTrackItem(trItem)">Delete</MudButton>
                         </td>
                 </tr>
 
@@ -84,20 +84,9 @@
             </MudItem>
         </MudGrid>
     </DialogActions>
-</MudDialog>*@
+</MudDialog>
 
-<MudGrid>
-    <MudItem xs="6">
-    </MudItem>
-    <MudItem xs="2">
-    </MudItem>
-    <MudItem xs="2">
-        <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
-    </MudItem>
-    <MudItem xs="2">
-        <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">@Loc["lbSave"]</MudButton>
-    </MudItem>
-</MudGrid>
+
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
@@ -106,38 +95,29 @@
     private bool resetValueOnEmptyText;
     private long iId = 1;
 
-
+    CarAdviceGrTruckMainTable CarAdviceGRMainTableNew = new CarAdviceGrTruckMainTable() { carAdviceGrTruckItems = new List<CarAdviceGrTruckItems>() };
+    List<CarAdviceGrTruckItems> truckItemList = new() { new CarAdviceGrTruckItems { Id = 1 } };
+    CarAdviceGrTruckItems truckItem = new();
 
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
-    // Combii 
-
     private List<string> senders;
     List<CarAdviceGrDictionarySender> sendersList = new List<CarAdviceGrDictionarySender>();
 
-    CarAdviceGrTruckItems truckItem = new();
-    List<CarAdviceGrTruckItems> truckItemList = new() { new CarAdviceGrTruckItems { Id = 1 } };
-
-
-
-    private async Task DeleteTrackItem(long delItemId)
+    private async Task DeleteTrackItem(CarAdviceGrTruckItems delItemId)
     {
-        var de = truckItemList.Find(c => c.Id == delItemId);
-        truckItemList.Remove(de);
+        //var de = truckItemList.Find(c => c.Id == delItemId);
+        truckItemList.Remove(delItemId);
         StateHasChanged();
     }
 
-    private void NewTrackItem(CarAdviceGrTruckItems newItem)
+    private void NewTrackItem()
     {
         iId++;
-
         CarAdviceGrTruckItems newEmptyItem = new() { Id = iId };
-
-
         truckItemList.Add(newEmptyItem);
-
         StateHasChanged();
     }
 
@@ -166,60 +146,9 @@
 
     private async void CloseSave()
     {
-        //    List<dziecko> dzLista = new List<dziecko>() { new dziecko { IdDziecka = 1, OpisDziecka = "Jarek" }, new dziecko { IdDziecka = 2, OpisDziecka = "Ewa" } };
-
-        //    List<parrent> listaParent = new List<parrent>() { new parrent { IdParret = 1, NameParek = "EEEEEE", DzieciLista = dzLista } };
-
-        CarAdviceGrTruckMainTable CarAdviceGRMainTableNew = new CarAdviceGrTruckMainTable()
-            {
-                Id = 99999,
-                AddByUser = "",
-                CarRemark = "",
-                Reference = "",
-                UnloadingPlace = "",
-                Status = "",
-                DriverS = "",
-                TruckPlatesS = "",
-                CallBy = "",
-                RemarkS = "",
-                DriverWh = "",
-                RemarkWh = "",
-                UnloadingDock = "",
-                SenderName = "",
-                TruckPlatesWh = "",
-                carAdviceGrTruckItems = new List<CarAdviceGrTruckItems>()
-
-    };
-
-        CarAdviceGrTruckItems item1 = new CarAdviceGrTruckItems() { ContainerNo = "fdtdf", TotalPalletQty = 2, TotalQty = 1, SapGrDone = false };
-
-        CarAdviceGrTruckItems item2 = new CarAdviceGrTruckItems() { ContainerNo = "fdetdf", TotalPalletQty = 2, TotalQty = 1, SapGrDone = false };
-
-        CarAdviceGRMainTableNew.carAdviceGrTruckItems.Add(item1);
-        CarAdviceGRMainTableNew.carAdviceGrTruckItems.Add(item2);
-
-
-
-        //CarAdviceGRMainTableNew.CarAdviceGrTruckItems = truckItemList;
         string linkCu = "api/CarAdviceGrTruckMainTable/NewItemGr";
+        CarAdviceGRMainTableNew.carAdviceGrTruckItems = truckItemList;
         await httpClient.PostAsJsonAsync(linkCu, CarAdviceGRMainTableNew);
-    }
-
-
-    public class parrent
-    {
-        public int IdParret { get; set; }
-        public string NameParek { get; set; }
-        public virtual ICollection<dziecko> DzieciLista { get; set; } = new List<dziecko>();
-
-
-    }
-
-
-    public class dziecko
-    {
-        public int IdDziecka { get; set; }
-        public string OpisDziecka { get; set; }
     }
 
 }
