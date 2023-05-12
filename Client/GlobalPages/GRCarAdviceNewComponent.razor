@@ -3,7 +3,7 @@
 @inject HttpClient httpClient;
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
-@*
+
 <MudDialog Style="min-width: 1400px;">
     <DialogContent>
         <MudCard Outlined="true" Elevation="20">
@@ -84,20 +84,9 @@
             </MudItem>
         </MudGrid>
     </DialogActions>
-</MudDialog>*@
+</MudDialog>
 
-<MudGrid>
-    <MudItem xs="6">
-    </MudItem>
-    <MudItem xs="2">
-    </MudItem>
-    <MudItem xs="2">
-        <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
-    </MudItem>
-    <MudItem xs="2">
-        <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">@Loc["lbSave"]</MudButton>
-    </MudItem>
-</MudGrid>
+
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
