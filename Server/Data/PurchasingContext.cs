@@ -159,7 +159,7 @@ public partial class PurchasingContext : DbContext
             entity.Property(e => e.SapGrMarDoc).HasMaxLength(50);
             entity.Property(e => e.SapGrTime).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Truck).WithMany(p => p.CarAdviceGrTruckItems)
+            entity.HasOne(d => d.Truck).WithMany(p => p.carAdviceGrTruckItems)
                 .HasForeignKey(d => d.TruckId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CarAdviceGrTruckItems_CarAdviceGrTruckMainTable");
@@ -177,7 +177,7 @@ public partial class PurchasingContext : DbContext
             entity.Property(e => e.CarRemark).HasMaxLength(500);
             entity.Property(e => e.DriverS).HasMaxLength(150);
             entity.Property(e => e.DriverWh).HasMaxLength(150);
-            entity.Property(e => e.EnterTime).HasColumnType("datetime");
+            entity.Property(e => e.TpvEnterTime).HasColumnType("datetime");
             entity.Property(e => e.ExitTime).HasColumnType("datetime");
             entity.Property(e => e.PlanDeliveryTime).HasColumnType("datetime");
             entity.Property(e => e.Reference).HasMaxLength(50);

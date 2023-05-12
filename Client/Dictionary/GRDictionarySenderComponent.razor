@@ -1,15 +1,13 @@
-﻿@page "/CADCarriersPage"
-
+﻿@page "/grDictionarySenderPage"
 @using SCMDWH.Shared.Models;
 @using SCMDWH.Client.JGHttpClient;
+@using System.Security.Claims;
 @inject HttpClient httpClient;
 @inject NavigationManager navigationManager;
 @inject IDialogService DialogService;
 @inject ISnackbar Snackbar;
 @inject IStringLocalizer<CultureExample2> Loc
 @inject JGHttpClient http;
-
-
 
 <style>
 
@@ -25,19 +23,19 @@
     }
 </style>
 
-<MudTable  Items="@carriersList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped"  FixedFooter="true"
-          FixedHeader="true" Height="38em" RowsPerPage="18" Filter="new Func<CarAdviceDictionaryCarriers,bool>(FilterFunc)">
-    <ToolBarContent >
+<MudTable Items="@grSenderList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
+          FixedHeader="true" Height="38em" RowsPerPage="18" Filter="new Func<CarAdviceGrDictionarySender,bool>(FilterFunc)">
+    <ToolBarContent>
         <MudGrid Style="background-color:#f5f8f8">
             <MudItem xs="3">
-                <MudButton Target="_blank" Variant="Variant.Filled" EndIcon="@Icons.Filled.NewLabel"
+                <MudButton Target="_blank" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NewLabel"
                            Style="text-transform:none " OnClick="AddNew" Size="Size.Large">
                     @Loc["lbAddnewitem"]
                 </MudButton>
             </MudItem>
             <MudItem xs="4">
                 <MudAlert Severity="Severity.Normal" Variant="Variant.Text">
-                    <h5>@Loc["lbCurrierList"] </h5>
+                    <h5>@Loc["lbGrSender"]</h5>
                 </MudAlert>
             </MudItem>
             <MudItem xs="5">
@@ -46,33 +44,35 @@
         </MudGrid>
     </ToolBarContent>
     <ColGroup>
-        <col style="width: 1%;" /> 
-        <col style="width: 60%;" />
+        <col style="width: 1%;" />
+        <col style="width: 40%;" />
         <col style="width: 15%;" />
         <col style="width: 20%;" />
-        <col style="width: 2%;" />
-        <col style="width: 1%;" />
+        <col style="width: 10%;" />
+        <col style="width: 5%;" />
         <col style="width: 1%;" />
     </ColGroup>
-    <HeaderContent >
-        <MudTh class="thcss"><MudTableSortLabel SortBy="new Func<CarAdviceDictionaryCarriers, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
-        <MudTh class="thcss">Carrier</MudTh>
-        <MudTh class="thcss">Added by user</MudTh>
+    <HeaderContent>
+        <MudTh class="thcss"><MudTableSortLabel SortBy="new Func<CarAdviceGrDictionarySender, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
+        <MudTh class="thcss">SenderName</MudTh>
+        <MudTh class="thcss">Remark</MudTh>
         <MudTh class="thcss">Add time</MudTh>
+        <MudTh class="thcss">Add user</MudTh>
         <MudTh class="thcss">Active</MudTh>
         <MudTh class="thcss">Edit</MudTh>
         <MudTh class="thcss">Delete</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd class="tdcss" DataLabel="User Name">@context.Id</MudTd>
-        <MudTd class="tdcss" DataLabel="Email">@context.Carrier</MudTd>
+        <MudTd class="tdcss" DataLabel="Email">@context.SenderName</MudTd>
+        <MudTd class="tdcss" DataLabel="Email">@context.Remark</MudTd>
         <MudTd class="tdcss" DataLabel="Created Time">@context.AddByUser</MudTd>
         <MudTd class="tdcss" DataLabel="Remark">@context.AddTime</MudTd>
         <MudTd class="tdcss" DataLabel="Active">
             <MudCheckBox ReadOnly="true" @bind-Checked="@context.ActiveFlag"></MudCheckBox>
         </MudTd>
-        <MudTd  DataLabel="Edit">
-            <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />       
+        <MudTd DataLabel="Edit">
+            <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
         </MudTd>
         <MudTd DataLabel="Delete">
             <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
@@ -84,7 +84,12 @@
 </MudTable>
 
 @code {
-    List<CarAdviceDictionaryCarriers> carriersList = new List<CarAdviceDictionaryCarriers>();
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    private string currentUser = "";
+
+    List<CarAdviceGrDictionarySender> grSenderList = new List<CarAdviceGrDictionarySender>();
     private bool dense = false;
     private bool hover = true;
     private bool striped = true;
@@ -95,93 +100,100 @@
 
     private async Task readData()
     {
-        string link = "/api/CarAdviceDictionaryCarriers";
+        string link = "/api/CarAdviceGrDictionarySender";
         try
         {
-            //carriersList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryCarriers>>(link);
 
-            carriersList = await http.Get<List<CarAdviceDictionaryCarriers>>(link);
+
+            grSenderList = await http.Get<List<CarAdviceGrDictionarySender>>(link);
         }
         catch (Exception ex)
         {
-            Snackbar.Add("Error " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+            Snackbar.Add("Error " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Material.Rounded.Error; config.VisibleStateDuration = 500; });
         }
     }
 
-
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthState;
+        var user = authState.User;
+        currentUser = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+
         await readData();
     }
 
-    private async void Delete(CarAdviceDictionaryCarriers carrier)
+    private async void Delete(CarAdviceGrDictionarySender sender)
     {
         var parameters = new DialogParameters();
         string strDelete = Loc["lbDelete"];
         parameters.Add("ButtonText", strDelete);
         parameters.Add("Color", Color.Error);
         var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
+
         var dialog = DialogService.Show<DialogDictionaryDeleteComponent>(strDelete, parameters, options);
         var result = await dialog.Result;
-        if (!result.Cancelled)
+        if (!result.Canceled)
         {
-
             try
             {
-                string link = "/api/CarAdviceDictionaryCarriers/" + carrier.Id;
-                var Response = await httpClient.DeleteAsync(link);               
+                string link = "/api/CarAdviceGrDictionarySender/" + sender.Id;
+                var Response = await httpClient.DeleteAsync(link);
                 await readData();
                 StateHasChanged();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Snackbar.Add("Error !!!  " + ex.Message , Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });                
+                Snackbar.Add("Error !!!  " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Material.Rounded.Error; config.VisibleStateDuration = 500; });
             }
-
         }
     }
 
     private async void AddNew()
     {
-        string strlbAddNewCurrier = Loc["lbAddNewCurrier"];
-        CarAdviceDictionaryCarriers newCarrier = new CarAdviceDictionaryCarriers();
+
+        string strlbAddNewCurrier = Loc["lbAddNewUnloadingPlace"];
+        CarAdviceGrDictionarySender newSender = new CarAdviceGrDictionarySender();
         var parameters = new DialogParameters { ["Id"] = "XXX" };
-        var dialog = DialogService.Show<CADCarriersDialogAddEdit>(strlbAddNewCurrier, parameters);
+        var dialog = DialogService.Show<GrSenderDialog>(strlbAddNewCurrier, parameters);
         var result = await dialog.Result;
-        if (!result.Cancelled)
+        if (!result.Canceled)
         {
-            newCarrier = (CarAdviceDictionaryCarriers)result.Data;
-            string link = "/api/CarAdviceDictionaryCarriers/";
-            var Response = await httpClient.PostAsJsonAsync<CarAdviceDictionaryCarriers>(link, newCarrier);
+            newSender = (CarAdviceGrDictionarySender)result.Data;
+            string link = "/api/CarAdviceGrDictionarySender";
+            newSender.AddByUser = currentUser;
+            newSender.CarAdviceGrTruckMainTable = null;
+            var Response = await httpClient.PostAsJsonAsync<CarAdviceGrDictionarySender>(link, newSender);
             await readData();
             StateHasChanged();
         }
     }
 
-    private async void Edit(CarAdviceDictionaryCarriers carrier)
+    private async void Edit(CarAdviceGrDictionarySender seneder)
     {
         string strlbEditCurrier = Loc["lbEditCurrier"];
-        CarAdviceDictionaryCarriers updateCarrier = new CarAdviceDictionaryCarriers();
-        var parameters = new DialogParameters { ["Id"] = carrier.Id.ToString() };
-        var dialog = DialogService.Show<CADCarriersDialogAddEdit>(strlbEditCurrier, parameters);
+        CarAdviceGrDictionarySender updateSeneder = new CarAdviceGrDictionarySender();
+        var parameters = new DialogParameters { ["Id"] = seneder.Id.ToString() };
+        var dialog = DialogService.Show<GrSenderDialog>(strlbEditCurrier, parameters);
         var result = await dialog.Result;
-        if (!result.Cancelled)
+        if (!result.Canceled)
         {
-            updateCarrier = (CarAdviceDictionaryCarriers)result.Data;
-            string link = "/api/CarAdviceDictionaryCarriers/" + carrier.Id;
-            var Response = await httpClient.PutAsJsonAsync<CarAdviceDictionaryCarriers>(link, updateCarrier);
+            updateSeneder = (CarAdviceGrDictionarySender)result.Data;
+            string link = "/api/CarAdviceGrDictionarySender/" +seneder.Id;
+            var Response = await httpClient.PutAsJsonAsync<CarAdviceGrDictionarySender>(link, updateSeneder);
             await readData();
             StateHasChanged();
         }
-       await readData();
+        await readData();
+    
     }
 
-    private bool FilterFunc(CarAdviceDictionaryCarriers element)
+    private bool FilterFunc(CarAdviceGrDictionarySender element)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (element.Carrier.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.SenderName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }
+
 }

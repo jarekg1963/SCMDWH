@@ -1,0 +1,201 @@
+﻿@page "/GrStatusDictionaryPage"
+@using SCMDWH.Shared.Models;
+@using SCMDWH.Client.JGHttpClient;
+@using System.Security.Claims;
+@inject NavigationManager navigationManager;
+@inject IDialogService DialogService;
+@inject ISnackbar Snackbar;
+@inject IStringLocalizer<CultureExample2> Loc;
+@inject JGHttpClient http;
+@inject HttpClient httpClient;
+
+<style>
+
+    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
+        font-size: small !important;
+    }
+
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+    }
+</style>
+
+
+
+<MudTable Items="@grStatusList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
+          FixedHeader="true" Height="38em" RowsPerPage="18" Filter="new Func<CarAdviceGrDictionaryCarStatuses,bool>(FilterFunc)">
+    <ToolBarContent>
+        <MudGrid Style="background-color:#f5f8f8">
+            <MudItem xs="3">
+                <MudButton Target="_blank" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NewLabel"
+                           Style="text-transform:none " OnClick="AddNew" Size="Size.Large">
+                    @Loc["lbAddnewitem"]
+                </MudButton>
+            </MudItem>
+            <MudItem xs="4">
+                <MudAlert Severity="Severity.Normal" Variant="Variant.Text">
+                    <h5>@Loc["lbGrCarStatus"]</h5>
+                </MudAlert>
+            </MudItem>
+            <MudItem xs="5">
+                <MudTextField Variant="Variant.Text" @bind-Value="searchString" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small" Class="mt-0"></MudTextField>
+            </MudItem>
+        </MudGrid>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 1%;" />
+        <col style="width: 40%;" />
+        <col style="width: 15%;" />
+        <col style="width: 20%;" />
+        <col style="width: 15%;" />
+        <col style="width: 5%;" />
+        <col style="width: 1%;" />
+    </ColGroup>
+    <HeaderContent>
+        <MudTh class="thcss"><MudTableSortLabel SortBy="new Func<CarAdviceGrDictionaryCarStatuses, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
+        <MudTh class="thcss">UnloadinPlace</MudTh>
+        <MudTh class="thcss">Add User</MudTh>
+        <MudTh class="thcss">Add Time</MudTh>
+        <MudTh class="thcss">Active</MudTh>
+        <MudTh class="thcss">Edit</MudTh>
+        <MudTh class="thcss">Delete</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd class="tdcss" DataLabel="User Name">@context.Id</MudTd>
+        <MudTd class="tdcss" DataLabel="Email">@context.Status</MudTd>
+        <MudTd class="tdcss" DataLabel="Created Time">@context.AddByUser</MudTd>
+        <MudTd class="tdcss" DataLabel="Remark">@context.AddTime</MudTd>
+        <MudTd class="tdcss" DataLabel="Active">
+            <MudCheckBox ReadOnly="true" @bind-Checked="@context.ActiveFlag"></MudCheckBox>
+        </MudTd>
+        <MudTd DataLabel="Edit">
+            <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+        <MudTd DataLabel="Delete">
+            <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    private string currentUser = "";
+
+    List<CarAdviceGrDictionaryCarStatuses> grStatusList = new List<CarAdviceGrDictionaryCarStatuses>();
+
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private string searchString = "";
+    private bool _sortNameByLength;
+    private List<string> _events = new();
+
+
+    private async void Delete(CarAdviceGrDictionaryCarStatuses sender)
+    {
+        var parameters = new DialogParameters();
+        string strDelete = Loc["lbDelete"];
+        parameters.Add("ButtonText", strDelete);
+        parameters.Add("Color", Color.Error);
+        var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = DialogService.Show<DialogDictionaryDeleteComponent>(strDelete, parameters, options);
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            try
+            {
+                string link = "/api/CarAdviceGrDictionaryCarStatuses/" + sender.Id;
+                var Response = await httpClient.DeleteAsync(link);
+                await readData();
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add("Error !!!  " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Material.Rounded.Error; config.VisibleStateDuration = 500; });
+            }
+        }
+    }
+
+    private async void Edit(CarAdviceGrDictionaryCarStatuses seneder)
+    {
+        string strlbEditCurrier = Loc["lbAddNewUnloadingPlace"];
+        CarAdviceGrDictionaryCarStatuses updateGrStatus= new CarAdviceGrDictionaryCarStatuses();
+        var parameters = new DialogParameters { ["Id"] = seneder.Id.ToString() };
+        var dialog = DialogService.Show<GRStatusDialog>(strlbEditCurrier, parameters);
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            updateGrStatus = (CarAdviceGrDictionaryCarStatuses)result.Data;
+            string link = "/api/CarAdviceGrDictionaryCarStatuses/" + seneder.Id;
+            var Response = await httpClient.PutAsJsonAsync<CarAdviceGrDictionaryCarStatuses>(link, updateGrStatus);
+            await readData();
+            StateHasChanged();
+        }
+        await readData();
+    }
+
+    private async void AddNew()
+    {
+        string strlbAddNewCurrier = Loc["lbAddNewGRStatus"];
+        CarAdviceGrDictionaryCarStatuses newGrStatus = new CarAdviceGrDictionaryCarStatuses();
+        var parameters = new DialogParameters { ["Id"] = "XXX" };
+        var dialog = DialogService.Show<GRStatusDialog>(strlbAddNewCurrier, parameters);
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            newGrStatus = (CarAdviceGrDictionaryCarStatuses)result.Data;
+            string link = "/api/CarAdviceGrDictionaryCarStatuses";
+            newGrStatus.AddByUser = currentUser;
+            newGrStatus.CarAdviceGrTruckMainTable = null;
+            var Response = await httpClient.PostAsJsonAsync<CarAdviceGrDictionaryCarStatuses>(link, newGrStatus);
+            await readData();
+           StateHasChanged();
+        }
+    }
+
+
+    private async Task readData()
+    {
+        string link = "/api/CarAdviceGrDictionaryCarStatuses";
+        try
+        {
+            grStatusList = await http.Get<List<CarAdviceGrDictionaryCarStatuses>>(link);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add("Error " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Material.Rounded.Error; config.VisibleStateDuration = 500; });
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+        currentUser = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+
+        await readData();
+    }
+
+    private bool FilterFunc(CarAdviceGrDictionaryCarStatuses element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Status.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+
+}

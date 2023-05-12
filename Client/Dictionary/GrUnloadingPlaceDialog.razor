@@ -1,0 +1,96 @@
+﻿@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient;
+@inject NavigationManager navigationManager
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<CultureExample2> Loc
+
+
+<EditForm Model="@newEditUnloadingPlace" OnValidSubmit="HandleValidSubmit">
+    <MudCard style="width:600px">
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@newEditUnloadingPlace.UnloadingPlace" Label="Name" Variant="Variant.Text" For="@(() => newEditUnloadingPlace.UnloadingPlace)"></MudTextField>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@newEditUnloadingPlace.Remark" Size="Size.Medium" Label="Remark"></MudTextField>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudCheckBox @bind-Checked="@newEditUnloadingPlace.ActiveFlag" Size="Size.Medium" Label="Active"></MudCheckBox>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@newEditUnloadingPlace.AddByUser" Label="User" ReadOnly="true" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@newEditUnloadingPlace.AddTime" Label="Date" ReadOnly="true" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+        <MudCardActions>
+            <MudItem xs="6">
+            </MudItem>
+            <MudItem xs="4">
+                <MudButton Variant="Variant.Filled" OnClick="Close">@Loc["lbCancel"]</MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">@Loc["lbSave"]</MudButton>
+            </MudItem>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string Id { get; set; }
+    string userName = "";
+   
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    CarAdviceGrDictionaryUnloadingPlace newEditUnloadingPlace = new CarAdviceGrDictionaryUnloadingPlace();
+
+    private async Task ReadData()
+    {
+        string link = "/api/CarAdviceGrDictionaryUnloadingPlace/" + Id;
+        newEditUnloadingPlace = await httpClient.GetFromJsonAsync<CarAdviceGrDictionaryUnloadingPlace>(link);
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            userName = user.Identity.Name;
+        }
+
+        if (Id != "XXX")
+        {
+            await ReadData();
+        }
+        else
+        {
+            newEditUnloadingPlace.UnloadingPlace = "";
+            newEditUnloadingPlace.ActiveFlag = false;
+            newEditUnloadingPlace.Remark = "";
+            newEditUnloadingPlace.AddByUser = userName;
+            newEditUnloadingPlace.AddTime = DateTime.Now;
+        }
+    }
+
+    private void HandleValidSubmit()
+    {
+        MudDialog.Close(DialogResult.Ok(newEditUnloadingPlace));
+    }
+
+
+    void Close() => MudDialog.Close(DialogResult.Cancel());
+}

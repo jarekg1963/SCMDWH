@@ -17,23 +17,27 @@
 		<MudNavGroup Title=@Loc["lbCarAdvice"] Icon="@Icons.Material.Filled.EmojiTransportation" @bind-Expanded=_isExpanded>
 			
 			
-			@if (rolaFGOperator ^ rolaFGAdmin)
+			@if (rolaFGOperator ^ rolaFGAdmin ^ rolaSecurity)
 			{
 				<MudNavLink Href="/caradvice" Icon="@Icons.Material.Filled.LibraryBooks">@Loc["lbPlan"]</MudNavLink>
 			}
 
-			@if (rolaGrOperator ^ rolaGrAdmin)
+			@if (rolaGrOperator ^ rolaGrAdmin ^ rolaSecurity)
 			{
-				<MudNavLink Href="/caradvice" Icon="@Icons.Material.Filled.LibraryBooks">@Loc["lbPlanGR"]</MudNavLink>
+				<MudNavGroup Title=@Loc["lbPlanGR"] Icon="@Icons.Material.Filled.Settings" Expanded="false">
+				<MudNavLink Href="/GRcarAdvice" Icon="@Icons.Material.Filled.LibraryBooks">Lista aut WH</MudNavLink>
+					<MudNavLink Href="/GRcarAdvice" Icon="@Icons.Material.Filled.LibraryBooks">Lista aut SECURITY</MudNavLink>
+					<MudNavLink Href="/GRcarAdvice" Icon="@Icons.Material.Filled.LibraryBooks">Lista palet</MudNavLink>
+				</MudNavGroup>
 			}
 
 
 			@if (rolaGrAdmin)
 			{
 				<MudNavGroup Title=@Loc["lbDictionaryGR"] Icon="@Icons.Material.Filled.Settings" Expanded="false">
-					<MudNavLink Href="CADCarriersPage" Icon="@Icons.Material.Filled.TimeToLeave">@Loc["lbCarriers"]</MudNavLink>
-					<MudNavLink Href="CADTrackTypes" Icon="@Icons.Material.Filled.LocalShipping">@Loc["lbTruckType"]</MudNavLink>
-					<MudNavLink Href="CADCustomersPage" Icon="@Icons.Material.Filled.Payments">@Loc["lbCustomers"]</MudNavLink>
+					<MudNavLink Href="grDictionarySenderPage" Icon="@Icons.Material.Filled.TimeToLeave">@Loc["lbGrSender"]</MudNavLink>
+					<MudNavLink Href="UnloadingPlacePage" Icon="@Icons.Material.Filled.LocalShipping">@Loc["lbGrUnloadingPlace"]</MudNavLink>
+					<MudNavLink Href="GrStatusDictionaryPage" Icon="@Icons.Material.Filled.Payments">@Loc["lbGrCarStatus"]</MudNavLink>
 				
 				</MudNavGroup>
 			}
@@ -80,6 +84,7 @@
 	private bool rolaGrAdmin;
 	private bool rolaFGOperator;
 	private bool rolaFGAdmin;
+	private bool rolaSecurity;
 
 	bool _isExpanded = false;
 
@@ -102,6 +107,7 @@
 			string rolesForDisplay = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
 			rolaAdministrator = rolesForDisplay.Contains("Administrator");
 			rolaScmTools = rolesForDisplay.Contains("SCMTOOLS");
+			rolaSecurity = rolesForDisplay.Contains("SECURITY");
 
 			// Nowe role do wsprowadzenia GR 
 

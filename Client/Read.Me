@@ -1,1 +1,32 @@
 ﻿Uwagi przed wprowadzeniem GR 
+
+1. Role 
+
+- dla TPV 
+            rolaGrOperator = rolesForDisplay.Contains("GROp");
+			rolaGrAdmin = rolesForDisplay.Contains("GRAdmin");
+			rolaFGAdmin = rolesForDisplay.Contains("FGAdmin");
+			rolaFGOperator = rolesForDisplay.Contains("FGOp");
+
+- role dla Security 
+			security Finish Goods 
+			security GR 
+
+
+
+przeskakiwanie po zakłądkach w mainCoponent 
+	
+    !!! rola rolaAdmin do usuniecia -> zostanie tylko administrator 
+   
+            if (wszystkieRole.Contains("ADMIN")) rolaAdmin = true;
+            if (wszystkieRole.Contains("SECURITY")) rolaSecurity = true;
+            if (wszystkieRole.Contains("WH")) rolaWh = true;
+
+    
+    private void Click(CarAdviceMainTable element)
+    {
+        if (rolaAdmin) tabs.ActivatePanel(1);
+        if (rolaSecurity) tabs.ActivatePanel(1);
+        if (rolaWh) tabs.ActivatePanel(1);      
+        selectedRow = element.Id.ToString();
+    }

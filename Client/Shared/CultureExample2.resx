@@ -126,8 +126,17 @@
   <data name="lbAddNewCurrier" xml:space="preserve">
     <value>Dodawanie nowego przewoźnika</value>
   </data>
+  <data name="lbAddNewGRStatus" xml:space="preserve">
+    <value>Status GR</value>
+  </data>
   <data name="lbAddnewitem" xml:space="preserve">
     <value>Nowy</value>
+  </data>
+  <data name="lbAddNewSeneder" xml:space="preserve">
+    <value>Nowy dostawca</value>
+  </data>
+  <data name="lbAddNewUnloadingPlace" xml:space="preserve">
+    <value>MIejsce rozładunku</value>
   </data>
   <data name="lbAta" xml:space="preserve">
     <value>Rzeczywista data przyjazdu (ATA)</value>
@@ -230,6 +239,15 @@
   </data>
   <data name="lbGeneralWarehouseInfoprmation" xml:space="preserve">
     <value>Dane magazynu</value>
+  </data>
+  <data name="lbGrCarStatus" xml:space="preserve">
+    <value>Statusy GR</value>
+  </data>
+  <data name="lbGrSender" xml:space="preserve">
+    <value>Dostawca</value>
+  </data>
+  <data name="lbGrUnloadingPlace" xml:space="preserve">
+    <value>Miejsce rozładunku</value>
   </data>
   <data name="lbHiddens" xml:space="preserve">
     <value>Kolumny ukryte</value>
@@ -335,6 +353,9 @@
   </data>
   <data name="lbSecuritypersons" xml:space="preserve">
     <value>Osoby ochrony</value>
+  </data>
+  <data name="lbSender" xml:space="preserve">
+    <value>Dostawca</value>
   </data>
   <data name="lbShipment" xml:space="preserve">
     <value>Numer wysyłki</value>

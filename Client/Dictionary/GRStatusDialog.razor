@@ -4,21 +4,22 @@
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
 
-<EditForm Model="@trackTypes" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="@newGrStatus" OnValidSubmit="HandleValidSubmit">
     <MudCard style="width:600px">
         <MudCardContent>
             <MudGrid>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@trackTypes.Truck" Label="Truck type" Variant="Variant.Text" For="@(() => trackTypes.Truck)"></MudTextField>
+                    <MudTextField @bind-Value="@newGrStatus.Status" Label="Name" Variant="Variant.Text" For="@(() => newGrStatus.Status)"></MudTextField>
+                </MudItem>
+               
+                <MudItem xs="12">
+                    <MudCheckBox @bind-Checked="@newGrStatus.ActiveFlag" Size="Size.Medium" Label="Active"></MudCheckBox>
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox @bind-Checked="@trackTypes.ActiveFlag" Size="Size.Medium" Label="Active"></MudCheckBox>
+                    <MudTextField @bind-Value="@newGrStatus.AddByUser" Label="User" ReadOnly="true" Variant="Variant.Text"></MudTextField>
                 </MudItem>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@trackTypes.AddByUser" Label="Currier" Variant="Variant.Text"></MudTextField>
-                </MudItem>
-                <MudItem xs="12">
-                    <MudTextField @bind-Value="@trackTypes.AddTime" Label="Currier" Variant="Variant.Text"></MudTextField>
+                    <MudTextField @bind-Value="@newGrStatus.AddTime" Label="Date" ReadOnly="true" Variant="Variant.Text"></MudTextField>
                 </MudItem>
             </MudGrid>
         </MudCardContent>
@@ -29,7 +30,7 @@
                 <MudButton Variant="Variant.Filled" OnClick="Close">@Loc["lbCancel"]</MudButton>
             </MudItem>
             <MudItem xs="2">
-            <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">@Loc["lbSave"]</MudButton>
+                <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">@Loc["lbSave"]</MudButton>
             </MudItem>
         </MudCardActions>
     </MudCard>
@@ -39,16 +40,20 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     [Parameter] public string Id { get; set; }
     string userName = "";
+    bool editSenederName = false;
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
-    CarAdviceDictionaryTruckType trackTypes = new CarAdviceDictionaryTruckType();
+    CarAdviceGrDictionaryCarStatuses newGrStatus =new  CarAdviceGrDictionaryCarStatuses();
 
-    private  void HandleValidSubmit()
+    private void HandleValidSubmit()
     {
-        MudDialog.Close(DialogResult.Ok(trackTypes));
+        MudDialog.Close(DialogResult.Ok(newGrStatus));
     }
+
+
+    void Close() => MudDialog.Close(DialogResult.Cancel());
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,24 +71,27 @@
 
         if (Id != "XXX")
         {
+            editSenederName = false;
             await ReadData();
         }
         else
         {
-            trackTypes.Truck = "";
-            trackTypes.ActiveFlag = false;
-            trackTypes.AddByUser = userName;
-            trackTypes.AddTime = DateTime.Now;
+            editSenederName = true;
+            newGrStatus.Status = "";
+            newGrStatus.ActiveFlag = false;
+           
+            newGrStatus.AddByUser = userName;
+            newGrStatus.AddTime = DateTime.Now;
         }
     }
 
     private async Task ReadData()
     {
-        string link = "/api/CarAdviceDictionaryTruckTypes/" + Id;
-        trackTypes = await httpClient.GetFromJsonAsync<CarAdviceDictionaryTruckType>(link);
+        string link = "/api/CarAdviceGrDictionaryCarStatuses/" + Id;
+        newGrStatus = await httpClient.GetFromJsonAsync<CarAdviceGrDictionaryCarStatuses>(link);
         StateHasChanged();
     }
 
-    void Close() => MudDialog.Close(DialogResult.Cancel());
+
 
 }

@@ -23,14 +23,143 @@ namespace SCMDWH.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CarAdviceGrDictionarySender>>> GetCarAdviceGrDictionarySender()
         {
-            if (_context.CarAdviceGrDictionaryCarStatuses == null)
+            if (_context.CarAdviceGrDictionarySender == null)
             {
                 return NotFound();
             }
-            return await _context.CarAdviceGrDictionarySender.Where(c => c.ActiveFlag == true).ToListAsync();
+
+
+            try
+            {
+                return await _context.CarAdviceGrDictionarySender.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, ex.Message);
+            }
         }
 
+
+        [HttpGet("GetActiveCarAdviceGrDictionarySender")]
+        public async Task<ActionResult<IEnumerable<CarAdviceGrDictionarySender>>> GetActiveCarAdviceGrDictionarySender()
+        {
+            if (_context.CarAdviceGrDictionarySender == null)
+            {
+                return NotFound();
+            }
+
+
+			try
+			{
+				return await _context.CarAdviceGrDictionarySender.Where(c => c.ActiveFlag == true).ToListAsync();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(400, ex.Message);
+			}	
         }
+
+		[HttpGet("{id}")]
+		public async Task<ActionResult<CarAdviceGrDictionarySender>> GetCarAdviceGrDictionarySender(long id)
+		{
+			if (_context.CarAdviceGrDictionarySender == null)
+			{
+				return NotFound();
+			}
+			var carAdviceGrDictionarySender = await _context.CarAdviceGrDictionarySender.FindAsync(id);
+
+			if (carAdviceGrDictionarySender == null)
+			{
+				return NotFound();
+			}
+
+			return carAdviceGrDictionarySender;
+		}
+
+
+		[HttpPut("{id}")]
+		public async Task<IActionResult> PutCarAdviceGrDictionarySender(long id, CarAdviceGrDictionarySender carAdviceGrDictionarySender)
+		{
+			if (id != carAdviceGrDictionarySender.Id)
+			{
+				return BadRequest();
+			}
+
+			_context.Entry(carAdviceGrDictionarySender).State = EntityState.Modified;
+
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException ex)
+			{
+				if (!carAdviceGrDictionarySenderExist(id))
+				{
+					return NotFound();
+				}
+				else
+				{
+					return StatusCode(400, ex.Message);
+				}
+			}
+
+			return NoContent();
+		}
+
+
+		[HttpPost]
+		public async Task<ActionResult<CarAdviceGrDictionarySender>> PostCarAdviceGrDictionarySender(CarAdviceGrDictionarySender carAdviceGrDictionarySender)
+		{
+			if (_context.CarAdviceGrDictionarySender == null)
+			{
+				return Problem("Entity set 'PurchasingContext.CarAdviceDictionaryCarriers'  is null.");
+			}
+			_context.CarAdviceGrDictionarySender.Add(carAdviceGrDictionarySender);
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException ex) 
+			{
+
+				return StatusCode(400, ex.Message);
+			}
+			return CreatedAtAction("GetCarAdviceGrDictionarySender", new { id = carAdviceGrDictionarySender.Id }, carAdviceGrDictionarySender);
+		}
+
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteCarAdviceGrDictionarySender(long id)
+		{
+			if (_context.CarAdviceGrDictionarySender == null)
+			{
+				return NotFound();
+			}
+			var carAdviceGrDictionarySender = await _context.CarAdviceGrDictionarySender.FindAsync(id);
+			if (carAdviceGrDictionarySender == null)
+			{
+				return NotFound();
+			}
+			try
+			{
+				_context.CarAdviceGrDictionarySender.Remove(carAdviceGrDictionarySender);
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException ex) 
+			{
+
+				return StatusCode(400, ex.Message);
+			}
+			return NoContent();
+		}
+
+
+		private bool carAdviceGrDictionarySenderExist(long id)
+		{
+			return (_context.CarAdviceGrDictionarySender?.Any(e => e.Id == id)).GetValueOrDefault();
+		}
+
+	}
 
       
      

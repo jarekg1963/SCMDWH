@@ -4,21 +4,25 @@
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
 
-<EditForm Model="@trackTypes" OnValidSubmit="HandleValidSubmit">
+
+<EditForm Model="@newEditSender" OnValidSubmit="HandleValidSubmit">
     <MudCard style="width:600px">
         <MudCardContent>
             <MudGrid>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@trackTypes.Truck" Label="Truck type" Variant="Variant.Text" For="@(() => trackTypes.Truck)"></MudTextField>
+                    <MudTextField @bind-Value="@newEditSender.SenderName"  Label="Name" Variant="Variant.Text" For="@(() => newEditSender.SenderName)"></MudTextField>
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox @bind-Checked="@trackTypes.ActiveFlag" Size="Size.Medium" Label="Active"></MudCheckBox>
+                    <MudTextField @bind-Value="@newEditSender.Remark" Size="Size.Medium" Label="Remark"></MudTextField>
                 </MudItem>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@trackTypes.AddByUser" Label="Currier" Variant="Variant.Text"></MudTextField>
+                    <MudCheckBox @bind-Checked="@newEditSender.ActiveFlag" Size="Size.Medium" Label="Active"></MudCheckBox>
                 </MudItem>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@trackTypes.AddTime" Label="Currier" Variant="Variant.Text"></MudTextField>
+                    <MudTextField @bind-Value="@newEditSender.AddByUser" Label="User" ReadOnly="true" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@newEditSender.AddTime" Label="Date" ReadOnly="true" Variant="Variant.Text"></MudTextField>
                 </MudItem>
             </MudGrid>
         </MudCardContent>
@@ -29,26 +33,25 @@
                 <MudButton Variant="Variant.Filled" OnClick="Close">@Loc["lbCancel"]</MudButton>
             </MudItem>
             <MudItem xs="2">
-            <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">@Loc["lbSave"]</MudButton>
+                <MudButton Variant="Variant.Filled" OnClick="HandleValidSubmit">@Loc["lbSave"]</MudButton>
             </MudItem>
         </MudCardActions>
     </MudCard>
 </EditForm>
 
+
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     [Parameter] public string Id { get; set; }
     string userName = "";
+    bool editSenederName = false;
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
-    CarAdviceDictionaryTruckType trackTypes = new CarAdviceDictionaryTruckType();
 
-    private  void HandleValidSubmit()
-    {
-        MudDialog.Close(DialogResult.Ok(trackTypes));
-    }
+    CarAdviceGrDictionarySender newEditSender = new CarAdviceGrDictionarySender();
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,23 +69,33 @@
 
         if (Id != "XXX")
         {
+            editSenederName = false;
             await ReadData();
         }
         else
         {
-            trackTypes.Truck = "";
-            trackTypes.ActiveFlag = false;
-            trackTypes.AddByUser = userName;
-            trackTypes.AddTime = DateTime.Now;
+            editSenederName = true;
+            newEditSender.SenderName = "";
+            newEditSender.ActiveFlag = false;
+            newEditSender.Remark = "";
+            newEditSender.AddByUser = userName;
+            newEditSender.AddTime = DateTime.Now;
         }
     }
 
     private async Task ReadData()
     {
-        string link = "/api/CarAdviceDictionaryTruckTypes/" + Id;
-        trackTypes = await httpClient.GetFromJsonAsync<CarAdviceDictionaryTruckType>(link);
+        string link = "/api/CarAdviceGrDictionarySender/" + Id;
+        newEditSender = await httpClient.GetFromJsonAsync<CarAdviceGrDictionarySender>(link);
         StateHasChanged();
     }
+
+
+    private  void HandleValidSubmit()
+    {
+        MudDialog.Close(DialogResult.Ok(newEditSender));
+    }
+
 
     void Close() => MudDialog.Close(DialogResult.Cancel());
 

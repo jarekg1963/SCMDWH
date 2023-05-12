@@ -1,0 +1,225 @@
+﻿@using SCMDWH.Shared.Models;
+
+@inject HttpClient httpClient;
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<CultureExample2> Loc
+@*
+<MudDialog Style="min-width: 1400px;">
+    <DialogContent>
+        <MudCard Outlined="true" Elevation="20">
+            <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbAddnewitem"]</MudAlert>
+            <MudGrid>
+                <MudItem xs="2">
+                    <MudDatePicker Label=@Loc["lbAdDateNowy"] @bind-Date="CarAdviceGRMainTableNew.AddDate" DisableToolbar="true" />
+                </MudItem>
+                <MudItem xs="3">
+                    <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbSender"] @bind-Value="CarAdviceGRMainTableNew.SenderName" SearchFunc="@SearchSender"
+                                     ResetValueOnEmptyText="@resetValueOnEmptyText" />
+                </MudItem>
+            </MudGrid>
+        </MudCard>
+         <MudCard Outlined="true" Elevation="20">
+             <hr />
+             <table>
+
+                <tr>
+                    <th>Id</th>
+                    <th>Invoice</th>
+                    <th>Container</th>
+                    <th>Material</th>
+                    <th>Part No</th>
+                    <th>Pallet Qty</th>
+                    <th>Qty</th>
+                </tr>
+                @foreach (var trItem in truckItemList)
+                {    
+                <tr>
+                    <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.Id" />
+                    </td>  
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.InvoiceNo" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.ContainerNo" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.Material" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.PalletNo" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.TotalPalletQty" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.TotalQty" />
+                        </td>
+
+                        <td>
+                            <MudButton Variant="Variant.Filled" OnClick="() => NewTrackItem(trItem)">New</MudButton>
+                        </td>
+
+                        <td>
+                            <MudButton Variant="Variant.Filled" OnClick="() => DeleteTrackItem(trItem.Id)">Delete</MudButton>
+                        </td>
+                </tr>
+
+                }
+            </table>
+         </MudCard>
+    </DialogContent>
+    <DialogActions>
+
+        <MudGrid>
+            <MudItem xs="6">
+            </MudItem>
+            <MudItem xs="2">
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">@Loc["lbSave"]</MudButton>
+            </MudItem>
+        </MudGrid>
+    </DialogActions>
+</MudDialog>*@
+
+<MudGrid>
+    <MudItem xs="6">
+    </MudItem>
+    <MudItem xs="2">
+    </MudItem>
+    <MudItem xs="2">
+        <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
+    </MudItem>
+    <MudItem xs="2">
+        <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">@Loc["lbSave"]</MudButton>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string Id { get; set; }
+    string userName = "";
+    private bool resetValueOnEmptyText;
+    private long iId = 1;
+
+
+
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    // Combii 
+
+    private List<string> senders;
+    List<CarAdviceGrDictionarySender> sendersList = new List<CarAdviceGrDictionarySender>();
+
+    CarAdviceGrTruckItems truckItem = new();
+    List<CarAdviceGrTruckItems> truckItemList = new() { new CarAdviceGrTruckItems { Id = 1 } };
+
+
+
+    private async Task DeleteTrackItem(long delItemId)
+    {
+        var de = truckItemList.Find(c => c.Id == delItemId);
+        truckItemList.Remove(de);
+        StateHasChanged();
+    }
+
+    private void NewTrackItem(CarAdviceGrTruckItems newItem)
+    {
+        iId++;
+
+        CarAdviceGrTruckItems newEmptyItem = new() { Id = iId };
+
+
+        truckItemList.Add(newEmptyItem);
+
+        StateHasChanged();
+    }
+
+
+    protected async override void OnInitialized()
+    {
+        // Senders
+        string linkCu = "/api/CarAdviceGrDictionarySender";
+        sendersList = await httpClient.GetFromJsonAsync<List<CarAdviceGrDictionarySender>>(linkCu);
+        senders = sendersList.Select(c => c.SenderName).ToList();
+    }
+
+    private async Task<IEnumerable<string>> SearchSender(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return senders;
+        return senders.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+
+    void CloseCancel() => MudDialog.Close(DialogResult.Cancel());
+
+
+
+
+
+    private async void CloseSave()
+    {
+        //    List<dziecko> dzLista = new List<dziecko>() { new dziecko { IdDziecka = 1, OpisDziecka = "Jarek" }, new dziecko { IdDziecka = 2, OpisDziecka = "Ewa" } };
+
+        //    List<parrent> listaParent = new List<parrent>() { new parrent { IdParret = 1, NameParek = "EEEEEE", DzieciLista = dzLista } };
+
+        CarAdviceGrTruckMainTable CarAdviceGRMainTableNew = new CarAdviceGrTruckMainTable()
+            {
+                Id = 99999,
+                AddByUser = "",
+                CarRemark = "",
+                Reference = "",
+                UnloadingPlace = "",
+                Status = "",
+                DriverS = "",
+                TruckPlatesS = "",
+                CallBy = "",
+                RemarkS = "",
+                DriverWh = "",
+                RemarkWh = "",
+                UnloadingDock = "",
+                SenderName = "",
+                TruckPlatesWh = "",
+                carAdviceGrTruckItems = new List<CarAdviceGrTruckItems>()
+
+    };
+
+        CarAdviceGrTruckItems item1 = new CarAdviceGrTruckItems() { ContainerNo = "fdtdf", TotalPalletQty = 2, TotalQty = 1, SapGrDone = false };
+
+        CarAdviceGrTruckItems item2 = new CarAdviceGrTruckItems() { ContainerNo = "fdetdf", TotalPalletQty = 2, TotalQty = 1, SapGrDone = false };
+
+        CarAdviceGRMainTableNew.carAdviceGrTruckItems.Add(item1);
+        CarAdviceGRMainTableNew.carAdviceGrTruckItems.Add(item2);
+
+
+
+        //CarAdviceGRMainTableNew.CarAdviceGrTruckItems = truckItemList;
+        string linkCu = "api/CarAdviceGrTruckMainTable/NewItemGr";
+        await httpClient.PostAsJsonAsync(linkCu, CarAdviceGRMainTableNew);
+    }
+
+
+    public class parrent
+    {
+        public int IdParret { get; set; }
+        public string NameParek { get; set; }
+        public virtual ICollection<dziecko> DzieciLista { get; set; } = new List<dziecko>();
+
+
+    }
+
+
+    public class dziecko
+    {
+        public int IdDziecka { get; set; }
+        public string OpisDziecka { get; set; }
+    }
+
+}

@@ -88,11 +88,38 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status GR.
+        /// </summary>
+        public static string lbAddNewGRStatus {
+            get {
+                return ResourceManager.GetString("lbAddNewGRStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nowy.
         /// </summary>
         public static string lbAddnewitem {
             get {
                 return ResourceManager.GetString("lbAddnewitem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nowy dostawca.
+        /// </summary>
+        public static string lbAddNewSeneder {
+            get {
+                return ResourceManager.GetString("lbAddNewSeneder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MIejsce rozładunku.
+        /// </summary>
+        public static string lbAddNewUnloadingPlace {
+            get {
+                return ResourceManager.GetString("lbAddNewUnloadingPlace", resourceCulture);
             }
         }
         
@@ -399,6 +426,33 @@ namespace SCMDWH.Client.Shared {
         public static string lbGeneralWarehouseInfoprmation {
             get {
                 return ResourceManager.GetString("lbGeneralWarehouseInfoprmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Statusy GR.
+        /// </summary>
+        public static string lbGrCarStatus {
+            get {
+                return ResourceManager.GetString("lbGrCarStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dostawca.
+        /// </summary>
+        public static string lbGrSender {
+            get {
+                return ResourceManager.GetString("lbGrSender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Miejsce rozładunku.
+        /// </summary>
+        public static string lbGrUnloadingPlace {
+            get {
+                return ResourceManager.GetString("lbGrUnloadingPlace", resourceCulture);
             }
         }
         
@@ -714,6 +768,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbSecuritypersons {
             get {
                 return ResourceManager.GetString("lbSecuritypersons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dostawca.
+        /// </summary>
+        public static string lbSender {
+            get {
+                return ResourceManager.GetString("lbSender", resourceCulture);
             }
         }
         

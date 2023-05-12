@@ -2,7 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-
+using System.Text.Json.Serialization;
 
 namespace SCMDWH.Shared.Models;
 
@@ -31,6 +31,6 @@ public partial class CarAdviceGrTruckItems
     public DateTime? SapGrTime { get; set; }
 
     public string SapGrMarDoc { get; set; }
-
+    [JsonIgnore]
     public virtual CarAdviceGrTruckMainTable Truck { get; set; }
 }

@@ -13,6 +13,10 @@ namespace SCMDWH.Shared.Models
         public DateTime DateMainCAFrom { get; set; }
 
         public DateTime DateMainCATo { get; set; }
+
+        public DateTime DateGRMainCAFrom { get; set; }
+
+        public DateTime DateGRMainCATo { get;set; }
     }
     
 }

@@ -129,8 +129,17 @@
   <data name="lbAddNewCurrier" xml:space="preserve">
     <value>Add new currier</value>
   </data>
+  <data name="lbAddNewGRStatus" xml:space="preserve">
+    <value>Status GR</value>
+  </data>
   <data name="lbAddnewitem" xml:space="preserve">
     <value>New</value>
+  </data>
+  <data name="lbAddNewSeneder" xml:space="preserve">
+    <value>New seneder</value>
+  </data>
+  <data name="lbAddNewUnloadingPlace" xml:space="preserve">
+    <value>Unloading place</value>
   </data>
   <data name="lbAta" xml:space="preserve">
     <value>Ata</value>
@@ -224,6 +233,15 @@
   </data>
   <data name="lbGeneralWarehouseInfoprmation" xml:space="preserve">
     <value>General warehouse information</value>
+  </data>
+  <data name="lbGrCarStatus" xml:space="preserve">
+    <value>Status code GR</value>
+  </data>
+  <data name="lbGrSender" xml:space="preserve">
+    <value>Sender</value>
+  </data>
+  <data name="lbGrUnloadingPlace" xml:space="preserve">
+    <value>Unloading place</value>
   </data>
   <data name="lbHiddens" xml:space="preserve">
     <value>Hiddens</value>
@@ -326,6 +344,9 @@
   </data>
   <data name="lbSecuritypersons" xml:space="preserve">
     <value>Security persons</value>
+  </data>
+  <data name="lbSender" xml:space="preserve">
+    <value>Sender</value>
   </data>
   <data name="lbShipment" xml:space="preserve">
     <value>Shipment</value>

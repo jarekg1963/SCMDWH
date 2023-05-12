@@ -10,6 +10,7 @@
 @using SCMDWH.Shared.Models;
 @using System.Security.Claims;
 @using System.Text.Json;
+@using SCMDWH.Shared.Tools;
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService;
@@ -83,10 +84,6 @@ else
                                 </PickerActions>
                             </MudDateRangePicker>
                         </MudItem>              
-                       @* <MudItem xs="4">
-                            <MudTextField @bind-Value="_searchString" Placeholder=@Loc["lbSearch"] Adornment="Adornment.Start" Immediate="true"
-                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                        </MudItem>*@
                         <MudItem xs="3">
                             <MudCheckBox Style="margin-top:20px!important" Size="Size.Small" Dense="true" @bind-Checked="CheckTest">@Loc["lbPickingstatusCheckBox"]</MudCheckBox>
                     </MudItem>
@@ -332,7 +329,6 @@ else
     GlobalAppUsersParameters userParametersDates = new();
     GlobalAppUsersParameters userParametersDatesForSave = new();
 
-    private bool rolaAdmin = false;
     private bool rolaWh = false;
     private bool rolaSecurity = false; 
     private string UserName = "";
@@ -402,7 +398,7 @@ else
 
     // ListCAMainTable
 
-   
+
 
     private bool _checkTest;
 
@@ -414,12 +410,12 @@ else
 
     async void HandleCheck(bool IsChecked)
     {
-    
+
         if (IsChecked)
             await ReadData(true);
         if (!IsChecked)
             await ReadData(false);
-    
+
     }
 
 
@@ -434,14 +430,6 @@ else
         StateHasChanged();
     }
 
-
-    private void Click(CarAdviceMainTable element)
-    {
-        if (rolaAdmin) tabs.ActivatePanel(1);
-        if (rolaSecurity) tabs.ActivatePanel(1);
-        if (rolaWh) tabs.ActivatePanel(1);      
-        selectedRow = element.Id.ToString();
-    }
 
     private void ImportFromExcel()
     {
@@ -530,11 +518,6 @@ else
             Snackbar.Add( strlbPleaseSelectRow , Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
         }
 
-        if (!rolaAdmin) 
-        {
-            tabs.ActivatePanel(0);
-            Snackbar.Add("You must be Admin", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.ImportantDevices; config.VisibleStateDuration = 500; });
-        }
     }
     private void Tab2Active()
     {
@@ -609,6 +592,8 @@ else
 
         userParametersDates.DateMainCAFrom = (DateTime)_dateRange.Start;
         userParametersDates.DateMainCATo = (DateTime)_dateRange.End;
+        userParametersDates.DateGRMainCAFrom = userParametersDates.DateGRMainCAFrom;
+        userParametersDates.DateGRMainCATo = userParametersDates.DateGRMainCATo;
         userParametersDates.UserName = UserName;
 
         // Action in Controller update table above class coltroller check if excist -> put if not post 
@@ -645,11 +630,11 @@ else
     void RowClicked(DataGridRowClickEventArgs<CarAdviceMainTable> args)
     {
 
-        if (rolaAdmin) tabs.ActivatePanel(1);
+        //if (rolaAdmin) tabs.ActivatePanel(1);
         if (rolaSecurity) tabs.ActivatePanel(1);
         if (rolaWh) tabs.ActivatePanel(1);
-        _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
         selectedRow = args.Item.Id.ToString();
+        Console.WriteLine("Click z Row clicked ");
 
     }
 
@@ -706,7 +691,6 @@ else
             UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
             claims = user.Claims;
             string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
-            if (wszystkieRole.Contains("ADMIN")) rolaAdmin = true;
             if (wszystkieRole.Contains("SECURITY")) rolaSecurity = true;
             if (wszystkieRole.Contains("WH")) rolaWh = true;
         }
@@ -812,17 +796,6 @@ else
     {
         public int clickCount { get; set; }
         public DateTime clickTime { get; set; }
-    }
-
-    public class gridColums
-    {
-        public string fieldName { get; set; }
-        public string fieldTitle { get; set; }
-        public bool filedSortable { get; set; }
-        public bool filedfirterable { get; set; }
-        public bool filedHiden { get; set; }
-        public int orderNumber { get; set; }
-        public string plHeader { get; set; }
     }
 
 }

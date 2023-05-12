@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace SCMDWH.Shared.Models;
 
@@ -9,7 +10,7 @@ public partial class CarAdviceGrTruckMainTable
 {
     public long Id { get; set; }
 
-    public DateTime AddDate { get; set; }
+    public DateTime? AddDate { get; set; }
 
     public string AddByUser { get; set; }
 
@@ -25,7 +26,7 @@ public partial class CarAdviceGrTruckMainTable
 
     public string Status { get; set; }
 
-    public DateTime? EnterTime { get; set; }
+    public DateTime? TpvEnterTime { get; set; }
 
     public string DriverS { get; set; }
 
@@ -46,9 +47,9 @@ public partial class CarAdviceGrTruckMainTable
     public DateTime? UnloadingTime { get; set; }
 
     public DateTime? ExitTime { get; set; }
-
-    public virtual ICollection<CarAdviceGrTruckItems> CarAdviceGrTruckItems { get; set; } = new List<CarAdviceGrTruckItems>();
-
+ 
+    public virtual ICollection<CarAdviceGrTruckItems> carAdviceGrTruckItems { get; set; } = new List<CarAdviceGrTruckItems>();
+ 
     public virtual CarAdviceGrDictionarySender SenderNameNavigation { get; set; }
 
     public virtual CarAdviceGrDictionaryCarStatuses StatusNavigation { get; set; }
