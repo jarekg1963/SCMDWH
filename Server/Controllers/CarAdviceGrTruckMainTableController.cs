@@ -28,18 +28,26 @@ namespace SCMDWH.Server.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //foreach (var dd in mainTable[0].DzieciLista)
-            //{
-
-            //    Console.WriteLine(dd.OpisDziecka);
-            //}
-
-            return CreatedAtRoute("DefaultApi", new { id = 0 }, mainTable);
-
             // zapisac rekord w nagłowku 
+
+            try
+            {
+
+                _context.CarAdviceGrTruckMainTable.Add(mainTable);
+                _context.SaveChanges();
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+
+            }
             // odczytac Id z nagłowka 
             // Update listy itemów z Id nagłowka 
             // Post listy itemów
+
+            return CreatedAtAction("DefaultApi", new { id = 0 }, mainTable);
+
+           
 
 
         }
