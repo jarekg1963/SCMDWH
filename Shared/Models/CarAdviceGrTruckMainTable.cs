@@ -8,51 +8,68 @@ namespace SCMDWH.Shared.Models;
 
 public partial class CarAdviceGrTruckMainTable
 {
-    public long Id { get; set; }
+	public long Id { get; set; }
 
-    public DateTime? AddDate { get; set; }
+	public DateTime? AddDate { get; set; }
 
-    public string AddByUser { get; set; }
+	public string AddByUser { get; set; }
 
-    public string CarRemark { get; set; }
+	public string CarRemark { get; set; }
 
-    public string Reference { get; set; }
+	public string Reference { get; set; }
 
-    public string SenderName { get; set; }
+	public string SenderName { get; set; }
 
-    public string UnloadingPlace { get; set; }
+	public string UnloadingPlace { get; set; }
 
-    public DateTime? PlanDeliveryTime { get; set; }
+	public DateTime? PlanDeliveryTime { get; set; }
 
-    public string Status { get; set; }
+	public string Status { get; set; }
 
-    public DateTime? TpvEnterTime { get; set; }
+	//public DateTime? EnterTime { get; set; }
 
-    public string DriverS { get; set; }
+	public DateTime? TpvEnterTime { get; set; }
 
-    public string TruckPlatesS { get; set; }
+	public string DriverS { get; set; }
 
-    public string RemarkS { get; set; }
+	public string TruckPlatesS { get; set; }
 
-    public string CallBy { get; set; }
+	public string RemarkS { get; set; }
 
-    public string DriverWh { get; set; }
+	public string CallBy { get; set; }
 
-    public string TruckPlatesWh { get; set; }
+	public string DriverWh { get; set; }
 
-    public string RemarkWh { get; set; }
+	public string TruckPlatesWh { get; set; }
 
-    public string UnloadingDock { get; set; }
+	public string RemarkWh { get; set; }
 
-    public DateTime? UnloadingTime { get; set; }
+	public string UnloadingDock { get; set; }
 
-    public DateTime? ExitTime { get; set; }
- 
-    public virtual ICollection<CarAdviceGrTruckItems> carAdviceGrTruckItems { get; set; } = new List<CarAdviceGrTruckItems>();
- 
-    public virtual CarAdviceGrDictionarySender SenderNameNavigation { get; set; }
+	public DateTime? UnloadingTime { get; set; }
 
-    public virtual CarAdviceGrDictionaryCarStatuses StatusNavigation { get; set; }
+	public DateTime? ExitTime { get; set; }
 
-    public virtual CarAdviceGrDictionaryUnloadingPlace UnloadingPlaceNavigation { get; set; }
+
+	public string? FgDelayReason { get; set; }
+
+	public DateTime? Ata { get; set; }
+
+	public string? Quality { get; set; } = null!;
+
+	public string? TruckType { get; set; }
+
+	public string? EntryByS { get; set; }
+
+	public DateTime? TpvExitTime { get; set; }
+
+    public DateTime? ETD { get; set; }
+
+    public virtual ICollection<CarAdviceGrTruckItems> CarAdviceGrTruckItems { get; set; } = new List<CarAdviceGrTruckItems>();
+
+	public virtual CarAdviceGrDictionarySender SenderNameNavigation { get; set; }
+
+	public virtual CarAdviceGrDictionaryCarStatuses StatusNavigation { get; set; }
+
+	public virtual CarAdviceGrDictionaryUnloadingPlace UnloadingPlaceNavigation { get; set; }
 }

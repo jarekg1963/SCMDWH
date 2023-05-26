@@ -51,17 +51,17 @@
     <MudItem xs="6" sm="2">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbClient"] @bind-Value="@CarAdviceMainTableWHEdit.Client" SearchFunc="@SearchClient"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
-        @*<MudTextField Label=@Loc["lbClient"] @bind-Value="@CarAdviceMainTableWHEdit.Client" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>*@
+     
     </MudItem>
     <MudItem xs="6" sm="2">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbCarriers"] @bind-Value="@CarAdviceMainTableWHEdit.Forwarder" SearchFunc="@SearchCurriers"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
-@*        <MudTextField Label=@Loc["lbCarriers"] @bind-Value="@CarAdviceMainTableWHEdit.Forwarder" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>*@
+
     </MudItem>
     <MudItem xs="6" sm="1">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbDestination"] @bind-Value="@CarAdviceMainTableWHEdit.Destination" SearchFunc="@SearchDestination"
                          ResetValueOnEmptyText="@resetValueOnEmptyText" />
- @*       <MudTextField Label=@Loc["lbDestination"] @bind-Value="@CarAdviceMainTableWHEdit.Destination" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>*@
+ 
     </MudItem>
     <MudItem xs="12" sm="6">
         <MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>
@@ -102,8 +102,6 @@
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudTextField Label=@Loc["lbQuality"] @bind-Value="@CarAdviceMainTableWHEdit.Quality" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
-@*        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbQuality"] @bind-Value="CarAdviceMainTableWHEdit.Quality" SearchFunc="@SearchQuality"
-                         ResetValueOnEmptyText="@resetValueOnEmptyText" />*@
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
@@ -134,8 +132,7 @@
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudTextField Label=@Loc["lbCallBy"] @bind-Value="@CarAdviceMainTableWHEdit.CallBy" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
-@*        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbCallBy"] @bind-Value="CarAdviceMainTableWHEdit.CallBy" SearchFunc="@SearchCallBy"
-                         ResetValueOnEmptyText="@resetValueOnEmptyText" />*@
+
     </MudItem>
     <MudItem xs="6" sm="6">
     </MudItem>

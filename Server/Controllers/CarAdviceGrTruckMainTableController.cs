@@ -22,7 +22,7 @@ namespace SCMDWH.Server.Controllers
 
         [HttpPost("NewItemGr")]
 
-        public async Task<ActionResult> NewItemGr([FromBody] CarAdviceGrTruckMainTable mainTable)    
+        public async Task<ActionResult> NewItemGr([FromBody] CarAdviceGrTruckMainTable mainTable)
         {
             if (!ModelState.IsValid)
             {
@@ -36,7 +36,7 @@ namespace SCMDWH.Server.Controllers
                 _context.CarAdviceGrTruckMainTable.Add(mainTable);
                 _context.SaveChanges();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
 
@@ -45,26 +45,12 @@ namespace SCMDWH.Server.Controllers
             // Update listy itemów z Id nagłowka 
             // Post listy itemów
 
-            return CreatedAtAction("DefaultApi", new { id = 0 }, mainTable);
+            return Ok();
 
-           
 
 
         }
 
-
-        public class parrent
-        {
-            public int IdParret { get; set; }
-            public string NameParek { get; set; }
-            public virtual ICollection<dziecko> DzieciLista { get; set; } = new List<dziecko>();
-        }
-
-        public class dziecko
-        {
-            public int IdDziecka { get; set; }
-            public string OpisDziecka { get; set; }
-        }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CarAdviceGrTruckMainTable>>> GetCarAdviceGrTruckMainTable()
@@ -80,7 +66,7 @@ namespace SCMDWH.Server.Controllers
             catch (Exception ex)
             {
                 return StatusCode(400, ex.Message);
-            }      
+            }
         }
 
 
@@ -105,7 +91,7 @@ namespace SCMDWH.Server.Controllers
             int eMc = Int32.Parse(endDate.Substring(0, 2));
             DateTime endDt = new DateTime(eYear, eMc, eDay);
 
-            return await _context.CarAdviceGrTruckMainTable.Where(d => d.AddDate >= startDt && d.AddDate <= endDt && d.Status != "Sent").Include(C=>C.carAdviceGrTruckItems)
+            return await _context.CarAdviceGrTruckMainTable.Where(d => d.AddDate >= startDt && d.AddDate <= endDt && d.Status != "Sent").Include(C => C.CarAdviceGrTruckItems)
                 .OrderByDescending(c => c.AddDate).ToListAsync();
         }
 
@@ -121,14 +107,17 @@ namespace SCMDWH.Server.Controllers
 
             try
             {
-                var carAdviceGrTruckMainTable = await _context.CarAdviceGrTruckMainTable.FindAsync(id);
+              //  var carAdviceGrTruckMainTable = await _context.CarAdviceGrTruckMainTable.FindAsync(id);
+             var carAdviceGrTruckMainTable = await _context.CarAdviceGrTruckMainTable.Include(d=>d.CarAdviceGrTruckItems).FirstOrDefaultAsync(c=>c.Id == id);
+
+
                 if (carAdviceGrTruckMainTable == null)
                 {
                     return NotFound();
                 }
                 return carAdviceGrTruckMainTable;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return StatusCode(400, ex.Message);
             }

@@ -152,14 +152,13 @@ public partial class PurchasingContext : DbContext
             entity.Property(e => e.ContainerNo).HasMaxLength(50);
             entity.Property(e => e.InvoiceNo).HasMaxLength(50);
             entity.Property(e => e.Material)
-                .IsRequired()
                 .HasMaxLength(18);
             entity.Property(e => e.PalletNo).HasMaxLength(50);
             entity.Property(e => e.Remark).HasMaxLength(500);
             entity.Property(e => e.SapGrMarDoc).HasMaxLength(50);
             entity.Property(e => e.SapGrTime).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Truck).WithMany(p => p.carAdviceGrTruckItems)
+            entity.HasOne(d => d.Truck).WithMany(p => p.CarAdviceGrTruckItems)
                 .HasForeignKey(d => d.TruckId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CarAdviceGrTruckItems_CarAdviceGrTruckMainTable");
@@ -168,7 +167,6 @@ public partial class PurchasingContext : DbContext
         modelBuilder.Entity<CarAdviceGrTruckMainTable>(entity =>
         {
             entity.Property(e => e.AddByUser)
-                .IsRequired()
                 .HasMaxLength(50);
             entity.Property(e => e.AddDate)
                 .HasDefaultValueSql("(getdate())")
@@ -183,11 +181,12 @@ public partial class PurchasingContext : DbContext
             entity.Property(e => e.Reference).HasMaxLength(50);
             entity.Property(e => e.RemarkS).HasMaxLength(255);
             entity.Property(e => e.RemarkWh).HasMaxLength(255);
-            entity.Property(e => e.SenderName)
-                .IsRequired()
+			entity.Property(e => e.FgDelayReason)
+			  .HasMaxLength(100)
+			  .HasColumnName("FG_DelayReason");
+			entity.Property(e => e.SenderName)
                 .HasMaxLength(50);
             entity.Property(e => e.Status)
-                .IsRequired()
                 .HasMaxLength(50);
             entity.Property(e => e.TruckPlatesS)
                 .HasMaxLength(100)
@@ -199,7 +198,6 @@ public partial class PurchasingContext : DbContext
                 .HasMaxLength(5)
                 .IsUnicode(false);
             entity.Property(e => e.UnloadingPlace)
-                .IsRequired()
                 .HasMaxLength(50);
             entity.Property(e => e.UnloadingTime).HasColumnType("datetime");
 

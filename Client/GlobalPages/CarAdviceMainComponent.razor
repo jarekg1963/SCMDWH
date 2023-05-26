@@ -1,5 +1,5 @@
 ﻿@page "/caradvice"
-@*@using System.Net.Http.Json*@
+
 @using System.Text.Json.Serialization;
 @using NPOI.SS.UserModel;
 @using NPOI.XSSF.UserModel;
@@ -92,7 +92,6 @@ else
                  <Columns>
                     @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
                     {
-                     
                         @foreach (var ii in listGridColums)
                         {
                             @switch (ii.fieldName)

@@ -59,16 +59,21 @@ else
            
             @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
             {
-
                 <HierarchyColumn Property="x => x.Id" Title="Id" Hidden="false" Sortable="true" />
+
+                <TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Default" StartIcon="@Icons.Material.Filled.ViewList" @onclick="@(()=>EditGr(@context.Item.Id))"></MudButton>
+                </CellTemplate>
+            </TemplateColumn>
 
                 @foreach (var ii in listGridColums)
                 {
                     @switch (ii.fieldName)
                     {
-                      @*  case "Id":
-                            <PropertyColumn Property="x => x.Id" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
-                            break;*@
+                        case "Id":
+                            <PropertyColumn Property="x => x.Id" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
                         case "AddDate":
                             <PropertyColumn Property="x => x.AddDate" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
                             break;
@@ -127,7 +132,27 @@ else
                         case "ExitTime":
                             <PropertyColumn Property="x => x.ExitTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
                             break;
-                      
+                        case "FG_DelayReason":
+                            <PropertyColumn Property="x => x.FgDelayReason" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "ATA":
+                            <PropertyColumn Property="x => x.Ata" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "Quality":
+                            <PropertyColumn Property="x => x.Quality" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "TruckType":
+                            <PropertyColumn Property="x => x.TruckType" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "TpvExitTime":
+                            <PropertyColumn Property="x => x.TpvExitTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "EntryByS":
+                            <PropertyColumn Property="x => x.EntryByS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "ETD":
+                            <PropertyColumn Property="x => x.ETD" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
                     }
                 }
             }
@@ -137,9 +162,6 @@ else
                 {
                     @switch (ii.fieldName)
                     {
-                        case "Id":
-                            <PropertyColumn Property="x => x.Id" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
-                            break;
                         case "AddDate":
                             <PropertyColumn Property="x => x.AddDate" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
                             break;
@@ -204,18 +226,38 @@ else
         </Columns>
         <ChildRowContent>
         <MudCard>
-            <MudCardHeader>
+@*            <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText Typo="Typo.h6">AAAAAAAAA</MudText>
+              
                 </CardHeaderContent>
-            </MudCardHeader>
+            </MudCardHeader>*@
             <MudCardContent>
-               @* <MudText>This element is number </MudText>
-                <MudText>This element has a molar mass of </MudText>*@
-                    <h2>@context.Item.Id</h2>
-
-
-            </MudCardContent>
+                    <MudSimpleTable Style="overflow-x: auto;" Dense="true" Hover="true" Bordered="true" Striped="true">
+                        <thead>
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Container</th>
+                                <th>Material</th>
+                                <th>Pallet No</th>
+                                <th>Pallet Qty</th>
+                                <th>Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in context.Item.CarAdviceGrTruckItems)
+                            {
+                                <tr>
+                                    <td>@row.InvoiceNo</td>
+                                    <td>@row.ContainerNo</td>
+                                    <td>@row.Material</td>
+                                    <td>@row.PalletNo</td>
+                                    <td>@row.TotalPalletQty</td>
+                                    <td>@row.TotalQty</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </MudSimpleTable>
+                </MudCardContent>
         </MudCard>
         </ChildRowContent>
         <PagerContent>
@@ -262,30 +304,39 @@ else
 
     List<CarAdviceGrMainPlanComum> columsForDisplayListDb = new List<CarAdviceGrMainPlanComum>();
 
+    private async void EditGr(long iiid)
+    {
 
-    #region hiddencolumndefinition 
-    private bool hiddenId = false;
-    private bool hiddenAddDate = false;
-    private bool hiddenAddByUser = false;
-    private bool hiddenCarRemark = false;
-    private bool hiddenReference = false;
-    private bool hiddenSenderName = false;
-    private bool hiddenUnloadingPlace = false;
-    private bool hiddenPlanDeliveryTime = false;
-    private bool hiddenStatus = false;
-    private bool hiddenEnterTime = false;
-    private bool hiddenDriverS = false;
-    private bool hiddenTruckPlatesS = false;
-    private bool hiddenRemarkS = false;
-    private bool hiddenCallBy = false;
-    private bool hiddenDriverWh = false;
-    private bool hiddenTruckPlatesWh = false;
-    private bool hiddenRemarkWh = false;
-    private bool hiddenUnloadingDock = false;
-    private bool hiddenUnloadingTime = false;
-    private bool hiddenExitTime = false;
+        navigationManager.NavigateTo($"/editGrTuckWh/{iiid.ToString()}");
+        
 
-    #endregion
+
+    }
+
+
+    //#region hiddencolumndefinition 
+    //private bool hiddenId = false;
+    //private bool hiddenAddDate = false;
+    //private bool hiddenAddByUser = false;
+    //private bool hiddenCarRemark = false;
+    //private bool hiddenReference = false;
+    //private bool hiddenSenderName = false;
+    //private bool hiddenUnloadingPlace = false;
+    //private bool hiddenPlanDeliveryTime = false;
+    //private bool hiddenStatus = false;
+    //private bool hiddenEnterTime = false;
+    //private bool hiddenDriverS = false;
+    //private bool hiddenTruckPlatesS = false;
+    //private bool hiddenRemarkS = false;
+    //private bool hiddenCallBy = false;
+    //private bool hiddenDriverWh = false;
+    //private bool hiddenTruckPlatesWh = false;
+    //private bool hiddenRemarkWh = false;
+    //private bool hiddenUnloadingDock = false;
+    //private bool hiddenUnloadingTime = false;
+    //private bool hiddenExitTime = false;
+
+    //#endregion
 
     private async void ExportToExcel()
     {
@@ -373,28 +424,28 @@ else
 
         }
 
-        #region setupColumsVisibility
-        hiddenId = verificationColumsVisibility("Id");
-        hiddenAddDate = verificationColumsVisibility("AddDate");
-        hiddenAddByUser = verificationColumsVisibility("AddByUser");
-        hiddenCarRemark = verificationColumsVisibility("CarRemark");
-        hiddenReference = verificationColumsVisibility("Reference");
-        hiddenSenderName = verificationColumsVisibility("SenderName");
-        hiddenUnloadingPlace = verificationColumsVisibility("UnloadingPlace");
-        hiddenPlanDeliveryTime = verificationColumsVisibility("PlanDeliveryTime");
-        hiddenStatus = verificationColumsVisibility("Status");
-        hiddenEnterTime = verificationColumsVisibility("TpvEnterTime");
-        hiddenDriverS = verificationColumsVisibility("DriverS");
-        hiddenTruckPlatesS = verificationColumsVisibility("TruckPlatesS");
-        hiddenRemarkS = verificationColumsVisibility("RemarkS");
-        hiddenCallBy = verificationColumsVisibility("CallBy");
-        hiddenDriverWh = verificationColumsVisibility("DriverWh");
-        hiddenTruckPlatesWh = verificationColumsVisibility("TruckPlatesWh");
-        hiddenRemarkWh = verificationColumsVisibility("RemarkWh");
-        hiddenUnloadingDock = verificationColumsVisibility("UnloadingDock");
-        hiddenUnloadingTime = verificationColumsVisibility("UnloadingTime");
-        hiddenExitTime = verificationColumsVisibility("ExitTime");
-        #endregion setupColumsVisibility
+        //#region setupColumsVisibility
+        //hiddenId = verificationColumsVisibility("Id");
+        //hiddenAddDate = verificationColumsVisibility("AddDate");
+        //hiddenAddByUser = verificationColumsVisibility("AddByUser");
+        //hiddenCarRemark = verificationColumsVisibility("CarRemark");
+        //hiddenReference = verificationColumsVisibility("Reference");
+        //hiddenSenderName = verificationColumsVisibility("SenderName");
+        //hiddenUnloadingPlace = verificationColumsVisibility("UnloadingPlace");
+        //hiddenPlanDeliveryTime = verificationColumsVisibility("PlanDeliveryTime");
+        //hiddenStatus = verificationColumsVisibility("Status");
+        //hiddenEnterTime = verificationColumsVisibility("TpvEnterTime");
+        //hiddenDriverS = verificationColumsVisibility("DriverS");
+        //hiddenTruckPlatesS = verificationColumsVisibility("TruckPlatesS");
+        //hiddenRemarkS = verificationColumsVisibility("RemarkS");
+        //hiddenCallBy = verificationColumsVisibility("CallBy");
+        //hiddenDriverWh = verificationColumsVisibility("DriverWh");
+        //hiddenTruckPlatesWh = verificationColumsVisibility("TruckPlatesWh");
+        //hiddenRemarkWh = verificationColumsVisibility("RemarkWh");
+        //hiddenUnloadingDock = verificationColumsVisibility("UnloadingDock");
+        //hiddenUnloadingTime = verificationColumsVisibility("UnloadingTime");
+        //hiddenExitTime = verificationColumsVisibility("ExitTime");
+        //#endregion setupColumsVisibility
 
 
     }
@@ -558,10 +609,22 @@ else
 }
 
 
+    
+
 <style>
 
+
+
+    th {
+        font-size: small !important;
+    }
+
+    td {
+        font-size: small !important;
+    }
+
     .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
-        font-size: xx-small !important;
+        font-size: small !important;
     }
 
     .mud-table-cell {

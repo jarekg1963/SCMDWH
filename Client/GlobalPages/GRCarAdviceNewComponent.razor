@@ -1,8 +1,12 @@
 ﻿@using SCMDWH.Shared.Models;
-
+@using System.Security.Claims;
+@inject NavigationManager navigationManager
 @inject HttpClient httpClient;
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<CultureExample2> Loc
+
+
+
 
 <MudDialog Style="min-width: 1400px;">
     <DialogContent>
@@ -16,14 +20,25 @@
                     <MudAutocomplete Margin="Margin.None" Dense="true" T="string" Label=@Loc["lbSender"] @bind-Value="CarAdviceGRMainTableNew.SenderName" SearchFunc="@SearchSender"
                                      ResetValueOnEmptyText="@resetValueOnEmptyText" />
                 </MudItem>
+                <MudItem xs="6" sm="2">
+                    <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="@ATATimeDate" DisableToolbar="true" ReadOnly="false" Editable="true" Margin="Margin.Normal" />
+                </MudItem>
+                <MudItem xs="6" sm="2">
+                    <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+                        <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="false" @bind-Time="ATATimeTime" DisableToolbar="true" ReadOnly="false" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+                    </MudStack>
+                </MudItem>
+                <MudItem xs="6" sm="2">                    
+                    <MudTextField Label="Uwagi" @bind-Value="@CarAdviceGRMainTableNew.RemarkWh" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
             </MudGrid>
         </MudCard>
-         <MudCard Outlined="true" Elevation="20">
-             <hr />
-             <table>
+        <MudCard Outlined="true" Elevation="20">
+            <hr />
+            <table>
 
                 <tr>
-                    <th>Lp</th>
+                 @*   <th>Lp</th>*@
                     <th>Invoice</th>
                     <th>Container</th>
                     <th>Material</th>
@@ -32,11 +47,11 @@
                     <th>Qty</th>
                 </tr>
                 @foreach (var trItem in truckItemList)
-                {    
-                <tr>
-                    <td>
+                {
+                    <tr>
+                      @*  <td>
                             <input type="text" class="form-control" placeholder="" @bind="@trItem.Id" />
-                    </td>  
+                        </td>*@
                         <td>
                             <input type="text" class="form-control" placeholder="" @bind="@trItem.InvoiceNo" />
                         </td>
@@ -56,18 +71,18 @@
                             <input type="text" class="form-control" placeholder="" @bind="@trItem.TotalQty" />
                         </td>
 
-                        <td>
-                            <MudButton Variant="Variant.Filled" OnClick="() => NewTrackItem()">New</MudButton>
-                        </td>
+                         <td>
+                    <MudButton Variant="Variant.Filled" OnClick="() => NewTrackItem()">New</MudButton>
+                    </td>
 
-                        <td>
-                            <MudButton Variant="Variant.Filled" OnClick="() => DeleteTrackItem(trItem)">Delete</MudButton>
-                        </td>
-                </tr>
+                    <td>
+                    <MudButton Variant="Variant.Filled" OnClick="() => DeleteTrackItem(trItem)">Delete</MudButton>
+                    </td>
+                    </tr>
 
                 }
             </table>
-         </MudCard>
+        </MudCard>
     </DialogContent>
     <DialogActions>
 
@@ -95,8 +110,16 @@
     private bool resetValueOnEmptyText;
     private long iId = 1;
 
-    CarAdviceGrTruckMainTable CarAdviceGRMainTableNew = new CarAdviceGrTruckMainTable() { carAdviceGrTruckItems = new List<CarAdviceGrTruckItems>() };
-    List<CarAdviceGrTruckItems> truckItemList = new() { new CarAdviceGrTruckItems { Id = 1 } };
+    DateTime? ATATimeDate;
+    TimeSpan? ATATimeTime;
+
+    CarAdviceGrTruckMainTable CarAdviceGRMainTableNew = new CarAdviceGrTruckMainTable()
+        {
+            AddDate = DateTime.Now,
+            Status = "Oczekuje"
+        };
+
+    List<CarAdviceGrTruckItems> truckItemList = new();
     CarAdviceGrTruckItems truckItem = new();
 
 
@@ -105,6 +128,8 @@
 
     private List<string> senders;
     List<CarAdviceGrDictionarySender> sendersList = new List<CarAdviceGrDictionarySender>();
+
+    CarAdviceGrTruckItems newEmptyFirstItem = new();
 
     private async Task DeleteTrackItem(CarAdviceGrTruckItems delItemId)
     {
@@ -116,7 +141,8 @@
     private void NewTrackItem()
     {
         iId++;
-        CarAdviceGrTruckItems newEmptyItem = new() { Id = iId };
+        //CarAdviceGrTruckItems newEmptyItem = new() { Id = iId };
+        CarAdviceGrTruckItems newEmptyItem = new();
         truckItemList.Add(newEmptyItem);
         StateHasChanged();
     }
@@ -128,6 +154,29 @@
         string linkCu = "/api/CarAdviceGrDictionarySender";
         sendersList = await httpClient.GetFromJsonAsync<List<CarAdviceGrDictionarySender>>(linkCu);
         senders = sendersList.Select(c => c.SenderName).ToList();
+
+
+        IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            userName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+            claims = user.Claims;
+            string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+
+        }
+
+
+
+        CarAdviceGRMainTableNew.AddByUser = userName;
+        truckItemList.Add(newEmptyFirstItem);
+        StateHasChanged();
+
     }
 
     private async Task<IEnumerable<string>> SearchSender(string value)
@@ -141,13 +190,20 @@
     void CloseCancel() => MudDialog.Close(DialogResult.Cancel());
 
 
-
-
-
     private async void CloseSave()
     {
         string linkCu = "api/CarAdviceGrTruckMainTable/NewItemGr";
-        CarAdviceGRMainTableNew.carAdviceGrTruckItems = truckItemList;
+        CarAdviceGRMainTableNew.CarAdviceGrTruckItems = truckItemList;
+        CarAdviceGRMainTableNew.Id = 0;
+
+        if (ATATimeDate != null)
+        {
+            DateTime EtdTimeDateNotNulable = (DateTime)ATATimeDate;
+            TimeSpan EtdTimeTimeNotNulable = (TimeSpan)ATATimeTime;
+            CarAdviceGRMainTableNew.Ata = EtdTimeDateNotNulable.Add(EtdTimeTimeNotNulable);
+
+        }
+
         await httpClient.PostAsJsonAsync(linkCu, CarAdviceGRMainTableNew);
     }
 

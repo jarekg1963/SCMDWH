@@ -22,7 +22,6 @@ namespace SCMDWH.Server.Controllers
         }
 
 
-
         [HttpGet]
         [Route("FoundByReference/{reference}")]
         public bool FoundByReference(string reference)
