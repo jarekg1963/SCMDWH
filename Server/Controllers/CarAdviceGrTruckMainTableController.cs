@@ -61,7 +61,7 @@ namespace SCMDWH.Server.Controllers
             }
             try
             {
-                return await _context.CarAdviceGrTruckMainTable.ToListAsync();
+                return await _context.CarAdviceGrTruckMainTable.Include(C=>C.CarAdviceGrTruckItems).ToListAsync();
             }
             catch (Exception ex)
             {

@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace SCMDWH.Shared.Models;
@@ -9,7 +10,15 @@ namespace SCMDWH.Shared.Models;
 public partial class CarAdviceGrTruckMainTable
 {
 	public long Id { get; set; }
-
+	[NotMapped]
+	public string Invoices
+	{
+		get 
+		{
+			if (CarAdviceGrTruckItems == null || !CarAdviceGrTruckItems.Any()) return string.Empty;
+			return string.Join(",", CarAdviceGrTruckItems.Select(o => o.InvoiceNo).Distinct().OrderBy(o=>o));
+		}
+	}
 	public DateTime? AddDate { get; set; }
 
 	public string AddByUser { get; set; }
