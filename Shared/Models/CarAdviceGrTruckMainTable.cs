@@ -65,6 +65,8 @@ public partial class CarAdviceGrTruckMainTable
 
     public DateTime? ETD { get; set; }
 
+	public string Invoices { get; set; }
+
     public virtual ICollection<CarAdviceGrTruckItems> CarAdviceGrTruckItems { get; set; } = new List<CarAdviceGrTruckItems>();
 
 	public virtual CarAdviceGrDictionarySender SenderNameNavigation { get; set; }
