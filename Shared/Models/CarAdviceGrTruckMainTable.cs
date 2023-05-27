@@ -23,19 +23,8 @@ public partial class CarAdviceGrTruckMainTable
 
 	public string AddByUser { get; set; }
 
-	public string CarRemark { get; set; }
+	public string? PickingStatus { get; set; }
 
-	public string Reference { get; set; }
-
-	public string SenderName { get; set; }
-
-	public string UnloadingPlace { get; set; }
-
-	public DateTime? PlanDeliveryTime { get; set; }
-
-	public string Status { get; set; }
-
-	//public DateTime? EnterTime { get; set; }
 
 	public DateTime? TpvEnterTime { get; set; }
 
@@ -51,13 +40,10 @@ public partial class CarAdviceGrTruckMainTable
 
 	public string TruckPlatesWh { get; set; }
 
-	public string RemarkWh { get; set; }
+	public string RemarksWh { get; set; }
 
-	public string UnloadingDock { get; set; }
+	public short? LoadingDock { get; set; }
 
-	public DateTime? UnloadingTime { get; set; }
-
-	public DateTime? ExitTime { get; set; }
 
 
 	public string? FgDelayReason { get; set; }
@@ -74,7 +60,7 @@ public partial class CarAdviceGrTruckMainTable
 
     public DateTime? ETD { get; set; }
 
-	public string Invoices { get; set; }
+	
 
     public virtual ICollection<CarAdviceGrTruckItems> CarAdviceGrTruckItems { get; set; } = new List<CarAdviceGrTruckItems>();
 

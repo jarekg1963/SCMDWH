@@ -172,52 +172,20 @@ public partial class PurchasingContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.CallBy).HasMaxLength(50);
-            entity.Property(e => e.CarRemark).HasMaxLength(500);
             entity.Property(e => e.DriverS).HasMaxLength(150);
             entity.Property(e => e.DriverWh).HasMaxLength(150);
             entity.Property(e => e.TpvEnterTime).HasColumnType("datetime");
-            entity.Property(e => e.ExitTime).HasColumnType("datetime");
-            entity.Property(e => e.PlanDeliveryTime).HasColumnType("datetime");
-            entity.Property(e => e.Reference).HasMaxLength(50);
             entity.Property(e => e.RemarkS).HasMaxLength(255);
-            entity.Property(e => e.RemarkWh).HasMaxLength(255);
 			entity.Property(e => e.FgDelayReason)
 			  .HasMaxLength(100)
 			  .HasColumnName("FG_DelayReason");
-			entity.Property(e => e.SenderName)
-                .HasMaxLength(50);
-            entity.Property(e => e.Status)
-                .HasMaxLength(50);
             entity.Property(e => e.TruckPlatesS)
                 .HasMaxLength(100)
                 .IsFixedLength();
             entity.Property(e => e.TruckPlatesWh)
                 .HasMaxLength(100)
                 .IsFixedLength();
-            entity.Property(e => e.UnloadingDock)
-                .HasMaxLength(5)
-                .IsUnicode(false);
-            entity.Property(e => e.UnloadingPlace)
-                .HasMaxLength(50);
-            entity.Property(e => e.UnloadingTime).HasColumnType("datetime");
 
-            entity.HasOne(d => d.SenderNameNavigation).WithMany(p => p.CarAdviceGrTruckMainTable)
-                .HasPrincipalKey(p => p.SenderName)
-                .HasForeignKey(d => d.SenderName)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CarAdviceGrTruckMainTable_CarAdviceGrDictionarySender");
-
-            entity.HasOne(d => d.StatusNavigation).WithMany(p => p.CarAdviceGrTruckMainTable)
-                .HasPrincipalKey(p => p.Status)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CarAdviceGrTruckMainTable_CarAdviceGrDictionaryCarStatuses");
-
-            entity.HasOne(d => d.UnloadingPlaceNavigation).WithMany(p => p.CarAdviceGrTruckMainTable)
-                .HasPrincipalKey(p => p.UnloadingPlace)
-                .HasForeignKey(d => d.UnloadingPlace)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CarAdviceGrTruckMainTable_CarAdviceGrDictionaryUnloadingPlace");
         });
 
 

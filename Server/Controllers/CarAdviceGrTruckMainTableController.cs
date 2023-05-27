@@ -91,7 +91,7 @@ namespace SCMDWH.Server.Controllers
             int eMc = Int32.Parse(endDate.Substring(0, 2));
             DateTime endDt = new DateTime(eYear, eMc, eDay);
 
-            return await _context.CarAdviceGrTruckMainTable.Where(d => d.AddDate >= startDt && d.AddDate <= endDt && d.Status != "Sent").Include(C => C.CarAdviceGrTruckItems)
+            return await _context.CarAdviceGrTruckMainTable.Where(d => d.AddDate >= startDt && d.AddDate <= endDt && d.PickingStatus != "Sent").Include(C => C.CarAdviceGrTruckItems)
                 .OrderByDescending(c => c.AddDate).ToListAsync();
         }
 
