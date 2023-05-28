@@ -1,0 +1,63 @@
+﻿@page "/newGRfromExcel"
+@using NPOI.SS.UserModel;
+@using NPOI.XSSF.UserModel;
+@using SCMDWH.Shared.Models;
+@using System.Security.Claims;
+@inject NavigationManager navigationManager
+
+
+<hr />
+<InputFile OnChange="ReadExcelNpoi" class="form-control form-control-lg" id="formFileLg" type="file">Select excel file</InputFile>
+<hr />
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    List<CarAdviceGrTruckItems> listGrItems = new List<CarAdviceGrTruckItems>();
+    CarAdviceGrTruckItems grItem = new CarAdviceGrTruckItems();
+    string UserName = "";
+    async Task ReadExcelNpoi(InputFileChangeEventArgs e)
+    {
+        var fileStream = e.File.OpenReadStream();
+        var ms = new MemoryStream();
+        await fileStream.CopyToAsync(ms);
+        ms.Position = 0;
+        ISheet sheet;
+        var xsswb = new XSSFWorkbook(ms);
+        sheet = xsswb.GetSheetAt(0);
+        IRow hr = sheet.GetRow(0);
+            for (var j = sheet.FirstRowNum + 1; j <= sheet.LastRowNum; j++)
+            {
+                var r = sheet.GetRow(j);
+            }
+    }
+
+    protected async override void OnInitialized()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+        }
+
+    }
+}
+
+<style>
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+    }
+
+    .Nag {
+        font-size: xx-small !important;
+    }
+</style>
