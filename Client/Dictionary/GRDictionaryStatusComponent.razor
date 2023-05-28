@@ -158,7 +158,7 @@
             newGrStatus = (CarAdviceGrDictionaryCarStatuses)result.Data;
             string link = "/api/CarAdviceGrDictionaryCarStatuses";
             newGrStatus.AddByUser = currentUser;
-            newGrStatus.CarAdviceGrTruckMainTable = null;
+            //newGrStatus.CarAdviceGrTruckMainTable = null;
             var Response = await httpClient.PostAsJsonAsync<CarAdviceGrDictionaryCarStatuses>(link, newGrStatus);
             await readData();
            StateHasChanged();

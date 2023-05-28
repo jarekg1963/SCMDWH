@@ -185,6 +185,12 @@ public partial class PurchasingContext : DbContext
             entity.Property(e => e.TruckPlatesWh)
                 .HasMaxLength(100)
                 .IsFixedLength();
+            entity.Property(e => e.TpvEnterTime)
+               .HasColumnType("datetime")
+               .HasColumnName("TPV_EnterTime");
+            entity.Property(e => e.TpvExitTime)
+                .HasColumnType("datetime")
+                .HasColumnName("TPV_ExitTime");
 
         });
 

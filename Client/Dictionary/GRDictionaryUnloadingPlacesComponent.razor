@@ -161,7 +161,7 @@
             newUnloadinPlace = (CarAdviceGrDictionaryUnloadingPlace)result.Data;
             string link = "/api/CarAdviceGrDictionaryUnloadingPlace";
             newUnloadinPlace.AddByUser = currentUser;
-            newUnloadinPlace.CarAdviceGrTruckMainTable = null;
+            //newUnloadinPlace.CarAdviceGrTruckMainTable = null;
             var Response = await httpClient.PostAsJsonAsync<CarAdviceGrDictionaryUnloadingPlace>(link, newUnloadinPlace);
             await readData();
             StateHasChanged();

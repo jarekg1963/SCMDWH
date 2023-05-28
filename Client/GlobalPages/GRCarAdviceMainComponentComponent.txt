@@ -1,0 +1,645 @@
+﻿@page "/grcarAdvice111"
+@using SCMDWH.Shared.Models;
+@using System.Security.Claims;
+@using SCMDWH.Shared.Tools;
+@inject IStringLocalizer<CultureExample2> Loc
+@inject NavigationManager navigationManager
+@inject HttpClient httpClient
+@inject IDialogService DialogService;
+
+@if (ListGRCAMainTable is null)
+{
+    <p>Loading </p>
+}
+else
+{
+    <MudDataGrid T="CarAdviceGrTruckMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+             Height="35em" RowsPerPage="30" MultiSelection="false" Items="@ListGRCAMainTable" SortMode="SortMode.Multiple" Filterable="true" 
+                      FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
+                <ToolBarContent >
+  
+        <MudTabPanel Icon="@Icons.Material.Filled.Api" Style="width:550px" Text=@Loc["lbCarAdvice"] BadgeData='"!"' BadgeColor="Color.Error" @ref="panel01" ID="@("pn_one")"
+                 OnClick="Tab0Active">
+        </MudTabPanel>
+
+        <MudGrid>
+            <MudItem xs="2">
+                <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ViewColumn"
+                       Style="text-transform:none ; margin-top:25px!important" OnClick="ShowColumsForSelection" Size="Size.Small">
+                    @Loc["lbColumns"]
+                </MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ImportExport"
+                       Style="text-transform:none ; margin-top:25px!important" OnClick="ImportFromExcel" Size="Size.Small">
+                    Excel
+                </MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.AddToDrive"
+                       Style="text-transform:none ; margin-top:25px!important" OnClick="NewItemsCarAdviceMain" Size="Size.Small">
+                    @Loc["lbNew"]
+                </MudButton>
+            </MudItem>
+            <MudItem xs="3">
+                <MudDateRangePicker DisableToolbar="true" IconSize="Size.Small" @ref="_picker" @bind-DateRange="_dateRange" AutoClose="@_autoClose">
+                    <PickerActions>
+                        <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
+                        <MudButton OnClick="@(() => _picker.Close(false))">Cancel</MudButton>
+                        <MudButton Color="Color.Primary" OnClick="SelectTimeFrameFromPicker">Ok</MudButton>
+                    </PickerActions>
+                </MudDateRangePicker>
+            </MudItem>
+            <MudItem xs="3">
+                <MudCheckBox Style="margin-top:20px!important" Size="Size.Small" Dense="true" @bind-Checked="CheckTest">@Loc["lbPickingstatusCheckBox"]</MudCheckBox>
+            </MudItem>
+        </MudGrid>
+        </ToolBarContent>
+                 <Columns>
+           
+            @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
+            {
+                <HierarchyColumn Property="x => x.Id" Title="Id" Hidden="false" Sortable="true" />
+
+                <TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Default" StartIcon="@Icons.Material.Filled.ViewList" @onclick="@(()=>EditGr(@context.Item.Id))"></MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+
+                @foreach (var ii in listGridColums)
+                {
+                    @switch (ii.fieldName)
+                    {
+                        case "Id":
+                            <PropertyColumn Property="x => x.Id" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "AddDate":
+                            <PropertyColumn Property="x => x.AddDate" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "AddByUser":
+                            <PropertyColumn Property="x => x.AddByUser" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "CarRemark":
+                            <PropertyColumn Property="x => x.CarRemark" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true">
+                            </PropertyColumn>
+                            break;
+                        case "Reference":
+                            <PropertyColumn Property="x => x.Reference" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "SenderName":
+                            <PropertyColumn Property="x => x.SenderName" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "UnloadingPlace":
+                            <PropertyColumn Property="x => x.UnloadingPlace" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "PlanDeliveryTime":
+                            <PropertyColumn Property="x => x.PlanDeliveryTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Status":
+                            <PropertyColumn Property="x => x.Status" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "EnterTime":
+                            <PropertyColumn Property="x => x.TpvEnterTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DriverS":
+                            <PropertyColumn Property="x => x.DriverS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TruckPlatesS":
+                            <PropertyColumn Property="x => x.TruckPlatesS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "RemarkS":
+                            <PropertyColumn Property="x => x.RemarkS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "CallBy":
+                            <PropertyColumn Property="x => x.CallBy" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DriverWh":
+                            <PropertyColumn Property="x => x.DriverWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "TruckPlatesWh":
+                            <PropertyColumn Property="x => x.TruckPlatesWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "RemarkWh":
+                            <PropertyColumn Property="x => x.RemarkWh" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "UnloadingDock":
+                            <PropertyColumn Property="x => x.UnloadingDock" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "UnloadingTime":
+                            <PropertyColumn Property="x => x.UnloadingTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "ExitTime":
+                            <PropertyColumn Property="x => x.ExitTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "FG_DelayReason":
+                            <PropertyColumn Property="x => x.FgDelayReason" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "ATA":
+                            <PropertyColumn Property="x => x.Ata" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "Quality":
+                            <PropertyColumn Property="x => x.Quality" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "TruckType":
+                            <PropertyColumn Property="x => x.TruckType" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "TpvExitTime":
+                            <PropertyColumn Property="x => x.TpvExitTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "EntryByS":
+                            <PropertyColumn Property="x => x.EntryByS" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "ETD":
+                            <PropertyColumn Property="x => x.ETD" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                @foreach (var ii in listGridColums)
+                {
+                    @switch (ii.fieldName)
+                    {
+                        case "AddDate":
+                            <PropertyColumn Property="x => x.AddDate" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "AddByUser":
+                            <PropertyColumn Property="x => x.AddByUser" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "CarRemark":
+                            <PropertyColumn Property="x => x.CarRemark" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true">
+                            </PropertyColumn>
+                            break;
+                        case "Reference":
+                            <PropertyColumn Property="x => x.Reference" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "SenderName":
+                            <PropertyColumn Property="x => x.SenderName" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "UnloadingPlace":
+                            <PropertyColumn Property="x => x.UnloadingPlace" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "PlanDeliveryTime":
+                            <PropertyColumn Property="x => x.PlanDeliveryTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Status":
+                            <PropertyColumn Property="x => x.Status" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "EnterTime":
+                            <PropertyColumn Property="x => x.TpvEnterTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DriverS":
+                            <PropertyColumn Property="x => x.DriverS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TruckPlatesS":
+                            <PropertyColumn Property="x => x.TruckPlatesS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "RemarkS":
+                            <PropertyColumn Property="x => x.RemarkS" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "CallBy":
+                            <PropertyColumn Property="x => x.CallBy" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DriverWh":
+                            <PropertyColumn Property="x => x.DriverWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                        case "TruckPlatesWh":
+                            <PropertyColumn Property="x => x.TruckPlatesWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "RemarkWh":
+                            <PropertyColumn Property="x => x.RemarkWh" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "UnloadingDock":
+                            <PropertyColumn Property="x => x.UnloadingDock" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "UnloadingTime":
+                            <PropertyColumn Property="x => x.UnloadingTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "ExitTime":
+                            <PropertyColumn Property="x => x.ExitTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" Filterable="false" />
+                            break;
+                    }
+                }
+            }
+        </Columns>
+        <ChildRowContent>
+        <MudCard>
+@*            <MudCardHeader>
+                <CardHeaderContent>
+              
+                </CardHeaderContent>
+            </MudCardHeader>*@
+            <MudCardContent>
+                    <MudSimpleTable Style="overflow-x: auto;" Dense="true" Hover="true" Bordered="true" Striped="true">
+                        <thead>
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Container</th>
+                                <th>Material</th>
+                                <th>Pallet No</th>
+                                <th>Pallet Qty</th>
+                                <th>Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in context.Item.CarAdviceGrTruckItems)
+                            {
+                                <tr>
+                                    <td>@row.InvoiceNo</td>
+                                    <td>@row.ContainerNo</td>
+                                    <td>@row.Material</td>
+                                    <td>@row.PalletNo</td>
+                                    <td>@row.TotalPalletQty</td>
+                                    <td>@row.TotalQty</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </MudSimpleTable>
+                </MudCardContent>
+        </MudCard>
+        </ChildRowContent>
+        <PagerContent>
+            <MudGrid>
+                <MudItem xs="2">
+                    <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.Exposure"
+                           Style="text-transform:none ; margin-top:10px!important" OnClick="ExportToExcel" Size="Size.Small">
+                        @Loc["lbExportExcel"]
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="10">
+                    <MudDataGridPager T="CarAdviceGrTruckMainTable" PageSizeOptions="new int[] { 20, 50}" RowsPerPageString=@Loc["lbRowPerPage"] />
+                </MudItem>
+            </MudGrid>
+        </PagerContent>
+    </MudDataGrid>
+
+  
+}
+
+@code {
+    [CascadingParameter]
+    public Error Error { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    List<CarAdviceGrTruckMainTable> ListGRCAMainTable = new List<CarAdviceGrTruckMainTable>();
+    MudTabs tabs;
+    MudTabPanel panel01;
+    MudTabPanel panel02;
+    MudTabPanel panel03;
+    private MudDateRangePicker _picker;
+    private DateRange _dateRange = new DateRange();
+    private bool _autoClose;
+    private bool rolaWh = false;
+    private bool rolaSecurity = false;
+    private string UserName = "";
+    private DateTime ldGRStart;
+    private DateTime ldGREnd;
+    GlobalAppUsersParameters userParametersGRDates = new();
+    GlobalAppUsersParameters userParametersGRDatesForSave = new();
+    List<gridColums> listGridColums = new();
+
+    List<CarAdviceGrMainPlanComum> columsForDisplayListDb = new List<CarAdviceGrMainPlanComum>();
+
+    private async void EditGr(long iiid)
+    {
+
+        navigationManager.NavigateTo($"/editGrTuckWh/{iiid.ToString()}");
+        
+
+
+    }
+
+
+    //#region hiddencolumndefinition 
+    //private bool hiddenId = false;
+    //private bool hiddenAddDate = false;
+    //private bool hiddenAddByUser = false;
+    //private bool hiddenCarRemark = false;
+    //private bool hiddenReference = false;
+    //private bool hiddenSenderName = false;
+    //private bool hiddenUnloadingPlace = false;
+    //private bool hiddenPlanDeliveryTime = false;
+    //private bool hiddenStatus = false;
+    //private bool hiddenEnterTime = false;
+    //private bool hiddenDriverS = false;
+    //private bool hiddenTruckPlatesS = false;
+    //private bool hiddenRemarkS = false;
+    //private bool hiddenCallBy = false;
+    //private bool hiddenDriverWh = false;
+    //private bool hiddenTruckPlatesWh = false;
+    //private bool hiddenRemarkWh = false;
+    //private bool hiddenUnloadingDock = false;
+    //private bool hiddenUnloadingTime = false;
+    //private bool hiddenExitTime = false;
+
+    //#endregion
+
+    private async void ExportToExcel()
+    {
+        //StateHasChanged();
+        //var response = await httpClient.GetAsync("/api/Raport/ReportToExcel/" + UserName);
+        //response.EnsureSuccessStatusCode();
+        //var fileBytes = await response.Content.ReadAsByteArrayAsync();
+        //var fileName = $"CarAdviceData{DateTime.Now.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}.xlsx";
+        //await JSRuntime.InvokeAsync<object>("saveAsFile", fileName, Convert.ToBase64String(fileBytes));
+        //StateHasChanged();
+    }
+
+    private async Task ReadData(bool NoSent)
+    {
+        IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+            claims = user.Claims;
+            string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+
+            //if (wszystkieRole.Contains("SECURITY")) rolaSecurity = true;
+            //if (wszystkieRole.Contains("WH")) rolaWh = true;
+        }
+
+        // read users parameters
+
+        string linkUserParameters = "/api/GlobalAppUsersParameters/" + UserName;
+
+
+        userParametersGRDates = await httpClient.GetFromJsonAsync<GlobalAppUsersParameters>(linkUserParameters);
+
+        if (userParametersGRDates == null)
+        {
+            ldGRStart = DateTime.Now.AddMonths(-3);
+            ldGREnd = DateTime.Now;
+        }
+        else
+        {
+            ldGRStart = userParametersGRDates.DateGRMainCAFrom;
+            ldGREnd = userParametersGRDates.DateGRMainCATo;
+        }
+
+        // end users parameters 
+
+        _dateRange = new DateRange(ldGRStart, ldGREnd);
+
+        string linkLoad = "";
+
+        if (NoSent)
+        {
+            //Update controler 
+            // linkLoad = "/api/CarAdviceMainTables/GetbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+        }
+        else
+        {
+            linkLoad = "/api/CarAdviceGrTruckMainTable/GetGRbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+        }
+        //!!!!!!!!!!!!!! -- poprawic inna tabela GR---------
+        ListGRCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceGrTruckMainTable>>(linkLoad);
+        // wczytanie kolumn 
+
+        string linkcoluser = "/api/CarAdviceGrMainPlanComumControllery/GRMainPlanComumByUser/" + UserName;
+        /// read colums for display main plan screen
+        columsForDisplayListDb.Clear();
+        columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<CarAdviceGrMainPlanComum>>(linkcoluser);
+
+        foreach (var columienka in columsForDisplayListDb)
+        {
+            listGridColums.Add(new gridColums()
+                {
+                    fieldName = columienka.MainScreenColumn,
+                    fieldTitle = columienka.MainScreenColumn,
+                    filedfirterable = true,
+                    filedSortable = true,
+                    filedHiden = columienka.Hidden,
+                    plHeader = columienka.PlHeader
+                });
+
+        }
+
+        //#region setupColumsVisibility
+        //hiddenId = verificationColumsVisibility("Id");
+        //hiddenAddDate = verificationColumsVisibility("AddDate");
+        //hiddenAddByUser = verificationColumsVisibility("AddByUser");
+        //hiddenCarRemark = verificationColumsVisibility("CarRemark");
+        //hiddenReference = verificationColumsVisibility("Reference");
+        //hiddenSenderName = verificationColumsVisibility("SenderName");
+        //hiddenUnloadingPlace = verificationColumsVisibility("UnloadingPlace");
+        //hiddenPlanDeliveryTime = verificationColumsVisibility("PlanDeliveryTime");
+        //hiddenStatus = verificationColumsVisibility("Status");
+        //hiddenEnterTime = verificationColumsVisibility("TpvEnterTime");
+        //hiddenDriverS = verificationColumsVisibility("DriverS");
+        //hiddenTruckPlatesS = verificationColumsVisibility("TruckPlatesS");
+        //hiddenRemarkS = verificationColumsVisibility("RemarkS");
+        //hiddenCallBy = verificationColumsVisibility("CallBy");
+        //hiddenDriverWh = verificationColumsVisibility("DriverWh");
+        //hiddenTruckPlatesWh = verificationColumsVisibility("TruckPlatesWh");
+        //hiddenRemarkWh = verificationColumsVisibility("RemarkWh");
+        //hiddenUnloadingDock = verificationColumsVisibility("UnloadingDock");
+        //hiddenUnloadingTime = verificationColumsVisibility("UnloadingTime");
+        //hiddenExitTime = verificationColumsVisibility("ExitTime");
+        //#endregion setupColumsVisibility
+
+
+    }
+
+
+    private Func<CarAdviceGrTruckMainTable, int, string> _rowStyleFunc => (x, i) =>
+       {
+           // Skan OK
+           //if (x.PickingStatus == "Scan OK")
+           //    return "background-color:#c0f752";
+
+
+           ////Picking
+           //if (x.PickingStatus == "Picking")
+           //    return "background-color:#fcba03";
+
+           ////Picking
+           //if (x.PickingStatus == "Loading")
+           //    return "background-color:#52d1f7";
+
+           //// Szaey -- Paper work Paper work
+
+           //if (x.PickingStatus == "Paper work")
+           //    return "background-color:#CDCDCD";
+
+           //// Ciemno zielony - sent
+           //if (x.PickingStatus == "Sent")
+           //    return "background-color:#22c738";
+
+           //// Cancelled - czerwony
+           //if (x.PickingStatus == "Cancelled")
+           //    return "background-color:#e65e69";
+
+           return "";
+
+       };
+
+    void RowClicked(DataGridRowClickEventArgs<CarAdviceGrTruckMainTable> args)
+    {
+
+        //if (rolaSecurity) tabs.ActivatePanel(1);
+        //if (rolaWh) tabs.ActivatePanel(1);
+        //selectedRow = args.Item.Id.ToString();
+        //Console.WriteLine("Click z Row clicked ");
+
+    }
+
+    private bool verificationColumsVisibility(string comumnName)
+    {
+        if (columsForDisplayListDb.Count(c => c.MainScreenColumn == comumnName && c.Hidden == true) != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ReadData(false);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex);
+        }
+
+
+    }
+
+
+    private async Task SelectTimeFrameFromPicker()
+    {
+        _picker.Close();
+        userParametersGRDates.DateMainCAFrom = userParametersGRDates.DateMainCAFrom;
+        userParametersGRDates.DateMainCATo = userParametersGRDates.DateMainCATo;
+        userParametersGRDates.DateGRMainCAFrom = (DateTime)_dateRange.Start;
+        userParametersGRDates.DateGRMainCATo = (DateTime)_dateRange.End;
+        userParametersGRDates.UserName = UserName;
+        string linkForPost = "api/GlobalAppUsersParameters";
+        await httpClient.PostAsJsonAsync<GlobalAppUsersParameters>(linkForPost, userParametersGRDates);
+        DateTime dStart = (DateTime)_dateRange.Start;
+        DateTime dEnd = (DateTime)_dateRange.End;
+        string linkzDates = "/api/CarAdviceMainTables/GetbyDate/" + Helpers.ChangeDateToString(dStart) + "/" + Helpers.ChangeDateToString(dEnd);  
+        ListGRCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceGrTruckMainTable>>(linkzDates);
+        StateHasChanged();
+        StateHasChanged();
+    }
+
+    private void Tab0Active()
+    {
+
+    }
+
+    private async Task ShowColumsForSelection()
+    {
+        var parameters = new DialogParameters { ["Username"] = UserName };
+        var dialog = DialogService.Show<GRDialogColumsSelection>("", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            navigationManager.NavigateTo("/grcarAdvice", true);
+            StateHasChanged();
+        }
+    }
+
+    private void ImportFromExcel()
+    {
+
+    }
+
+    private async Task NewItemsCarAdviceMain()
+    {
+        CarAdviceGrTruckMainTable CarAdviceMainTableNewForSave = new CarAdviceGrTruckMainTable();
+        CarAdviceGrTruckMainTable CarAdviceMainTablejsonCamel = new CarAdviceGrTruckMainTable();
+        var parameters = new DialogParameters { ["Id"] = "XXX" };
+        var dialog = DialogService.Show<GRCarAdviceNewComponent>("", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            //CarAdviceMainTableNewForSave = (CarAdviceMainTable)result.Data;
+
+            //string linkAddNew = "/api/CarAdviceMainTables";
+            //var response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkAddNew, CarAdviceMainTableNewForSave);
+            //// zamiana jsona Camel na Pascal
+            //var jsonResposeWithId = await response.Content.ReadAsStringAsync();
+            //CarAdviceMainTablejsonCamel = JsonConvert.DeserializeObject<CarAdviceMainTable>(jsonResposeWithId);
+            //string jsonStringCANew = System.Text.Json.JsonSerializer.Serialize(CarAdviceMainTablejsonCamel);
+
+            //rl.RecordOperationLog("New item",
+            //jsonStringCANew,
+            //UserName, "Success");
+
+            //await ReadData(false);
+            //StateHasChanged();
+        }
+       
+    }
+    private bool _checkTest;
+    private bool CheckTest
+    {
+        get { return _checkTest; }
+        set { _checkTest = value; HandleCheck(value); }
+    }
+
+    async void HandleCheck(bool IsChecked)
+    {
+
+        //if (IsChecked)
+        //    await ReadData(true);
+        //if (!IsChecked)
+        //    await ReadData(false);
+
+    }
+
+}
+
+
+    
+
+<style>
+
+
+
+    th {
+        font-size: small !important;
+    }
+
+    td {
+        font-size: small !important;
+    }
+
+    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
+        font-size: small !important;
+    }
+
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+    }
+
+    @@media (min-width: 1080px) {
+        .example {
+            width: 1080px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+    }
+
+</style>

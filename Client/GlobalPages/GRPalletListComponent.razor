@@ -1,0 +1,204 @@
+﻿@page "/GrPalletList"
+@using SCMDWH.Shared.Models;
+@using System.Security.Claims;
+@using SCMDWH.Shared.Tools;
+@inject IStringLocalizer<CultureExample2> Loc
+@inject NavigationManager navigationManager
+@inject HttpClient httpClient
+@inject IDialogService DialogService;
+
+<MudDataGrid T="CarAdviceGrTruckItems" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+             Height="35em" RowsPerPage="30" MultiSelection="false" Items="@itemPaletList" SortMode="SortMode.Multiple" Filterable="true"
+             FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
+
+    <ToolBarContent>
+        <MudGrid>
+            <MudItem xs="2">
+                <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ViewColumn"
+                           Style="text-transform:none ; margin-top:25px!important" OnClick="ShowColumsForSelection" Size="Size.Small">
+                    @Loc["lbColumns"]
+                </MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ImportExport"
+                           Style="text-transform:none ; margin-top:25px!important" OnClick="ImportFromExcel" Size="Size.Small">
+                    Excel
+                </MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.AddToDrive"
+                           Style="text-transform:none ; margin-top:25px!important" OnClick="NewItemsCarAdviceMain" Size="Size.Small">
+                    @Loc["lbNew"]
+                </MudButton>
+            </MudItem>
+            <MudItem xs="3">
+                <MudDateRangePicker DisableToolbar="true" IconSize="Size.Small" @ref="_picker" @bind-DateRange="_dateRange" AutoClose="@_autoClose">
+                    <PickerActions>
+                        <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
+                        <MudButton OnClick="@(() => _picker.Close(false))">Cancel</MudButton>
+                        <MudButton Color="Color.Primary" OnClick="SelectTimeFrameFromPicker">Ok</MudButton>
+                    </PickerActions>
+                </MudDateRangePicker>
+            </MudItem>
+            <MudItem xs="3">
+              @*  <MudCheckBox Style="margin-top:20px!important" Size="Size.Small" Dense="true" @bind-Checked="CheckTest">@Loc["lbPickingstatusCheckBox"]</MudCheckBox>*@
+            </MudItem>
+        </MudGrid>
+    </ToolBarContent>
+                    
+
+    <Columns>
+        <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
+        <PropertyColumn Property="x => x.ContainerNo" Title="Container" Sortable="true" Filterable="false" />
+        <PropertyColumn Property="x => x.PalletNo" Title="Pallet" Sortable="true" Filterable="false" />
+        <PropertyColumn Property="x => x.Material" Title="Material" Sortable="true" Filterable="false" />
+        <PropertyColumn Property="x => x.InvoiceNo" Title="Invoice" Sortable="true" Filterable="false" />
+        <PropertyColumn Property="x => x.TotalPalletQty" Title="Pallet Qty" Sortable="true" Filterable="false" />
+        <PropertyColumn Property="x => x.Remark" Title="Remark" Sortable="true" Filterable="false" />
+        
+    </Columns>
+                
+</MudDataGrid>
+
+@code {
+    List<CarAdviceGrTruckItems> itemPaletList = new();
+    private bool _autoClose;
+    private MudDateRangePicker _picker;
+    GlobalAppUsersParameters userParametersGRDates = new();
+    private DateRange _dateRange = new DateRange();
+    private string UserName = "";
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    private DateTime ldGRStart;
+    private DateTime ldGREnd;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ReadData(false);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            //Error.ProcessError(ex);
+        }
+    }
+
+    private async Task ReadData(bool NoSent)
+    {
+        IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+            claims = user.Claims;
+            string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+
+            //if (wszystkieRole.Contains("SECURITY")) rolaSecurity = true;
+            //if (wszystkieRole.Contains("WH")) rolaWh = true;
+        }
+
+        // read users parameters
+
+        string linkUserParameters = "/api/GlobalAppUsersParameters/" + UserName;
+
+
+        userParametersGRDates = await httpClient.GetFromJsonAsync<GlobalAppUsersParameters>(linkUserParameters);
+
+        if (userParametersGRDates == null)
+        {
+            ldGRStart = DateTime.Now.AddMonths(-3);
+            ldGREnd = DateTime.Now;
+        }
+        else
+        {
+            ldGRStart = userParametersGRDates.DateGRMainCAFrom;
+            ldGREnd = userParametersGRDates.DateGRMainCATo;
+        }
+
+        // end users parameters
+
+        _dateRange = new DateRange(ldGRStart, ldGREnd);
+
+        string linkLoad = "";
+
+        ///api/CarAdviceGrTruckItemsControllery/GetbyDateNoSent/01012023/10102023
+        linkLoad = "/api/CarAdviceGrTruckItemsControllery/GetbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+    
+        //!!!!!!!!!!!!!! -- poprawic inna tabela GR---------
+        itemPaletList = await httpClient.GetFromJsonAsync<List<CarAdviceGrTruckItems>>(linkLoad);
+       
+
+    }
+
+
+    private async Task SelectTimeFrameFromPicker()
+    {
+        _picker.Close();
+        userParametersGRDates.DateMainCAFrom = userParametersGRDates.DateMainCAFrom;
+        userParametersGRDates.DateMainCATo = userParametersGRDates.DateMainCATo;
+        userParametersGRDates.DateGRMainCAFrom = (DateTime)_dateRange.Start;
+        userParametersGRDates.DateGRMainCATo = (DateTime)_dateRange.End;
+        userParametersGRDates.UserName = UserName;
+        string linkForPost = "api/GlobalAppUsersParameters";
+        await httpClient.PostAsJsonAsync<GlobalAppUsersParameters>(linkForPost, userParametersGRDates);
+        DateTime dStart = (DateTime)_dateRange.Start;
+        DateTime dEnd = (DateTime)_dateRange.End;
+        string linkzDates = "/api/CarAdviceMainTables/GetbyDate/" + Helpers.ChangeDateToString(dStart) + "/" + Helpers.ChangeDateToString(dEnd);
+        //ListGRCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceGrTruckMainTable>>(linkzDates);
+        StateHasChanged();
+  
+    }
+
+    private async Task NewItemsCarAdviceMain()
+    {
+        CarAdviceGrTruckMainTable CarAdviceMainTableNewForSave = new CarAdviceGrTruckMainTable();
+        CarAdviceGrTruckMainTable CarAdviceMainTablejsonCamel = new CarAdviceGrTruckMainTable();
+        var parameters = new DialogParameters { ["Id"] = "XXX" };
+        var dialog = DialogService.Show<GRCarAdviceNewComponent>("", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            //CarAdviceMainTableNewForSave = (CarAdviceMainTable)result.Data;
+
+            //string linkAddNew = "/api/CarAdviceMainTables";
+            //var response = await httpClient.PostAsJsonAsync<CarAdviceMainTable>(linkAddNew, CarAdviceMainTableNewForSave);
+            //// zamiana jsona Camel na Pascal
+            //var jsonResposeWithId = await response.Content.ReadAsStringAsync();
+            //CarAdviceMainTablejsonCamel = JsonConvert.DeserializeObject<CarAdviceMainTable>(jsonResposeWithId);
+            //string jsonStringCANew = System.Text.Json.JsonSerializer.Serialize(CarAdviceMainTablejsonCamel);
+
+            //rl.RecordOperationLog("New item",
+            //jsonStringCANew,
+            //UserName, "Success");
+
+            //await ReadData(false);
+            //StateHasChanged();
+        }
+    }
+
+    private void ImportFromExcel()
+    {
+
+    }
+
+    private async Task ShowColumsForSelection()
+    {
+        //var parameters = new DialogParameters { ["Username"] = UserName };
+        //var dialog = DialogService.Show<GRDialogColumsSelection>("", parameters);
+        //var result = await dialog.Result;
+
+        //if (!result.Cancelled)
+        //{
+        //    navigationManager.NavigateTo("/grcarAdvice", true);
+        //    StateHasChanged();
+        //}
+    }
+
+}

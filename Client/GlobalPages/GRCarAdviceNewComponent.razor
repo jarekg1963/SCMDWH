@@ -1,0 +1,215 @@
+﻿@using SCMDWH.Shared.Models;
+@using System.Security.Claims;
+@inject NavigationManager navigationManager
+@inject HttpClient httpClient;
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<CultureExample2> Loc
+
+
+<MudDialog Style="min-width: 1400px;">
+    <DialogContent>
+        <MudCard Outlined="true" Elevation="20">
+            <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbAddnewitem"]</MudAlert>
+            <MudGrid>
+
+                <MudItem xs="6" sm="3">
+                    <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="@EtdTimeDate" DisableToolbar="true" ReadOnly="false" Editable="true" Margin="Margin.Normal" />
+                </MudItem>
+                <MudItem xs="6" sm="3">
+                    <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+                        <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" ReadOnly="false" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+                        
+                    </MudStack>
+                </MudItem>
+                <MudItem xs="6" sm="2">                    
+                    <MudTextField Label="Uzytkownik" @bind-Value="@CarAdviceGRMainTableNew.AddByUser" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudCard>
+        <MudCard Outlined="true" Elevation="20">
+            <hr />
+            <table>
+                <tr>
+                 @*   <th>Lp</th>*@
+                    <th>Invoice</th>
+                    <th>Container</th>
+                    <th>Material</th>
+                    <th>Part No</th>
+                    <th>Pallet Qty</th>
+                    <th>Qty</th>
+                </tr>
+                @foreach (var trItem in truckItemList)
+                {
+                    <tr>
+                      @*  <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.Id" />
+                        </td>*@
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.InvoiceNo" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.ContainerNo" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.Material" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.PalletNo" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.TotalPalletQty" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="" @bind="@trItem.TotalQty" />
+                        </td>
+
+                         <td>
+                    <MudButton Variant="Variant.Filled" OnClick="() => NewTrackItem()">New</MudButton>
+                    </td>
+
+                    <td>
+                    <MudButton Variant="Variant.Filled" OnClick="() => DeleteTrackItem(trItem)">Delete</MudButton>
+                    </td>
+                    </tr>
+
+                }
+            </table>
+        </MudCard>
+    </DialogContent>
+    <DialogActions>
+
+        <MudGrid>
+            <MudItem xs="6">
+            </MudItem>
+            <MudItem xs="2">
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">@Loc["lbSave"]</MudButton>
+            </MudItem>
+        </MudGrid>
+    </DialogActions>
+</MudDialog>
+
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string Id { get; set; }
+    string userName = "";
+    private bool resetValueOnEmptyText;
+    private long iId = 1;
+
+    DateTime? EtdTimeDate;
+    TimeSpan? EtdTimeTime;
+
+    DateTime? ATATimeDate;
+    TimeSpan? ATATimeTime;
+
+
+
+    CarAdviceGrTruckMainTable CarAdviceGRMainTableNew = new CarAdviceGrTruckMainTable()
+        {
+            AddDate = DateTime.Now,
+            PickingStatus = "Oczekuje"
+        };
+
+    List<CarAdviceGrTruckItems> truckItemList = new();
+    CarAdviceGrTruckItems truckItem = new();
+
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    private List<string> senders;
+    List<CarAdviceGrDictionarySender> sendersList = new List<CarAdviceGrDictionarySender>();
+
+    CarAdviceGrTruckItems newEmptyFirstItem = new();
+
+    private async Task DeleteTrackItem(CarAdviceGrTruckItems delItemId)
+    {
+        //var de = truckItemList.Find(c => c.Id == delItemId);
+        truckItemList.Remove(delItemId);
+        StateHasChanged();
+    }
+
+    private void NewTrackItem()
+    {
+        iId++;
+        //CarAdviceGrTruckItems newEmptyItem = new() { Id = iId };
+        CarAdviceGrTruckItems newEmptyItem = new();
+        truckItemList.Add(newEmptyItem);
+        StateHasChanged();
+    }
+
+
+    protected async override void OnInitialized()
+    {
+        // Senders
+        string linkCu = "/api/CarAdviceGrDictionarySender";
+        sendersList = await httpClient.GetFromJsonAsync<List<CarAdviceGrDictionarySender>>(linkCu);
+        senders = sendersList.Select(c => c.SenderName).ToList();
+
+
+        IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            userName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+            claims = user.Claims;
+            string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+
+        }
+
+
+
+        CarAdviceGRMainTableNew.AddByUser = userName;
+        truckItemList.Add(newEmptyFirstItem);
+        StateHasChanged();
+
+    }
+
+    private async Task<IEnumerable<string>> SearchSender(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return senders;
+        return senders.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+
+    void CloseCancel() => MudDialog.Close(DialogResult.Cancel());
+
+
+    private async void CloseSave()
+    {
+        string linkCu = "api/CarAdviceGrTruckMainTable/NewItemGr";
+        CarAdviceGRMainTableNew.CarAdviceGrTruckItems = truckItemList;
+        CarAdviceGRMainTableNew.Id = 0;
+
+        if (ATATimeDate != null)
+        {
+            DateTime EtdTimeDateNotNulable = (DateTime)ATATimeDate;
+            TimeSpan EtdTimeTimeNotNulable = (TimeSpan)ATATimeTime;
+            CarAdviceGRMainTableNew.Ata = EtdTimeDateNotNulable.Add(EtdTimeTimeNotNulable);
+        }
+
+        if (EtdTimeDate != null)
+        {
+            DateTime EtdTimeDateNotNulable = (DateTime)EtdTimeDate;
+            TimeSpan EtdTimeTimeNotNulable = (TimeSpan)EtdTimeTime;
+            CarAdviceGRMainTableNew.ETD = EtdTimeDateNotNulable.Add(EtdTimeTimeNotNulable);
+
+        }
+
+
+        await httpClient.PostAsJsonAsync(linkCu, CarAdviceGRMainTableNew);
+    }
+
+}

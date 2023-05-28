@@ -161,7 +161,7 @@
             newSender = (CarAdviceGrDictionarySender)result.Data;
             string link = "/api/CarAdviceGrDictionarySender";
             newSender.AddByUser = currentUser;
-            newSender.CarAdviceGrTruckMainTable = null;
+            //newSender.CarAdviceGrTruckMainTable = null;
             var Response = await httpClient.PostAsJsonAsync<CarAdviceGrDictionarySender>(link, newSender);
             await readData();
             StateHasChanged();

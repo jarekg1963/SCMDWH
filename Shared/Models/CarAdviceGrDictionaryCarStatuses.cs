@@ -18,5 +18,5 @@ public partial class CarAdviceGrDictionaryCarStatuses
 
     public DateTime AddTime { get; set; }
 
-    public virtual ICollection<CarAdviceGrTruckMainTable> CarAdviceGrTruckMainTable { get; set; } = new List<CarAdviceGrTruckMainTable>();
+    //public virtual ICollection<CarAdviceGrTruckMainTable> CarAdviceGrTruckMainTable { get; set; } = new List<CarAdviceGrTruckMainTable>();
 }
