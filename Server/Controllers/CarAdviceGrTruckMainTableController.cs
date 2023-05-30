@@ -22,22 +22,56 @@ namespace SCMDWH.Server.Controllers
 
 
         [HttpPost("ImportExcel")]
-        public async Task<ActionResult> ImportExcel([FromBody] List<ImportGrExcel>  excelImportedList)
+        public async Task<ActionResult> ImportExcel([FromBody] List<ImportGrExcel> excelImportedList)
         {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-
+            List<CarAdviceGrTruckMainTable> AllCarsToAdd = new List<CarAdviceGrTruckMainTable>();
+            foreach (List<ImportGrExcel> ExcelGroup in excelImportedList.GroupBy(EG => EG.CarNumber)
+                                                          .OrderBy(group => group.Key)
+                                                          .Select(group => group.ToList())
+                                                          .ToList())
+            {
+                CarAdviceGrTruckMainTable CarToAdd = new CarAdviceGrTruckMainTable();
+                ImportGrExcel ReferenceExcelLineFromGroup = ExcelGroup.FirstOrDefault();
+                if (ReferenceExcelLineFromGroup == null) continue;
+                if (ReferenceExcelLineFromGroup.DataEtd == null) ReferenceExcelLineFromGroup.DataEtd = DateTime.Now;
+                if (ReferenceExcelLineFromGroup.HourEtd == null) ReferenceExcelLineFromGroup.HourEtd = DateTime.Now;
+                CarToAdd.ETD = new DateTime(ReferenceExcelLineFromGroup.DataEtd.Value.Year, ReferenceExcelLineFromGroup.DataEtd.Value.Month, ReferenceExcelLineFromGroup.DataEtd.Value.Day, ReferenceExcelLineFromGroup.HourEtd.Value.Hour, ReferenceExcelLineFromGroup.HourEtd.Value.Minute, ReferenceExcelLineFromGroup.HourEtd.Value.Second);
+                CarToAdd.Sender = ReferenceExcelLineFromGroup.Sender;
+                foreach (ImportGrExcel item in ExcelGroup)
+                {
+                    CarAdviceGrTruckItems itemToAdd = new();
+                    itemToAdd.ContainerNo = item.ContainerNo;
+                    itemToAdd.InvoiceNo = item.InvoiceNo;
+                    itemToAdd.Material = item.Material;
+                    itemToAdd.TotalPalletQty = item.TotalPalletQty != null ? (int)item.TotalPalletQty : 0;
+                    itemToAdd.TotalQty = item.TotalQty != null ? (int)item.TotalQty : 0;
+                    itemToAdd.Remark = item.Remark;
+                    CarToAdd.CarAdviceGrTruckItems.Add(itemToAdd);
+                }
+                AllCarsToAdd.Add(CarToAdd);
+            }
+            if(!AllCarsToAdd.Any()) return Ok();
+            foreach (CarAdviceGrTruckMainTable car in AllCarsToAdd)
+            {
+                _context.CarAdviceGrTruckMainTable.Add(car);
+            }
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok();
         }
 
-
-
-            [HttpPost("NewItemGr")]
-
+        [HttpPost("NewItemGr")]
         public async Task<ActionResult> NewItemGr([FromBody] CarAdviceGrTruckMainTable mainTable)
         {
             if (!ModelState.IsValid)
