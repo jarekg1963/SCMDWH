@@ -2,6 +2,7 @@
 using SCMDWH.Server.Data;
 using SCMDWH.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using SCMDWH.Shared.DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,7 +21,22 @@ namespace SCMDWH.Server.Controllers
         }
 
 
-        [HttpPost("NewItemGr")]
+        [HttpPost("ImportExcel")]
+        public async Task<ActionResult> ImportExcel([FromBody] List<ImportGrExcel>  excelImportedList)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
+            return Ok();
+        }
+
+
+
+            [HttpPost("NewItemGr")]
 
         public async Task<ActionResult> NewItemGr([FromBody] CarAdviceGrTruckMainTable mainTable)
         {

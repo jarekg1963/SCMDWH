@@ -21,6 +21,11 @@
                         
                     </MudStack>
                 </MudItem>
+
+                <MudItem xs="6" sm="2">
+                    <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbPickingstatus"] @bind-Value="CarAdviceGRMainTableNew.Sender" SearchFunc="@SearchSender"
+                                     ResetValueOnEmptyText="@resetValueOnEmptyText" />
+                </MudItem>
                 <MudItem xs="6" sm="2">                    
                     <MudTextField Label="Uzytkownik" @bind-Value="@CarAdviceGRMainTableNew.AddByUser" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>
                 </MudItem>
@@ -107,7 +112,6 @@
 
     DateTime? ATATimeDate;
     TimeSpan? ATATimeTime;
-
 
 
     CarAdviceGrTruckMainTable CarAdviceGRMainTableNew = new CarAdviceGrTruckMainTable()
@@ -205,9 +209,7 @@
             DateTime EtdTimeDateNotNulable = (DateTime)EtdTimeDate;
             TimeSpan EtdTimeTimeNotNulable = (TimeSpan)EtdTimeTime;
             CarAdviceGRMainTableNew.ETD = EtdTimeDateNotNulable.Add(EtdTimeTimeNotNulable);
-
         }
-
 
         await httpClient.PostAsJsonAsync(linkCu, CarAdviceGRMainTableNew);
     }

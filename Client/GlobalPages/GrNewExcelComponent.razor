@@ -1,9 +1,12 @@
 ﻿@page "/newGRfromExcel"
+@using SCMDWH.Client.Tools;
 @using NPOI.SS.UserModel;
 @using NPOI.XSSF.UserModel;
+@using SCMDWH.Shared.DTO;
 @using SCMDWH.Shared.Models;
 @using System.Security.Claims;
 @inject NavigationManager navigationManager
+@inject HttpClient httpClient
 
 
 <hr />
@@ -16,6 +19,10 @@
 
     List<CarAdviceGrTruckItems> listGrItems = new List<CarAdviceGrTruckItems>();
     CarAdviceGrTruckItems grItem = new CarAdviceGrTruckItems();
+
+
+    List<ImportGrExcel> listImportGrExcel = new();
+
     string UserName = "";
     async Task ReadExcelNpoi(InputFileChangeEventArgs e)
     {
@@ -27,10 +34,29 @@
         var xsswb = new XSSFWorkbook(ms);
         sheet = xsswb.GetSheetAt(0);
         IRow hr = sheet.GetRow(0);
-            for (var j = sheet.FirstRowNum + 1; j <= sheet.LastRowNum; j++)
-            {
-                var r = sheet.GetRow(j);
+        for (var j = sheet.FirstRowNum + 1; j <= sheet.LastRowNum; j++)
+        {
+            var r = sheet.GetRow(j);
+            ImportGrExcel importExcel = new();
+
+            importExcel.DataEtd = r.GetCell(0).DateCellValue; // dodaj godzine z pole 5
+            importExcel.HourEtd = r.GetCell(5).DateCellValue; // dodaj godzine z pole 5
+
+            importExcel.Sender = NpoiExtension.GetFormattedCellValue(r.GetCell(1));
+            importExcel.ContainerNo = NpoiExtension.GetFormattedCellValue(r.GetCell(2));
+            importExcel.PickingStatus = NpoiExtension.GetFormattedCellValue(r.GetCell(4));
+            importExcel.Material = NpoiExtension.GetFormattedCellValue(r.GetCell(6));
+            importExcel.InvoiceNo = NpoiExtension.GetFormattedCellValue(r.GetCell(7));
+            importExcel.PartNo = NpoiExtension.GetFormattedCellValue(r.GetCell(8));
+            importExcel.CarNumber = NpoiExtension.GetFormattedCellValue(r.GetCell(10));
+
+            listImportGrExcel.Add(importExcel);
+
             }
+                             
+        string linkpostca = "/api/CarAdviceGrTruckMainTable/ImportExcel/";
+        var Response = await httpClient.PostAsJsonAsync<List<ImportGrExcel>>(linkpostca, listImportGrExcel);
+
     }
 
     protected async override void OnInitialized()

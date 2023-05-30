@@ -63,6 +63,7 @@ public partial class CarAdviceGrTruckMainTable
 	public string? EntryByWh { get; set; }
 
 
+    public string? Sender { get; set; }
 
 
     public virtual ICollection<CarAdviceGrTruckItems> CarAdviceGrTruckItems { get; set; } = new List<CarAdviceGrTruckItems>();
