@@ -39,8 +39,8 @@ namespace SCMDWH.Server.Controllers
                 ImportGrExcel ReferenceExcelLineFromGroup = ExcelGroup.FirstOrDefault();
                 if (ReferenceExcelLineFromGroup == null) continue;
                 if (ReferenceExcelLineFromGroup.DataEtd == null) ReferenceExcelLineFromGroup.DataEtd = DateTime.Now;
-                if (ReferenceExcelLineFromGroup.HourEtd == null) ReferenceExcelLineFromGroup.HourEtd = DateTime.Now;
-                CarToAdd.ETD = new DateTime(ReferenceExcelLineFromGroup.DataEtd.Value.Year, ReferenceExcelLineFromGroup.DataEtd.Value.Month, ReferenceExcelLineFromGroup.DataEtd.Value.Day, ReferenceExcelLineFromGroup.HourEtd.Value.Hour, ReferenceExcelLineFromGroup.HourEtd.Value.Minute, ReferenceExcelLineFromGroup.HourEtd.Value.Second);
+                if (ReferenceExcelLineFromGroup.HourEtd == null) ReferenceExcelLineFromGroup.HourEtd = DateTime.Now.TimeOfDay;
+             //   CarToAdd.ETD = new DateTime(ReferenceExcelLineFromGroup.DataEtd.Value.Year, ReferenceExcelLineFromGroup.DataEtd.Value.Month, ReferenceExcelLineFromGroup.DataEtd.Value.Day, ReferenceExcelLineFromGroup.HourEtd.Value.Hour, ReferenceExcelLineFromGroup.HourEtd.Value.Minute, ReferenceExcelLineFromGroup.HourEtd.Value.Second);
                 CarToAdd.Sender = ReferenceExcelLineFromGroup.Sender;
                 foreach (ImportGrExcel item in ExcelGroup)
                 {
@@ -78,8 +78,7 @@ namespace SCMDWH.Server.Controllers
             {
                 return BadRequest(ModelState);
             }
-            // zapisac rekord w nagłowku 
-
+  
             try
             {
 
@@ -91,9 +90,7 @@ namespace SCMDWH.Server.Controllers
                 return BadRequest(ex.Message);
 
             }
-            // odczytac Id z nagłowka 
-            // Update listy itemów z Id nagłowka 
-            // Post listy itemów
+       
 
             return Ok();
 
@@ -111,7 +108,7 @@ namespace SCMDWH.Server.Controllers
             }
             try
             {
-                return await _context.CarAdviceGrTruckMainTable.Include(C=>C.CarAdviceGrTruckItems).ToListAsync();
+                return await _context.CarAdviceGrTruckMainTable.Include(C => C.CarAdviceGrTruckItems).ToListAsync();
             }
             catch (Exception ex)
             {

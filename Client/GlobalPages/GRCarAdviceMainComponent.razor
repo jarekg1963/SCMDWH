@@ -18,16 +18,7 @@ else
                  Height="35em" RowsPerPage="30" MultiSelection="false" Items="@ListGRCAMainTable" SortMode="SortMode.Multiple" Filterable="true"
                  FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive" >
         <ToolBarContent>
-
-
-
             <MudGrid>
-                <MudItem xs="2">
-                    <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ViewColumn"
-                               Style="text-transform:none ; margin-top:25px!important" OnClick="ShowColumsForSelection" Size="Size.Small">
-                        @Loc["lbColumns"]
-                    </MudButton>
-                </MudItem>
                 <MudItem xs="2">
                     <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ImportExport"
                                Style="text-transform:none ; margin-top:25px!important" OnClick="ImportFromExcel" Size="Size.Small">
@@ -49,9 +40,7 @@ else
                         </PickerActions>
                     </MudDateRangePicker>
                 </MudItem>
-                <MudItem xs="3">
-                    <MudCheckBox Style="margin-top:20px!important" Size="Size.Small" Dense="true" @bind-Checked="CheckTest">@Loc["lbPickingstatusCheckBox"]</MudCheckBox>
-                </MudItem>
+               
                  
             </MudGrid>
         </ToolBarContent>
@@ -80,11 +69,7 @@ else
         </Columns>
         <ChildRowContent>
             <MudCard>
-                @*            <MudCardHeader>
-            <CardHeaderContent>
-
-            </CardHeaderContent>
-            </MudCardHeader>*@
+          
                 <MudCardContent>
                     <MudSimpleTable Style="overflow-x: auto;" Dense="true" Hover="true" Bordered="true" Striped="true">
                         <thead>
@@ -245,40 +230,31 @@ else
 
         string linkLoad = "";
 
-        if (NoSent)
-        {
-            //Update controler
-            // linkLoad = "/api/CarAdviceMainTables/GetbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
-        }
-        else
-        {
+      
             linkLoad = "/api/CarAdviceGrTruckMainTable/GetGRbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
-        }
-        //!!!!!!!!!!!!!! -- poprawic inna tabela GR---------
+        
         ListGRCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceGrTruckMainTable>>(linkLoad);
         // wczytanie kolumn
 
-        string linkcoluser = "/api/CarAdviceGrMainPlanComumControllery/GRMainPlanComumByUser/" + UserName;
-        /// read colums for display main plan screen
+
        
     }
 
     private async Task SelectTimeFrameFromPicker()
     {
         _picker.Close();
-        //userParametersGRDates.DateMainCAFrom = userParametersGRDates.DateMainCAFrom;
-        //userParametersGRDates.DateMainCATo = userParametersGRDates.DateMainCATo;
-        //userParametersGRDates.DateGRMainCAFrom = (DateTime)_dateRange.Start;
-        //userParametersGRDates.DateGRMainCATo = (DateTime)_dateRange.End;
-        //userParametersGRDates.UserName = UserName;
-        //string linkForPost = "api/GlobalAppUsersParameters";
-        //await httpClient.PostAsJsonAsync<GlobalAppUsersParameters>(linkForPost, userParametersGRDates);
-        //DateTime dStart = (DateTime)_dateRange.Start;
-        //DateTime dEnd = (DateTime)_dateRange.End;
-        //string linkzDates = "/api/CarAdviceMainTables/GetbyDate/" + Helpers.ChangeDateToString(dStart) + "/" + Helpers.ChangeDateToString(dEnd);
-        //ListGRCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceGrTruckMainTable>>(linkzDates);
-        //StateHasChanged();
-        //StateHasChanged();
+        userParametersGRDates.DateMainCAFrom = userParametersGRDates.DateMainCAFrom;
+        userParametersGRDates.DateMainCATo = userParametersGRDates.DateMainCATo;
+        userParametersGRDates.DateGRMainCAFrom = (DateTime)_dateRange.Start;
+        userParametersGRDates.DateGRMainCATo = (DateTime)_dateRange.End;
+        userParametersGRDates.UserName = UserName;
+        string linkForPost = "api/GlobalAppUsersParameters";
+        await httpClient.PostAsJsonAsync<GlobalAppUsersParameters>(linkForPost, userParametersGRDates);
+        DateTime dStart = (DateTime)_dateRange.Start;
+        DateTime dEnd = (DateTime)_dateRange.End;
+        string linkzDates = "/api/CarAdviceGrTruckMainTable/GetGRbyDateNoSent/" + Helpers.ChangeDateToString(dStart) + "/" + Helpers.ChangeDateToString(dEnd);
+        ListGRCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceGrTruckMainTable>>(linkzDates);
+        StateHasChanged();
     }
 
     private async Task NewItemsCarAdviceMain()
@@ -303,7 +279,7 @@ else
             //jsonStringCANew,
             //UserName, "Success");
 
-            //await ReadData(false);
+            await ReadData(false);
             //StateHasChanged();
         }
 

@@ -11,7 +11,7 @@ namespace SCMDWH.Shared.DTO
         public int Id { get; set; }
         public DateTime? DataEtd { get; set; }
 
-        public DateTime? HourEtd { get; set; }
+        public TimeSpan? HourEtd { get; set; }
 
         public string? Sender { get; set; }
 

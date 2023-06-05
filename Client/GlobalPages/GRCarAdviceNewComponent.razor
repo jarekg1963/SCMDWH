@@ -80,6 +80,8 @@
                 }
             </table>
         </MudCard>
+
+        <MudTextField T="string" Label="Remarks" Variant="Variant.Filled" @bind-Value="@CarAdviceGRMainTableNew.RemarksWh"  Lines="3" />
     </DialogContent>
     <DialogActions>
 
@@ -193,6 +195,11 @@
 
     private async void CloseSave()
     {
+        if (CarAdviceGRMainTableNew.CarAdviceGrTruckItems.Count == 0 ^ CarAdviceGRMainTableNew.CarAdviceGrTruckItems == null)
+        {
+            Snackbar.Add("Musi byc co najmniej jedna faktura", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+            return;
+        }
         string linkCu = "api/CarAdviceGrTruckMainTable/NewItemGr";
         CarAdviceGRMainTableNew.CarAdviceGrTruckItems = truckItemList;
         CarAdviceGRMainTableNew.Id = 0;
@@ -212,6 +219,8 @@
         }
 
         await httpClient.PostAsJsonAsync(linkCu, CarAdviceGRMainTableNew);
+
+        MudDialog.Close(DialogResult.Ok(""));
     }
 
 }

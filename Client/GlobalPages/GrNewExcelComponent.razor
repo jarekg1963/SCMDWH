@@ -7,25 +7,193 @@
 @using System.Security.Claims;
 @inject NavigationManager navigationManager
 @inject HttpClient httpClient
+@inject IStringLocalizer<CultureExample2> Loc
+@inject IDialogService DialogService;
 
 
 <hr />
 <InputFile OnChange="ReadExcelNpoi" class="form-control form-control-lg" id="formFileLg" type="file">Select excel file</InputFile>
 <hr />
 
+
+@if (listImportGrExcel == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <MudTable Items="@listImportGrExcel" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" FixedFooter="true"
+              FixedHeader="true" Height="38em" RowsPerPage="18" Filter="new Func<ImportGrExcel,bool>(FilterFunc)">
+ 
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Periodic Elements</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh Class="Nag">Id</MudTh>
+            <MudTh Class="Nag">Data avizacji</MudTh>
+            <MudTh Class="Nag">Godzina awizacji </MudTh>
+            <MudTh Class="Nag">Dostawca</MudTh>
+            <MudTh Class="Nag">Kontener</MudTh>
+            <MudTh Class="Nag">Status</MudTh>
+            <MudTh Class="Nag">Material</MudTh>
+            <MudTh Class="Nag">Faktura</MudTh>
+            <MudTh Class="Nag">Nr czesci</MudTh>
+            <MudTh Class="Nag">Auto</MudTh>
+            <MudTh Class="Nag">Ilosc</MudTh>
+            <MudTh Class="Nag">Ilosc calkowita</MudTh>
+            <MudTh Class="Nag">@Loc["lbEdit"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbDelete"]</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nr">@context.Id</MudTd>
+            <MudTd DataLabel="Nr">@context.DataEtd</MudTd>
+            <MudTd DataLabel="Sign">@context.HourEtd</MudTd>
+            <MudTd DataLabel="Name">@context.Sender</MudTd>
+            <MudTd DataLabel="Position">@context.ContainerNo</MudTd>
+            <MudTd DataLabel="Molar mass">@context.PickingStatus</MudTd>
+            <MudTd DataLabel="Molar mass">@context.Material</MudTd>
+            <MudTd DataLabel="Molar mass">@context.InvoiceNo</MudTd>
+            <MudTd DataLabel="Molar mass">@context.PartNo</MudTd>
+            <MudTd DataLabel="Molar mass">@context.CarNumber</MudTd>
+            <MudTd DataLabel="Molar mass">@context.TotalPalletQty</MudTd>
+            <MudTd DataLabel="Molar mass">@context.TotalQty</MudTd>
+      @*      <MudTd DataLabel="Molar mass">@context.Remark</MudTd>*@
+            <MudTd DataLabel="Edit">
+                <MudIconButton @onclick="@(()=>Edit(@context))" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+            </MudTd>
+            <MudTd DataLabel="Delete">
+                <MudIconButton @onclick="@(()=>Delete(@context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+        </PagerContent>
+    </MudTable>
+    <MudGrid>
+        <MudItem xs="6">
+
+        </MudItem>
+
+
+        <MudItem xs="2">
+
+        </MudItem>
+
+        <MudItem xs="2">
+            <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
+        </MudItem>
+        <MudItem xs="2">
+            <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">@Loc["lbSave"]</MudButton>
+        </MudItem>
+    </MudGrid>
+
+}
+
+
 @code {
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
-    List<CarAdviceGrTruckItems> listGrItems = new List<CarAdviceGrTruckItems>();
+
     CarAdviceGrTruckItems grItem = new CarAdviceGrTruckItems();
+    ImportGrExcel grItemUpdated = new ImportGrExcel();
+    bool fixed_header = true;
+    bool fixed_footer = false;
+    private string searchString = "";
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    int counterId = 1;
 
-
-    List<ImportGrExcel> listImportGrExcel = new();
+    List<ImportGrExcel> listImportGrExcel = new List<ImportGrExcel>();
 
     string UserName = "";
+
+
+    private async Task CloseSave()
+    {
+        List<CarAdviceGrTruckItems> listGrItems = new List<CarAdviceGrTruckItems>();
+
+        CarAdviceGrTruckMainTable newTruck = new();
+
+        newTruck.AddDate = DateTime.Now;
+        newTruck.AddByUser = "rcis";
+
+        DateTime etdToMain = (DateTime)listImportGrExcel[0].DataEtd;
+        TimeSpan etdTime = (TimeSpan)listImportGrExcel[0].HourEtd;
+
+
+        newTruck.ETD = etdToMain.Add(etdTime);
+        newTruck.PickingStatus = "Oczekuje";
+
+        foreach (var excelItem in listImportGrExcel)
+        {
+            grItem.ContainerNo = excelItem.ContainerNo;
+            grItem.PalletNo = excelItem.PartNo;
+            grItem.Material = excelItem.Material;
+            grItem.InvoiceNo = excelItem.InvoiceNo;
+            grItem.TotalPalletQty = (int)excelItem.TotalPalletQty;
+            grItem.TotalQty = (int)excelItem.TotalQty;
+            grItem.Remark = excelItem.Remark;
+            listGrItems.Add(grItem);
+
+        }
+
+        newTruck.CarAdviceGrTruckItems = listGrItems;
+
+        string linkCu = "api/CarAdviceGrTruckMainTable/ImportExcel";
+        await httpClient.PostAsJsonAsync(linkCu, newTruck);
+
+
+      //  navigationManager.NavigateTo("/GRcarAdvice", true);
+
+    }
+
+    private async Task CloseCancel()
+    {
+
+
+        navigationManager.NavigateTo("/GRcarAdvice", true);
+
+    }
+
+    private async void Edit(ImportGrExcel caForEdit)
+    {
+        var parameters = new DialogParameters { ["GrItemForEdit"] = caForEdit };
+        var dialog = DialogService.Show<GREditNewImportExcelComponent>("", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            grItemUpdated = (ImportGrExcel)result.Data;
+            var indexOf = listImportGrExcel.IndexOf(listImportGrExcel.FirstOrDefault(p => p.Id == grItemUpdated.Id));
+            listImportGrExcel[indexOf] = grItemUpdated;
+            StateHasChanged();
+        }
+    }
+
+    private async void Delete(ImportGrExcel caForDelete)
+    {
+        listImportGrExcel.Remove(caForDelete);
+        StateHasChanged();
+    }
+
+
+    private Func<ImportGrExcel, int, string> _rowStyleFunc => (x, i) =>
+       {
+           // Skan OK
+           //if (x.RemarksWh == "REFERENCE ALREADY UPLOADED!!!!")
+           //    return "background-color:#f79f52";
+
+           return "";
+       };
+
     async Task ReadExcelNpoi(InputFileChangeEventArgs e)
     {
+        listImportGrExcel = new();
         var fileStream = e.File.OpenReadStream();
         var ms = new MemoryStream();
         await fileStream.CopyToAsync(ms);
@@ -38,9 +206,10 @@
         {
             var r = sheet.GetRow(j);
             ImportGrExcel importExcel = new();
+            importExcel.Id = counterId;
 
-            importExcel.DataEtd = r.GetCell(0).DateCellValue; // dodaj godzine z pole 5
-            importExcel.HourEtd = r.GetCell(5).DateCellValue; // dodaj godzine z pole 5
+            importExcel.DataEtd = r.GetCell(0).DateCellValue; 
+            importExcel.HourEtd = r.GetCell(5).DateCellValue.TimeOfDay; 
 
             importExcel.Sender = NpoiExtension.GetFormattedCellValue(r.GetCell(1));
             importExcel.ContainerNo = NpoiExtension.GetFormattedCellValue(r.GetCell(2));
@@ -49,13 +218,17 @@
             importExcel.InvoiceNo = NpoiExtension.GetFormattedCellValue(r.GetCell(7));
             importExcel.PartNo = NpoiExtension.GetFormattedCellValue(r.GetCell(8));
             importExcel.CarNumber = NpoiExtension.GetFormattedCellValue(r.GetCell(10));
+            importExcel.TotalPalletQty = (int)r.GetCell(11).NumericCellValue;
+            importExcel.TotalQty = (int)r.GetCell(12).NumericCellValue;
 
             listImportGrExcel.Add(importExcel);
 
+            counterId++;
+
             }
                              
-        string linkpostca = "/api/CarAdviceGrTruckMainTable/ImportExcel/";
-        var Response = await httpClient.PostAsJsonAsync<List<ImportGrExcel>>(linkpostca, listImportGrExcel);
+        //string linkpostca = "/api/CarAdviceGrTruckMainTable/ImportExcel/";
+        //var Response = await httpClient.PostAsJsonAsync<List<ImportGrExcel>>(linkpostca, listImportGrExcel);
 
     }
 
@@ -71,14 +244,24 @@
         {
             UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
         }
-
     }
+
+ 
+    private bool FilterFunc(ImportGrExcel element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.InvoiceNo.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
 }
 
 <style>
     .mud-table-cell {
         padding: 0px !important;
-        font-size: small !important;
+        font-size: x-small !important;
         text-transform: uppercase !important;
         text-align: left !important;
     }
@@ -87,3 +270,4 @@
         font-size: xx-small !important;
     }
 </style>
+

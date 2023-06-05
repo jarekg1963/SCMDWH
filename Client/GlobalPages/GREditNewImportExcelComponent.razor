@@ -1,0 +1,105 @@
+﻿@using SCMDWH.Shared.Models;
+@using SCMDWH.Shared.DTO;
+@using System.Text.Json;
+@inject HttpClient httpClient;
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<CultureExample2> Loc
+
+<MudDialog Style="min-width: 1400px;">
+    <DialogContent>
+        <MudCard Outlined="true" Elevation="20">
+            <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbAddnewitem"]</MudAlert>
+            <MudGrid>
+                <MudItem xs="2">
+                    <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="newEtadate" />
+                </MudItem>
+                 <MudItem xs="2">
+                    <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="true" @bind-Time="newEtatime" />
+                 </MudItem>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.Sender" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.ContainerNo" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.PickingStatus" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.Material" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+            </MudGrid>
+            <MudGrid>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.InvoiceNo" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.Material" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.InvoiceNo" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.TotalPalletQty" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.TotalQty" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+            </MudGrid>
+              <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@GrItemForEdit.Remark" Label="Uwagi" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+              </MudGrid>
+        </MudCard>
+    </DialogContent>
+    <DialogActions>
+
+        <MudGrid>
+            <MudItem xs="6">
+
+            </MudItem>
+
+
+            <MudItem xs="2">
+
+            </MudItem>
+
+            <MudItem xs="2">
+                <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">@Loc["lbSave"]</MudButton>
+            </MudItem>
+        </MudGrid>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public ImportGrExcel GrItemForEdit { get; set; }
+
+    string userName = "";
+
+    DateTime? newEtadate;
+    TimeSpan? newEtatime;
+
+    protected async override void OnInitialized()
+    {
+        newEtadate = (DateTime)GrItemForEdit.DataEtd;
+        newEtatime = GrItemForEdit.HourEtd;
+
+    }
+
+    void CloseCancel() => MudDialog.Close(DialogResult.Cancel());
+
+    private async void CloseSave()
+    {
+         MudDialog.Close(DialogResult.Ok(GrItemForEdit));
+    }
+}

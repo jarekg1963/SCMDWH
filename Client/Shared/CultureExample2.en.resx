@@ -171,6 +171,9 @@
   <data name="lbColumns" xml:space="preserve">
     <value>Columns</value>
   </data>
+  <data name="lbContainer" xml:space="preserve">
+    <value>Container</value>
+  </data>
   <data name="lbCurrierList" xml:space="preserve">
     <value>Currier list</value>
   </data>
@@ -209,6 +212,9 @@
   </data>
   <data name="lbEditCurrier" xml:space="preserve">
     <value>Edit currier</value>
+  </data>
+  <data name="lbEditNewTruckItem" xml:space="preserve">
+    <value>Edit new trusk item</value>
   </data>
   <data name="lbEnTime" xml:space="preserve">
     <value>En Time</value>
@@ -249,6 +255,9 @@
   <data name="lbHome" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="lbInvoice" xml:space="preserve">
+    <value>Invoice</value>
+  </data>
   <data name="lbleftdockdate" xml:space="preserve">
     <value>Left dock date</value>
   </data>
@@ -261,11 +270,23 @@
   <data name="lbLoggeduser" xml:space="preserve">
     <value>Logged user</value>
   </data>
+  <data name="lbMaterial" xml:space="preserve">
+    <value>Material</value>
+  </data>
   <data name="lbNew" xml:space="preserve">
     <value>New</value>
   </data>
   <data name="lbNow" xml:space="preserve">
     <value>Now</value>
+  </data>
+  <data name="lbPalletList" xml:space="preserve">
+    <value>Pallet list</value>
+  </data>
+  <data name="lbPalletNo" xml:space="preserve">
+    <value>Pallet number</value>
+  </data>
+  <data name="lbPalletQty" xml:space="preserve">
+    <value>Pallet quantity</value>
   </data>
   <data name="lbPassword" xml:space="preserve">
     <value>Password</value>
@@ -360,6 +381,9 @@
   <data name="lbStatuscodes" xml:space="preserve">
     <value>Status codes</value>
   </data>
+  <data name="lbTotalQty" xml:space="preserve">
+    <value>Total quantity</value>
+  </data>
   <data name="lbTPVEntrydate" xml:space="preserve">
     <value>TPV Entry date</value>
   </data>
@@ -392,6 +416,9 @@
   </data>
   <data name="lbWarehouseinformation" xml:space="preserve">
     <value>Warehouse information</value>
+  </data>
+  <data name="lbWorkOrder" xml:space="preserve">
+    <value>Work orders</value>
   </data>
   <data name="lbWrongpassuser" xml:space="preserve">
     <value>Wrong password or username </value>

@@ -168,6 +168,9 @@
   <data name="lbColumns" xml:space="preserve">
     <value>Kolumny</value>
   </data>
+  <data name="lbContainer" xml:space="preserve">
+    <value>Kontener</value>
+  </data>
   <data name="lbCopy" xml:space="preserve">
     <value>Kopiuj</value>
   </data>
@@ -213,6 +216,9 @@
   <data name="lbEditCurrier" xml:space="preserve">
     <value>Edycja przewoźnika</value>
   </data>
+  <data name="lbEditNewTruckItem" xml:space="preserve">
+    <value>Edycja fatury GR</value>
+  </data>
   <data name="lbEnTime" xml:space="preserve">
     <value>Godzina wjazdu</value>
   </data>
@@ -255,6 +261,9 @@
   <data name="lbHome" xml:space="preserve">
     <value>Start</value>
   </data>
+  <data name="lbInvoice" xml:space="preserve">
+    <value>Faktura</value>
+  </data>
   <data name="lbleftdockdate" xml:space="preserve">
     <value>Data opuszczenia doku</value>
   </data>
@@ -267,11 +276,23 @@
   <data name="lbLoggeduser" xml:space="preserve">
     <value>Użytkownik</value>
   </data>
+  <data name="lbMaterial" xml:space="preserve">
+    <value>Materiał</value>
+  </data>
   <data name="lbNew" xml:space="preserve">
     <value>Nowy</value>
   </data>
   <data name="lbNow" xml:space="preserve">
     <value>Teraz</value>
+  </data>
+  <data name="lbPalletList" xml:space="preserve">
+    <value>Lista palet</value>
+  </data>
+  <data name="lbPalletNo" xml:space="preserve">
+    <value>Nr palety</value>
+  </data>
+  <data name="lbPalletQty" xml:space="preserve">
+    <value>Ilość na palecie</value>
   </data>
   <data name="lbPassword" xml:space="preserve">
     <value>Hasło</value>
@@ -369,6 +390,9 @@
   <data name="lbStatuscodes" xml:space="preserve">
     <value>Kody status</value>
   </data>
+  <data name="lbTotalQty" xml:space="preserve">
+    <value>Ilość całkowita</value>
+  </data>
   <data name="lbTPVEntrydate" xml:space="preserve">
     <value>Data wjazdu do TPV</value>
   </data>
@@ -401,6 +425,9 @@
   </data>
   <data name="lbWarehouseinformation" xml:space="preserve">
     <value>Magazyn dane wysyłki</value>
+  </data>
+  <data name="lbWorkOrder" xml:space="preserve">
+    <value>Zelecenia produkcyjne</value>
   </data>
   <data name="lbWrongpassuser" xml:space="preserve">
     <value>Złe hasło lub nazwa użytkowanika</value>

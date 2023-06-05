@@ -214,6 +214,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kontener.
+        /// </summary>
+        public static string lbContainer {
+            get {
+                return ResourceManager.GetString("lbContainer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kopiuj.
         /// </summary>
         public static string lbCopy {
@@ -349,6 +358,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edycja fatury GR.
+        /// </summary>
+        public static string lbEditNewTruckItem {
+            get {
+                return ResourceManager.GetString("lbEditNewTruckItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Godzina wjazdu.
         /// </summary>
         public static string lbEnTime {
@@ -475,6 +493,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Faktura.
+        /// </summary>
+        public static string lbInvoice {
+            get {
+                return ResourceManager.GetString("lbInvoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data opuszczenia doku.
         /// </summary>
         public static string lbleftdockdate {
@@ -511,6 +538,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Materiał.
+        /// </summary>
+        public static string lbMaterial {
+            get {
+                return ResourceManager.GetString("lbMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nowy.
         /// </summary>
         public static string lbNew {
@@ -525,6 +561,33 @@ namespace SCMDWH.Client.Shared {
         public static string lbNow {
             get {
                 return ResourceManager.GetString("lbNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista palet.
+        /// </summary>
+        public static string lbPalletList {
+            get {
+                return ResourceManager.GetString("lbPalletList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nr palety.
+        /// </summary>
+        public static string lbPalletNo {
+            get {
+                return ResourceManager.GetString("lbPalletNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ilość na palecie.
+        /// </summary>
+        public static string lbPalletQty {
+            get {
+                return ResourceManager.GetString("lbPalletQty", resourceCulture);
             }
         }
         
@@ -817,6 +880,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ilość całkowita.
+        /// </summary>
+        public static string lbTotalQty {
+            get {
+                return ResourceManager.GetString("lbTotalQty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data wjazdu do TPV.
         /// </summary>
         public static string lbTPVEntrydate {
@@ -912,6 +984,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbWarehouseinformation {
             get {
                 return ResourceManager.GetString("lbWarehouseinformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zelecenia produkcyjne.
+        /// </summary>
+        public static string lbWorkOrder {
+            get {
+                return ResourceManager.GetString("lbWorkOrder", resourceCulture);
             }
         }
         

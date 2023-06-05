@@ -1,0 +1,138 @@
+﻿@using SCMDWH.Shared.DTO;
+@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient;
+@inject IStringLocalizer<CultureExample2> Loc
+@inject NavigationManager navigationManager
+
+<MudDialog Style="min-width: 1400px;">
+    <DialogContent>
+        <MudCard Outlined="true" Elevation="20">
+            <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbEditNewTruckItem"]</MudAlert>
+            <MudGrid>
+                <MudItem xs="3">
+                    <MudTextField @bind-Value="@GrItemForEdit.ContainerNo" Label=@Loc["lbContainer"] Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="3">
+                    <MudTextField @bind-Value="@GrItemForEdit.Material" Variant="Variant.Text" Label=@Loc["lbMaterial"]></MudTextField>
+                </MudItem>
+
+                <MudItem xs="3">
+                    <MudTextField @bind-Value="@GrItemForEdit.InvoiceNo" Variant="Variant.Text" Label=@Loc["lbInvoice"]></MudTextField>
+                </MudItem>
+
+                <MudItem xs="3">
+                    <MudTextField @bind-Value="@GrItemForEdit.PalletNo" Variant="Variant.Text" Label=@Loc["lbPalletNo"]></MudTextField>
+                </MudItem>
+            </MudGrid>
+          
+            <MudGrid>   
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.TotalPalletQty" Variant="Variant.Text" Label=@Loc["lbPalletQty"]></MudTextField>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.TotalQty" Variant="Variant.Text" Label=@Loc["lbTotalQty"]></MudTextField>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.WorkOrders" Variant="Variant.Text" Label=@Loc["lbWorkOrder"]></MudTextField>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudTextField @bind-Value="@GrItemForEdit.Transfer" Variant="Variant.Text" Label="Transfery"></MudTextField>
+                </MudItem>
+            </MudGrid>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@GrItemForEdit.Remark"  Variant="Variant.Text" Label=@Loc["lbRemarkWH"]></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudCard>
+    </DialogContent>
+    <DialogActions>
+
+        <MudGrid>
+            <MudItem xs="6">
+
+            </MudItem>
+
+
+            <MudItem xs="2">
+                <MudButton OnClick="CloseDelete" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Delete">@Loc["lbDelete"]</MudButton>
+            </MudItem>
+           
+
+            <MudItem xs="2">
+                <MudButton OnClick="CloseCancel" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Cancel">@Loc["lbCancel"]</MudButton>
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Medium" StartIcon="@Icons.Material.Filled.Save" OnClick="CloseSave">@Loc["lbSave"]</MudButton>
+            </MudItem>
+        </MudGrid>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    CarAdviceGrTruckItems GrItemForEdit = new();
+
+    [Parameter]
+    public long idForEdit { get; set; }
+
+    string userName = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            userName = user.Identity.Name;
+        }
+
+        if (idForEdit != 0)
+        {
+            await ReadData();
+        }
+        else
+        {
+            //stStatus.Status = "";
+            //stStatus.ActiveFlag = false;
+            //stStatus.AddByUser = userName;
+            //stStatus.AddTime = DateTime.Now;
+        }
+    }
+
+    private async Task ReadData()
+    {
+        string link = "/api/CarAdviceGrTruckItemsControllery/" + idForEdit;
+        GrItemForEdit = await httpClient.GetFromJsonAsync<CarAdviceGrTruckItems>(link);
+        StateHasChanged();
+    }
+
+    void CloseCancel() => MudDialog.Close(DialogResult.Cancel());
+
+    private async void CloseSave()
+    {
+        MudDialog.Close(DialogResult.Ok(GrItemForEdit));
+
+
+        
+    }
+
+    private async void CloseDelete()
+    {
+        MudDialog.Close(DialogResult.Ok("Delete" + idForEdit));
+
+
+
+    }
+
+
+}
