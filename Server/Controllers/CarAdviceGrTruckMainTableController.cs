@@ -23,8 +23,7 @@ namespace SCMDWH.Server.Controllers
 
         [HttpPost("ImportExcel")]
         public async Task<ActionResult> ImportExcel([FromBody] List<ImportGrExcel> excelImportedList)
-        {
-
+        { 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -40,8 +39,13 @@ namespace SCMDWH.Server.Controllers
                 if (ReferenceExcelLineFromGroup == null) continue;
                 if (ReferenceExcelLineFromGroup.DataEtd == null) ReferenceExcelLineFromGroup.DataEtd = DateTime.Now;
                 if (ReferenceExcelLineFromGroup.HourEtd == null) ReferenceExcelLineFromGroup.HourEtd = DateTime.Now.TimeOfDay;
-             //   CarToAdd.ETD = new DateTime(ReferenceExcelLineFromGroup.DataEtd.Value.Year, ReferenceExcelLineFromGroup.DataEtd.Value.Month, ReferenceExcelLineFromGroup.DataEtd.Value.Day, ReferenceExcelLineFromGroup.HourEtd.Value.Hour, ReferenceExcelLineFromGroup.HourEtd.Value.Minute, ReferenceExcelLineFromGroup.HourEtd.Value.Second);
+                DateTime DateInfo = (DateTime)ReferenceExcelLineFromGroup.DataEtd;
+                DateInfo = DateInfo.Add((TimeSpan)ReferenceExcelLineFromGroup.HourEtd);
+                CarToAdd.ETD = DateInfo;
                 CarToAdd.Sender = ReferenceExcelLineFromGroup.Sender;
+                CarToAdd.PickingStatus = "Oczekuje";
+                CarToAdd.AddByUser = "rcis";
+                CarToAdd.AddDate = DateTime.Now;
                 foreach (ImportGrExcel item in ExcelGroup)
                 {
                     CarAdviceGrTruckItems itemToAdd = new();
@@ -78,10 +82,8 @@ namespace SCMDWH.Server.Controllers
             {
                 return BadRequest(ModelState);
             }
-  
             try
             {
-
                 _context.CarAdviceGrTruckMainTable.Add(mainTable);
                 _context.SaveChanges();
             }
@@ -90,12 +92,7 @@ namespace SCMDWH.Server.Controllers
                 return BadRequest(ex.Message);
 
             }
-       
-
             return Ok();
-
-
-
         }
 
 

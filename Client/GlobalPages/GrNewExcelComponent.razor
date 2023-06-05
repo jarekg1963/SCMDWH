@@ -97,8 +97,6 @@ else
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
-
-    CarAdviceGrTruckItems grItem = new CarAdviceGrTruckItems();
     ImportGrExcel grItemUpdated = new ImportGrExcel();
     bool fixed_header = true;
     bool fixed_footer = false;
@@ -116,41 +114,23 @@ else
 
     private async Task CloseSave()
     {
-        List<CarAdviceGrTruckItems> listGrItems = new List<CarAdviceGrTruckItems>();
-
-        CarAdviceGrTruckMainTable newTruck = new();
-
-        newTruck.AddDate = DateTime.Now;
-        newTruck.AddByUser = "rcis";
-
-        DateTime etdToMain = (DateTime)listImportGrExcel[0].DataEtd;
-        TimeSpan etdTime = (TimeSpan)listImportGrExcel[0].HourEtd;
-
-
-        newTruck.ETD = etdToMain.Add(etdTime);
-        newTruck.PickingStatus = "Oczekuje";
-
+        List<ImportGrExcel> listGrItems = new List<ImportGrExcel>();
         foreach (var excelItem in listImportGrExcel)
         {
+            ImportGrExcel grItem = new ImportGrExcel();
             grItem.ContainerNo = excelItem.ContainerNo;
-            grItem.PalletNo = excelItem.PartNo;
+            grItem.PartNo = excelItem.PartNo;
             grItem.Material = excelItem.Material;
             grItem.InvoiceNo = excelItem.InvoiceNo;
             grItem.TotalPalletQty = (int)excelItem.TotalPalletQty;
             grItem.TotalQty = (int)excelItem.TotalQty;
             grItem.Remark = excelItem.Remark;
+            grItem.CarNumber = excelItem.CarNumber;
             listGrItems.Add(grItem);
-
         }
-
-        newTruck.CarAdviceGrTruckItems = listGrItems;
-
         string linkCu = "api/CarAdviceGrTruckMainTable/ImportExcel";
-        await httpClient.PostAsJsonAsync(linkCu, newTruck);
-
-
+        await httpClient.PostAsJsonAsync(linkCu, listGrItems);
       //  navigationManager.NavigateTo("/GRcarAdvice", true);
-
     }
 
     private async Task CloseCancel()

@@ -23,24 +23,24 @@ public partial class CarAdviceGrTruckMainTable
 
 	public string AddByUser { get; set; }
 
-	public string? PickingStatus { get; set; }
+	public string PickingStatus { get; set; }
 
 
 	public DateTime? TpvEnterTime { get; set; }
 
-	public string DriverS { get; set; }
+	public string? DriverS { get; set; }
 
-	public string TruckPlatesS { get; set; }
+	public string? TruckPlatesS { get; set; }
 
-	public string RemarkS { get; set; }
+	public string? RemarkS { get; set; }
 
-	public string CallBy { get; set; }
+	public string? CallBy { get; set; }
 
-	public string DriverWh { get; set; }
+	public string? DriverWh { get; set; }
 
-	public string TruckPlatesWh { get; set; }
+	public string? TruckPlatesWh { get; set; }
 
-	public string RemarksWh { get; set; }
+	public string? RemarksWh { get; set; }
 
 	public short? LoadingDock { get; set; }
 
