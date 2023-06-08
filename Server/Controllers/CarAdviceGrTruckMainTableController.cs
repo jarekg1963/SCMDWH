@@ -41,6 +41,9 @@ namespace SCMDWH.Server.Controllers
                 if (ReferenceExcelLineFromGroup.HourEtd == null) ReferenceExcelLineFromGroup.HourEtd = DateTime.Now.TimeOfDay;
                 DateTime DateInfo = (DateTime)ReferenceExcelLineFromGroup.DataEtd;
                 DateInfo = DateInfo.Add((TimeSpan)ReferenceExcelLineFromGroup.HourEtd);
+
+
+
                 CarToAdd.ETD = DateInfo;
                 CarToAdd.Sender = ReferenceExcelLineFromGroup.Sender;
                 CarToAdd.PickingStatus = "Oczekuje";
@@ -135,8 +138,8 @@ namespace SCMDWH.Server.Controllers
             int eMc = Int32.Parse(endDate.Substring(0, 2));
             DateTime endDt = new DateTime(eYear, eMc, eDay);
 
-            return await _context.CarAdviceGrTruckMainTable.Where(d => d.AddDate >= startDt && d.AddDate <= endDt && d.PickingStatus != "Sent").Include(C => C.CarAdviceGrTruckItems)
-                .OrderByDescending(c => c.AddDate).ToListAsync();
+            return await _context.CarAdviceGrTruckMainTable.Where(d => d.ETD >= startDt && d.ETD <= endDt && d.PickingStatus != "Sent").Include(C => C.CarAdviceGrTruckItems)
+                .OrderByDescending(c => c.ETD).ToListAsync();
         }
 
 

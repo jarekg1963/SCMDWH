@@ -16,7 +16,7 @@ else
 {
     <MudDataGrid T="CarAdviceGrTruckMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                  Height="35em" RowsPerPage="30" MultiSelection="false" Items="@ListGRCAMainTable" SortMode="SortMode.Multiple" Filterable="true"
-                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive" >
+                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
         <ToolBarContent>
             <MudGrid>
                 <MudItem xs="2">
@@ -40,8 +40,8 @@ else
                         </PickerActions>
                     </MudDateRangePicker>
                 </MudItem>
-               
-                 
+
+
             </MudGrid>
         </ToolBarContent>
 
@@ -50,36 +50,44 @@ else
             @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
             {
                 <HierarchyColumn Property="x => x.Id" Title="Id" Hidden="false" Sortable="true" />
-                <TemplateColumn CellClass="d-flex justify-end">
+                <TemplateColumn CellClass="d-flex justify-end" Filterable="false" Sortable="false">
                     <CellTemplate>
-                        <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Default" StartIcon="@Icons.Material.Filled.ViewList" @onclick="@(()=>EditGr(@context.Item.Id))"></MudButton>
+                        <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Default" StartIcon="@Icons.Material.Filled.CarRental"  @onclick="@(()=>EditGr(@context.Item.Id))"></MudButton>
                     </CellTemplate>
                 </TemplateColumn>
-                <PropertyColumn Property="x => x.Id" Title="Id"  Sortable="true" Filterable="false" />
-                <PropertyColumn Property="x => x.AddDate" Title="Add Date" Sortable="true" Filterable="true" />
-                <PropertyColumn Property="x => x.AddByUser" Title="Add Date" Sortable="true" Filterable="false" />
-
+                <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
+                <PropertyColumn Property="x => x.ETD" Title="ETD" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.Invoices" Title="Invoices" Sortable="true" Filterable="true" />
+                <PropertyColumn Property="x => x.PickingStatus" Title="Status" Sortable="true" Filterable="false" />
+                    <PropertyColumn Property="x => x.AddDate" Title="Add Date" Sortable="true" Filterable="true" />
+                <PropertyColumn Property="x => x.AddByUser" Title="Add Date" Sortable="true" Filterable="false" />
                     <PropertyColumn Property="x => x.Ata" Title="ATA" Sortable="true" Filterable="false" />
-                        <PropertyColumn Property="x => x.ETD" Title="ETD" Sortable="true" Filterable="false" />
-                            <PropertyColumn Property="x => x.RemarksWh" Title="Uwagi magazyn" Sortable="true" Filterable="false" />
-                                <PropertyColumn Property="x => x.PickingStatus" Title="Status" Sortable="true" Filterable="false" />
+              
+                <PropertyColumn Property="x => x.RemarksWh" Title="Uwagi magazyn" Sortable="true" Filterable="false" />
+               
                 <PropertyColumn Property="x => x.RemarkS" Title="Uwagi ochrona" Sortable="true" Filterable="false" />
             }
         </Columns>
         <ChildRowContent>
             <MudCard>
-          
+
                 <MudCardContent>
-                    <MudSimpleTable Style="overflow-x: auto;" Dense="true" Hover="true" Bordered="true" Striped="true">
+                    <MudSimpleTable Style="width:70%;" Dense="true" Hover="true" Bordered="true" Striped="true">
+                        <col style="width:10%">
+                        <col style="width:10%">
+                        <col style="width:10%">
+                         <col style="width:10%">
+                          <col style="width:1%">
+                        <col style="width:1%">
+                        
                         <thead>
                             <tr>
-                                <th>Invoice</th>
-                                <th>Container</th>
-                                <th>Material</th>
-                                <th>Pallet No</th>
-                                <th>Pallet Qty</th>
-                                <th>Qty</th>
+                                <th >Invoice</th>
+                                <th >Container</th>
+                                <th >Material</th>
+                                <th >Pallet No</th>
+                                <th >Pallet Qty</th>
+                                <th >Qty</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -136,7 +144,7 @@ else
     GlobalAppUsersParameters userParametersGRDates = new();
     private DateTime ldGRStart;
     private DateTime ldGREnd;
- 
+
 
     private bool CheckTest
     {
@@ -230,14 +238,12 @@ else
 
         string linkLoad = "";
 
-      
-            linkLoad = "/api/CarAdviceGrTruckMainTable/GetGRbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
-        
+
+        linkLoad = "/api/CarAdviceGrTruckMainTable/GetGRbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+
         ListGRCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceGrTruckMainTable>>(linkLoad);
         // wczytanie kolumn
 
-
-       
     }
 
     private async Task SelectTimeFrameFromPicker()

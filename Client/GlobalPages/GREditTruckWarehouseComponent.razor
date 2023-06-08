@@ -1,10 +1,12 @@
 ﻿@page "/editGrTuckWh/{zId}"
 @using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.Models;
+@using System.Security.Claims;
 @inject HttpClient httpClient
 @inject IStringLocalizer<CultureExample2> Loc
 @inject NavigationManager navigationManager
-
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 <style>
 
@@ -31,31 +33,28 @@
     <MudItem xs="12">
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbGeneralInfo"]</MudAlert>
     </MudItem>
+
+    <MudItem xs="6" sm="2">
+
+
+    </MudItem>
     <MudItem xs="6" sm="1">
         <MudTextField Label="Nr" @bind-Value="@CAMainTable.Id" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+    </MudItem>
+    <MudItem xs="6" sm="1">
     </MudItem>
     <MudItem xs="6" sm="2">
         <MudDatePicker Label=@Loc["lbAdDate"] @bind-Date="@CAMainTable.AddDate" DisableToolbar="true" ReadOnly="false" Editable="true" Margin="Margin.Normal" />
     </MudItem>
-    <MudItem xs="6" sm="2">
-        <h6> @CAMainTable.Invoices </h6>
-    </MudItem>
-    <MudItem xs="6" sm="2">
-        <MudTextField Label=@Loc["lbReference"] @bind-Value="@CAMainTable.ETD" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
-    </MudItem>
-    <MudItem xs="6" sm="2">
-
-        <MudTextField Label=@Loc["lbReference"] @bind-Value="@CAMainTable.Ata" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>
-
-    </MudItem>
-    <MudItem xs="6" sm="2">
-    
-
-    </MudItem>
     <MudItem xs="6" sm="1">
-      
-
     </MudItem>
+    <MudItem xs="6" sm="2">
+        <h6 > @CAMainTable.Invoices </h6>
+    </MudItem>
+   
+  
+
+  
     <MudItem xs="12" sm="6">
         <MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>
     </MudItem>
@@ -64,105 +63,105 @@
     </MudItem>
 
     <MudItem xs="6" sm="3">
-        <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="@EtdTimeDate" DisableToolbar="true" ReadOnly="false" Editable="true" Margin="Margin.Normal" />
+        <MudDatePicker Label=@Loc["lbEtdDate"] @bind-Date="@EtdTimeDate" DisableToolbar="true" Disabled="@readOnlyWH" Margin="Margin.Normal" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" ReadOnly="false" Editable="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" Disabled="@readOnlyWH" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
           
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="3">
-        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" DisableToolbar="true" ReadOnly="false" Editable="false" Margin="Margin.Normal" />
+        <MudDatePicker Label=@Loc["lbAtaTimeDate"] @bind-Date="AtaTimeDate" Disabled="@readOnlyScurity" Margin="Margin.Normal" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" DisableToolbar="false" ReadOnly="true" Editable="false" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
            
         </MudStack>
     </MudItem>
     <MudItem xs="3" sm="3">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbReason"] @bind-Value="CAMainTable.FgDelayReason" SearchFunc="@SearchFGDelayReason"
-                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+                         Disabled="@readOnlyWH" ResetValueOnEmptyText="@resetValueOnEmptyText" />
 
     </MudItem>
     <MudItem xs="3" sm="3">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbPickingstatus"] @bind-Value="CAMainTable.PickingStatus" SearchFunc="@SearchStatus"
-                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+                         Disabled="@readOnlyWH" ResetValueOnEmptyText="@resetValueOnEmptyText" />
 
     </MudItem>
    
     <MudItem xs="6" sm="3">
-        <MudTextField Label=@Loc["lbTruckType"] @bind-Value="@CAMainTable.TruckType" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbTruckType"] @bind-Value="@CAMainTable.TruckType" Variant="Variant.Text"  Disabled = "@readOnlyScurity"  Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbQuality"] @bind-Value="CAMainTable.Quality" SearchFunc="@SearchQuality"
-                         ResetValueOnEmptyText="@resetValueOnEmptyText" />
+                         Disabled="@readOnlyScurity" ResetValueOnEmptyText="@resetValueOnEmptyText" />
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTextField Label=@Loc["lbDriverWH"] @bind-Value="@CAMainTable.DriverWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
+            <MudTextField Label=@Loc["lbDriverWH"] @bind-Value="@CAMainTable.DriverWh" Variant="Variant.Text" Disabled="@readOnlyWH" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
             
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTextField Label=@Loc["lbDriverS"] @bind-Value="@CAMainTable.DriverS" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
+            <MudTextField Label=@Loc["lbDriverS"] @bind-Value="@CAMainTable.DriverS" Variant="Variant.Text" Disabled="@readOnlyScurity" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
           
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CAMainTable.TruckPlatesWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
+            <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CAMainTable.TruckPlatesWh" Variant="Variant.Text" Disabled="@readOnlyWH" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
          
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CAMainTable.TruckPlatesS" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
+            <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CAMainTable.TruckPlatesS" Variant="Variant.Text" Disabled="@readOnlyScurity" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudTextField Label=@Loc["lbDock"] @bind-Value="@CAMainTable.LoadingDock" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbDock"] @bind-Value="@CAMainTable.LoadingDock" Variant="Variant.Text" Disabled="@readOnlyWH" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudTextField Label=@Loc["lbCallBy"] @bind-Value="@CAMainTable.CallBy" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbCallBy"] @bind-Value="@CAMainTable.CallBy" Variant="Variant.Text" Disabled="@readOnlyScurity" Margin="Margin.Normal"></MudTextField>
 
     </MudItem>
 
     <MudItem xs="6" sm="6">
     </MudItem>
     <MudItem xs="6" sm="3">
-        <MudDatePicker Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Editable="false" ReadOnly="true" Margin="Margin.Normal" />
+        <MudDatePicker Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Disabled="@readOnlyScurity" Margin="Margin.Normal" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Editable="false" ReadOnly="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
            
         </MudStack>
     </MudItem>
      <MudItem xs="6" sm="6">
     </MudItem>
     <MudItem xs="6" sm="3">
-        <MudDatePicker Label=@Loc["lbTPVExitdate"] @bind-Date="TPVExitTimeDate" DisableToolbar="true" Editable="false" ReadOnly="true" Margin="Margin.Normal" />
+        <MudDatePicker Label=@Loc["lbTPVExitdate"] @bind-Date="TPVExitTimeDate" DisableToolbar="true" Disabled="@readOnlyScurity" Margin="Margin.Normal" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" DisableToolbar="true" Editable="false" ReadOnly="true" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" DisableToolbar="true" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
             
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudTextField Label=@Loc["lbRemarkWH"] @bind-Value="@CAMainTable.RemarksWh" Variant="Variant.Text" ReadOnly="false" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbRemarkWH"] @bind-Value="@CAMainTable.RemarksWh" Variant="Variant.Text" Disabled="@readOnlyWH" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudTextField Label=@Loc["lbRemarksS"] @bind-Value="@CAMainTable.RemarkS" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbRemarksS"] @bind-Value="@CAMainTable.RemarkS" Variant="Variant.Text" Disabled="@readOnlyScurity" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudTextField Label=@Loc["lbEntrybyWH"] @bind-Value="@CAMainTable.EntryByWh" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbEntrybyWH"] @bind-Value="@CAMainTable.EntryByWh" Variant="Variant.Text" Disabled="@readOnlyWH" Margin="Margin.Normal"></MudTextField>
     </MudItem>
     <MudItem xs="6" sm="6">
-        <MudTextField Label=@Loc["lbEntryByS"] @bind-Value="@CAMainTable.EntryByS" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
+        <MudTextField Label=@Loc["lbEntryByS"] @bind-Value="@CAMainTable.EntryByS" Variant="Variant.Text" Disabled="@readOnlyScurity" Margin="Margin.Normal"></MudTextField>
     </MudItem>
 </MudGrid>
 
@@ -215,6 +214,25 @@
 @code {
     [Parameter] public string zId { get; set; }
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    private bool rolaAdministrator;
+    private bool rolaDictionary = true;
+    private bool rolaScmTools;
+    private bool rolaGrOperator;
+    private bool rolaGrAdmin;
+    private bool rolaFGOperator;
+    private bool rolaFGAdmin;
+    private bool rolaSecurity;
+    string UserName = "";
+
+    private bool readOnlyScurity = true;
+    private bool readOnlyWH = true;
+
+    private IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+
+
     CarAdviceGrTruckMainTable CAMainTable = new CarAdviceGrTruckMainTable();
 
     DateTime? EtdTimeDate;
@@ -241,24 +259,84 @@
 
     private async Task CancelButton()
     {
-        
+        navigationManager.NavigateTo("/grcarAdvice", true);
     }
 
     private async Task DeleteButton()
     {
-        
-        
+        var parameters = new DialogParameters();
+        string MessageDialog = Loc["lbDoYouRealyDelete"];
+        parameters.Add("ContentText", MessageDialog);
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+        var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
+        string textDelete = Loc["lbDelete"];
+        var dialog = DialogService.Show<DialogUserDeleteComponent>(textDelete, parameters, options);
+        var result = await dialog.Result;
+       
+        if (!result.Canceled)
+        {
+            try
+            {
+                string link = "/api/CarAdviceGrTruckMainTable/" + zId;
+                var Res = await httpClient.DeleteAsync(link);
+               
+            }
+            catch (Exception e)
+            {
+                Snackbar.Add(e.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Material.Rounded.Error; config.VisibleStateDuration = 1500; });
+            }
+        }
+        navigationManager.NavigateTo("/grcarAdvice", true);
     }
 
     private async Task SaveWh()
     {
-        
+
+        CAMainTable.EntryByS = UserName;
+
+        if (EtdTimeDate != null)
+        {
+            DateTime EtdTimeDateNotNulable = (DateTime)EtdTimeDate;
+            TimeSpan EtdTimeTimeNotNulable = (TimeSpan)EtdTimeTime;
+            CAMainTable.ETD = EtdTimeDateNotNulable.Add(EtdTimeTimeNotNulable);
+
+        }
+
+        if (AtaTimeDate != null)
+        {
+            DateTime AtaTimeDateNotNulable = (DateTime)AtaTimeDate;
+            TimeSpan AtaTimeTimeNotNulable = (TimeSpan)AtaTimeTime;
+            CAMainTable.Ata = AtaTimeDateNotNulable.Add(AtaTimeTimeNotNulable);
+        }
+
+        if (TPVEntryTimeDate != null)
+        {
+            DateTime TPVEntryTimeDateNotNulable = (DateTime)TPVEntryTimeDate;
+            TimeSpan TPVEntryTimeTimeNotNulable = (TimeSpan)TPVEntryTimeTime;
+            CAMainTable.TpvEnterTime = TPVEntryTimeDateNotNulable.Add(TPVEntryTimeTimeNotNulable);
+        }
+
+        if (TPVExitTimeDate != null)
+        {
+            DateTime TPVExitTimeDateNotNulable = (DateTime)TPVExitTimeDate;
+            TimeSpan TPVExitTimeTimeNotNulable = (TimeSpan)TPVExitTimeTime;
+            CAMainTable.TpvExitTime = TPVExitTimeDateNotNulable.Add(TPVExitTimeTimeNotNulable);
+        }
+
+        string linkSave = "/api/CarAdviceGrTruckMainTable/" + CAMainTable.Id;
+        var Response = await httpClient.PutAsJsonAsync<CarAdviceGrTruckMainTable>(linkSave, CAMainTable);
+
+        navigationManager.NavigateTo("/grcarAdvice", true);
+
+
+
     }
 
     private async Task PrintWH()
     {
 
-       
+
     }
 
     private string DriverMatch(string arg)
@@ -289,8 +367,35 @@
         return quality.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
-   protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
+
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+            claims = user.Claims;
+            string rolesForDisplay = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+            rolaAdministrator = rolesForDisplay.Contains("Administrator");
+            rolaScmTools = rolesForDisplay.Contains("SCMTOOLS");
+            rolaSecurity = rolesForDisplay.Contains("SECURITY");
+
+            // Nowe role do wsprowadzenia GR
+
+            rolaGrOperator = rolesForDisplay.Contains("GROp");
+            rolaGrAdmin = rolesForDisplay.Contains("GRAdmin");
+            rolaFGAdmin = rolesForDisplay.Contains("FGAdmin");
+            rolaFGOperator = rolesForDisplay.Contains("FGOp");
+
+            if (rolaGrOperator ^ rolaGrAdmin) readOnlyWH = false;
+            if (rolaSecurity) readOnlyScurity = false;
+        }
+
 
         // quality
 
@@ -329,6 +434,33 @@
         {
             AtaTimeDate = Convert.ToDateTime(CAMainTable.Ata).Date;
             AtaTimeTime = Convert.ToDateTime(CAMainTable.Ata).TimeOfDay;
+        }
+
+
+        // TPV Entry Time
+
+        if (CAMainTable.TpvEnterTime == null)
+        {
+            TPVEntryTimeDate = null;
+            TPVEntryTimeTime = null;
+        }
+        else
+        {
+            TPVEntryTimeDate = Convert.ToDateTime(CAMainTable.TpvEnterTime).Date;
+            TPVEntryTimeTime = Convert.ToDateTime(CAMainTable.TpvEnterTime).TimeOfDay;
+        }
+
+        // TPV exit time
+
+        if (CAMainTable.TpvExitTime == null)
+        {
+            TPVExitTimeDate = null;
+            TPVExitTimeTime = null;
+        }
+        else
+        {
+            TPVExitTimeDate = Convert.ToDateTime(CAMainTable.TpvExitTime).Date;
+            TPVExitTimeTime = Convert.ToDateTime(CAMainTable.TpvExitTime).TimeOfDay;
         }
 
         // picking status
