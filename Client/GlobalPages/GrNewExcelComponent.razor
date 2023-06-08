@@ -9,7 +9,7 @@
 @inject HttpClient httpClient
 @inject IStringLocalizer<CultureExample2> Loc
 @inject IDialogService DialogService;
-
+@inject IStringLocalizer<CultureExample2> Loc
 
 <hr />
 <InputFile OnChange="ReadExcelNpoi" class="form-control form-control-lg" id="formFileLg" type="file">Select excel file</InputFile>
@@ -33,17 +33,17 @@ else
         </ToolBarContent>
         <HeaderContent>
             <MudTh Class="Nag">Id</MudTh>
-            <MudTh Class="Nag">Data avizacji</MudTh>
-            <MudTh Class="Nag">Godzina awizacji </MudTh>
-            <MudTh Class="Nag">Dostawca</MudTh>
-            <MudTh Class="Nag">Kontener</MudTh>
-            <MudTh Class="Nag">Status</MudTh>
-            <MudTh Class="Nag">Material</MudTh>
-            <MudTh Class="Nag">Faktura</MudTh>
-            <MudTh Class="Nag">Nr czesci</MudTh>
-            <MudTh Class="Nag">Auto</MudTh>
-            <MudTh Class="Nag">Ilosc</MudTh>
-            <MudTh Class="Nag">Ilosc calkowita</MudTh>
+            <MudTh Class="Nag">@Loc["lbEtdDate"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbEtdTime"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbSender"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbContainer"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbStatuscodes"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbMaterial"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbInvoice"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbMaterial"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbCarAdvice"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbQuality"]</MudTh>
+            <MudTh Class="Nag">@Loc["lbQuality"]</MudTh>
             <MudTh Class="Nag">@Loc["lbEdit"]</MudTh>
             <MudTh Class="Nag">@Loc["lbDelete"]</MudTh>
         </HeaderContent>

@@ -123,6 +123,9 @@
   <data name="lbAdDateNowy" xml:space="preserve">
     <value>Data awizacji </value>
   </data>
+  <data name="lbAddbyUser" xml:space="preserve">
+    <value>Dodane przez</value>
+  </data>
   <data name="lbAddNewCurrier" xml:space="preserve">
     <value>Dodawanie nowego przewoźnika</value>
   </data>

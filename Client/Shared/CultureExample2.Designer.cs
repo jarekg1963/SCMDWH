@@ -79,6 +79,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dodane przez.
+        /// </summary>
+        public static string lbAddbyUser {
+            get {
+                return ResourceManager.GetString("lbAddbyUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dodawanie nowego przewoźnika.
         /// </summary>
         public static string lbAddNewCurrier {

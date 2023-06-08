@@ -10,7 +10,7 @@
 @inject IDialogService DialogService;
 
 <MudDataGrid T="GrTruckItemsDTO" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
-             Height="35em" RowsPerPage="30" MultiSelection="false" Items="@itemPaletList" SortMode="SortMode.Multiple" Filterable="true"
+             Height="35em" RowsPerPage="35" MultiSelection="false" Items="@itemPaletList" SortMode="SortMode.Multiple" Filterable="true"
              FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
     <ToolBarContent>
         <MudGrid>
@@ -27,7 +27,7 @@
                 </MudDateRangePicker>
             </MudItem>
             <MudItem xs="3">
-              @*  <MudCheckBox Style="margin-top:20px!important" Size="Size.Small" Dense="true" @bind-Checked="CheckTest">@Loc["lbPickingstatusCheckBox"]</MudCheckBox>*@
+           
             </MudItem>
         </MudGrid>
     </ToolBarContent>
@@ -175,8 +175,26 @@
         itemPaletList = await httpClient.GetFromJsonAsync<List<GrTruckItemsDTO>>(linkLoad);
         StateHasChanged();
     }
-
-
-
-
 }
+
+
+<style>
+    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
+        font-size: xx-small !important;
+    }
+
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+    }
+
+    @@media (min-width: 1080px) {
+        .example {
+            width: 1080px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+    }
+</style>

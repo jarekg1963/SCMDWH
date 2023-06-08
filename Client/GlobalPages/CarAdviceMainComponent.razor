@@ -633,7 +633,7 @@ else
         if (rolaSecurity) tabs.ActivatePanel(1);
         if (rolaWh) tabs.ActivatePanel(1);
         selectedRow = args.Item.Id.ToString();
-        Console.WriteLine("Click z Row clicked ");
+        
 
     }
 
@@ -692,6 +692,10 @@ else
             string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
             if (wszystkieRole.Contains("SECURITY")) rolaSecurity = true;
             if (wszystkieRole.Contains("WH")) rolaWh = true;
+            if (wszystkieRole.Contains("FGAdmin")) rolaWh = true;
+            if (wszystkieRole.Contains("FGOp")) rolaWh = true;
+
+          
         }
 
         // read data for datepicker from MSQl Table GlobalAppUsersParameters

@@ -23,7 +23,7 @@
                 </MudItem>
 
                 <MudItem xs="6" sm="2">
-                    <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbPickingstatus"] @bind-Value="CarAdviceGRMainTableNew.Sender" SearchFunc="@SearchSender"
+                    <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbSender"] @bind-Value="CarAdviceGRMainTableNew.Sender" SearchFunc="@SearchSender"
                                      ResetValueOnEmptyText="@resetValueOnEmptyText" />
                 </MudItem>
                 <MudItem xs="6" sm="2">                    
@@ -36,12 +36,12 @@
             <table>
                 <tr>
                  @*   <th>Lp</th>*@
-                    <th>Invoice</th>
-                    <th>Container</th>
-                    <th>Material</th>
-                    <th>Part No</th>
-                    <th>Pallet Qty</th>
-                    <th>Qty</th>
+                    <th>@Loc["lbInvoice"]</th>
+                    <th>@Loc["lbContainer"]</th>
+                    <th>@Loc["lbMaterial"]</th>
+                    <th>@Loc["lbPalletNo"]</th>
+                    <th>@Loc["lbPalletQty"]</th>
+                    <th>@Loc["lbQuality"]</th>
                 </tr>
                 @foreach (var trItem in truckItemList)
                 {
@@ -173,13 +173,9 @@
             string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
 
         }
-
-
-
         CarAdviceGRMainTableNew.AddByUser = userName;
         truckItemList.Add(newEmptyFirstItem);
         StateHasChanged();
-
     }
 
     private async Task<IEnumerable<string>> SearchSender(string value)
@@ -195,11 +191,7 @@
 
     private async void CloseSave()
     {
-        if (CarAdviceGRMainTableNew.CarAdviceGrTruckItems.Count == 0 ^ CarAdviceGRMainTableNew.CarAdviceGrTruckItems == null)
-        {
-            Snackbar.Add("Musi byc co najmniej jedna faktura", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
-            return;
-        }
+      
         string linkCu = "api/CarAdviceGrTruckMainTable/NewItemGr";
         CarAdviceGRMainTableNew.CarAdviceGrTruckItems = truckItemList;
         CarAdviceGRMainTableNew.Id = 0;

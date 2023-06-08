@@ -17,15 +17,24 @@
 		<MudNavGroup Title=@Loc["lbCarAdvice"] Icon="@Icons.Material.Filled.EmojiTransportation" @bind-Expanded=_isExpanded>
 			
 			
-			@if (rolaFGOperator ^ rolaFGAdmin ^ rolaSecurity)
+			@if (rolaFGOperator ^ rolaFGAdmin ^ rolaSecurity )
 			{
 				<MudNavLink Href="/caradvice" Icon="@Icons.Material.Filled.LibraryBooks">@Loc["lbPlan"]</MudNavLink>
 			}
 
-			@if (rolaGrOperator ^ rolaGrAdmin ^ rolaSecurity)
+
+			@if ( rolaSecurity)
+			{
+				
+					<MudNavLink Href="/GRcarAdvice" Icon="@Icons.Material.Filled.Warehouse">Lista aut GR</MudNavLink>
+				
+			}
+
+
+			@if (rolaGrOperator ^ rolaGrAdmin)
 			{
 				<MudNavGroup Title=@Loc["lbPlanGR"] Icon="@Icons.Material.Filled.Settings" Expanded="false">
-				<MudNavLink Href="/GRcarAdvice" Icon="@Icons.Material.Filled.LibraryBooks">Lista aut WH</MudNavLink>
+				<MudNavLink Href="/GRcarAdvice" Icon="@Icons.Material.Filled.LibraryBooks">Lista aut GR</MudNavLink>
 					<MudNavLink Href="/GrPalletList" Icon="@Icons.Material.Filled.LibraryBooks">Lista palet</MudNavLink>
 				</MudNavGroup>
 			}
