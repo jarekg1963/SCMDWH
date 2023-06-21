@@ -31,11 +31,11 @@
 			}
 
 
-			@if (rolaGrOperator ^ rolaGrAdmin)
+			@if (rolaGrOperator )
 			{
 				<MudNavGroup Title=@Loc["lbPlanGR"] Icon="@Icons.Material.Filled.Settings" Expanded="false">
-				<MudNavLink Href="/GRcarAdvice" Icon="@Icons.Material.Filled.LibraryBooks">Lista aut GR</MudNavLink>
-					<MudNavLink Href="/GrPalletList" Icon="@Icons.Material.Filled.LibraryBooks">Lista palet</MudNavLink>
+				    <MudNavLink Href="/GRcarAdvice" Icon="@Icons.Material.Filled.Business">Lista aut GR</MudNavLink>
+					<MudNavLink Href="/GrPalletList" Icon="@Icons.Material.Filled.Inbox">Lista palet</MudNavLink>
 				</MudNavGroup>
 			}
 

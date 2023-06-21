@@ -49,6 +49,7 @@
 }
 else
 {
+    
     <MudTabs  Elevation="2" Rounded="true"  Centered="true" Class="my-6" Color="Color.Dark" @ref="tabs" >
         <MudTabPanel Icon="@Icons.Material.Filled.Api" Style="width:550px" Text=@Loc["lbCarAdvice"] BadgeData='"!"' BadgeColor="Color.Error" @ref="panel01" ID="@("pn_one")"
                  OnClick="Tab0Active">
@@ -293,7 +294,7 @@ else
                         </MudButton>
                     </MudItem>
                     <MudItem xs="10">
-                            <MudDataGridPager T="CarAdviceMainTable" PageSizeOptions="new int[] { 20, 50}" RowsPerPageString=@Loc["lbRowPerPage"] />
+                            <MudDataGridPager T="CarAdviceMainTable" PageSizeOptions="new int[] { 20, 50,  100}" RowsPerPageString=@Loc["lbRowPerPage"] />
                         </MudItem>
                     </MudGrid>
                 </PagerContent>

@@ -20,9 +20,9 @@ public partial class CarAdviceGrTruckItems
 
     public string? InvoiceNo { get; set; }
 
-    public int TotalPalletQty { get; set; }
+    public int? TotalPalletQty { get; set; }
 
-    public int TotalQty { get; set; }
+    public int? TotalQty { get; set; }
 
     public string? Remark { get; set; }
 

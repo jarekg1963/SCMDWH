@@ -3,6 +3,7 @@
 @using System.Linq;
 @using System.Collections.Generic;
 @using System;
+@inject ISnackbar Snackbar
 
 <MudDialog Style="width:30rem">
     <DialogContent>
@@ -110,6 +111,11 @@
 
     private async void Delete(GlobalAppUserRoles roleForDelet)
     {
+        if (userRoleList.Count == 1)
+        {
+            Snackbar.Add("No delete only one role ", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Material.Rounded.Error; config.VisibleStateDuration = 1500; });
+            return;
+        }
         string linkforDelete = "/api/GlobalAppUserRoles/" + roleForDelet.Id;
         await httpClient.DeleteAsync(linkforDelete);
         string link = "/api/GlobalAppUserRoles/findbyname/" + userName;
@@ -126,10 +132,11 @@
         userRole.AddByUser = "Jarek";
         string link3 = "/api/GlobalAppUserRoles";
         var Response = await httpClient.PostAsJsonAsync<GlobalAppUserRoles>(link3, userRole);
-            string link = "/api/GlobalAppUserRoles/findbyname/" + userName;
-            userRoleList = await httpClient.GetFromJsonAsync<List<GlobalAppUserRoles>>(link);
+        string link = "/api/GlobalAppUserRoles/findbyname/" + userName;
+        userRoleList = await httpClient.GetFromJsonAsync<List<GlobalAppUserRoles>>(link);
         await readRoles();
-            StateHasChanged();
+        wybranaRola = "";
+        StateHasChanged();
         
     }
 

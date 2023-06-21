@@ -16,10 +16,10 @@
 else
 {
     <MudDataGrid T="CarAdviceGrTruckMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
-                 Height="35em" RowsPerPage="35" MultiSelection="false" Items="@ListGRCAMainTable" SortMode="SortMode.Multiple" Filterable="true"
+                 Height="40em" RowsPerPage="30" MultiSelection="false" Items="@ListGRCAMainTable" SortMode="SortMode.Multiple" Filterable="true"
                  FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
         <ToolBarContent>
-            <MudGrid>
+            <MudGrid >
                 <MudItem xs="2">
                     <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ImportExport"
                                Style="text-transform:none ; margin-top:25px!important" OnClick="ImportFromExcel" Size="Size.Small">
@@ -41,8 +41,6 @@ else
                         </PickerActions>
                     </MudDateRangePicker>
                 </MudItem>
-
-
             </MudGrid>
         </ToolBarContent>
         <Columns>
@@ -118,7 +116,7 @@ else
                     </MudButton>
                 </MudItem>
                 <MudItem xs="10">
-                    <MudDataGridPager T="CarAdviceGrTruckMainTable" PageSizeOptions="new int[] { 20, 50}" RowsPerPageString=@Loc["lbRowPerPage"] />
+                    <MudDataGridPager T="CarAdviceGrTruckMainTable" PageSizeOptions="new int[] { 20, 50, 100}" RowsPerPageString=@Loc["lbRowPerPage"] />
                 </MudItem>
             </MudGrid>
         </PagerContent>

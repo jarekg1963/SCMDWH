@@ -33,10 +33,7 @@
     <MudItem xs="12">
         <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">@Loc["lbGeneralInfo"]</MudAlert>
     </MudItem>
-
     <MudItem xs="6" sm="2">
-
-
     </MudItem>
     <MudItem xs="6" sm="1">
         <MudTextField Label="Nr" @bind-Value="@CAMainTable.Id" Variant="Variant.Text" ReadOnly="true" Margin="Margin.Normal"></MudTextField>
@@ -51,10 +48,6 @@
     <MudItem xs="6" sm="2">
         <h6 > @CAMainTable.Invoices </h6>
     </MudItem>
-   
-  
-
-  
     <MudItem xs="12" sm="6">
         <MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>
     </MudItem>
@@ -67,8 +60,8 @@
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="false" @bind-Time="EtdTimeTime" DisableToolbar="true" Disabled="@readOnlyWH" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-          
+            <MudTimePicker Label=@Loc["lbEtdTime"] AmPm="false" @bind-Time="EtdTimeTime" Editable = "true" DisableToolbar="true" Disabled="@readOnlyWH" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="@readOnlyWH" OnClick="NowButton4">@Loc["lbNow"]  </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="3">
@@ -76,8 +69,8 @@
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-           
+            <MudTimePicker Label=@Loc["lbAtaDateTime"] AmPm="false" @bind-Time="AtaTimeTime" Editable="true" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="@readOnlyScurity" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="3" sm="3">
@@ -101,24 +94,25 @@
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTextField Label=@Loc["lbDriverWH"] @bind-Value="@CAMainTable.DriverWh" Variant="Variant.Text" Disabled="@readOnlyWH" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
-            
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="@readOnlyWH" OnClick="CopyButtonWhDriver">@Loc["lbCopy"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTextField Label=@Loc["lbDriverS"] @bind-Value="@CAMainTable.DriverS" Variant="Variant.Text" Disabled="@readOnlyScurity" Margin="Margin.Normal" Validation="@(new Func<string, string>(DriverMatch))"></MudTextField>
-          
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="@readOnlyScurity" OnClick="CopyButtonSecDriver">@Loc["lbCopy"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CAMainTable.TruckPlatesWh" Variant="Variant.Text" Disabled="@readOnlyWH" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
-         
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="@readOnlyWH" OnClick="CopyButton1">@Loc["lbCopy"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTextField Label=@Loc["lbPlates"] @bind-Value="@CAMainTable.TruckPlatesS" Variant="Variant.Text" Disabled="@readOnlyScurity" Margin="Margin.Normal" Validation="@(new Func<string, string>(PlatesMatch))"></MudTextField>
+            <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="@readOnlyScurity" OnClick="CopyButton2">@Loc["lbCopy"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
@@ -136,7 +130,7 @@
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" DisableToolbar="true" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" Editable = "true" DisableToolbar="true" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
            
         </MudStack>
     </MudItem>
@@ -147,7 +141,7 @@
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" DisableToolbar="true" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
+            <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" Editable = "true" DisableToolbar="true" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
             
         </MudStack>
     </MudItem>
@@ -195,11 +189,11 @@
 <MudGrid>
     <MudItem xs="6">
 
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Print" Size="Size.Small" OnClick="PrintWH">@Loc["lbPrintWH"]</MudButton>
+    @*    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Print" Size="Size.Small" OnClick="PrintWH">@Loc["lbPrintWH"]</MudButton>*@
     </MudItem>
     <MudItem xs="2">
 
-        <MudButton  Color="Color.Error" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="DeleteButton">@Loc["lbDelete"]</MudButton>
+     @*   <MudButton  Color="Color.Error" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="DeleteButton">@Loc["lbDelete"]</MudButton>*@
     </MudItem>
     <MudItem xs="2">
         <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">@Loc["lbCancel"]</MudButton>
@@ -256,6 +250,43 @@
     List<CarAdviceDictionaryQuality> qualityList = new List<CarAdviceDictionaryQuality>();
     private List<string> quality;
 
+    private void NowButton1()
+    {
+
+        AtaTimeDate = DateTime.Today;
+        AtaTimeTime = DateTime.Now.TimeOfDay;
+        StateHasChanged();
+    }
+
+    private void NowButton4()
+    {
+        EtdTimeDate = DateTime.Today;
+        EtdTimeTime = DateTime.Now.TimeOfDay;
+        StateHasChanged();
+    }
+
+    private void CopyButtonWhDriver()
+    {
+        CAMainTable.DriverWh = CAMainTable.DriverS;
+        StateHasChanged();
+    }
+    private void CopyButtonSecDriver()
+    {
+        CAMainTable.DriverS = CAMainTable.DriverWh;
+        StateHasChanged();
+    }
+
+    private void CopyButton1()
+    {
+        CAMainTable.TruckPlatesWh = CAMainTable.TruckPlatesS;
+        StateHasChanged();
+    }
+
+    private void CopyButton2()
+    {
+        CAMainTable.TruckPlatesS = CAMainTable.TruckPlatesWh;
+        StateHasChanged();
+    }
 
     private async Task CancelButton()
     {
