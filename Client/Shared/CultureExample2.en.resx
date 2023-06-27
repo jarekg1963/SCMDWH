@@ -177,6 +177,9 @@
   <data name="lbContainer" xml:space="preserve">
     <value>Container</value>
   </data>
+  <data name="lbContainerQ" xml:space="preserve">
+    <value>Container quality</value>
+  </data>
   <data name="lbCurrierList" xml:space="preserve">
     <value>Currier list</value>
   </data>
@@ -276,6 +279,9 @@
   <data name="lbMaterial" xml:space="preserve">
     <value>Material</value>
   </data>
+  <data name="lbMaterialQ" xml:space="preserve">
+    <value>Material quality</value>
+  </data>
   <data name="lbNew" xml:space="preserve">
     <value>New</value>
   </data>
@@ -302,6 +308,9 @@
   </data>
   <data name="lbPickingstatusCheckBox" xml:space="preserve">
     <value>Exclude SENT </value>
+  </data>
+  <data name="lbPickingstatusgRCheckBox" xml:space="preserve">
+    <value>No located status</value>
   </data>
   <data name="lbPickingtime" xml:space="preserve">
     <value>Picking time</value>

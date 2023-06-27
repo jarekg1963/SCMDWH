@@ -232,6 +232,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Jakość kontener.
+        /// </summary>
+        public static string lbContainerQ {
+            get {
+                return ResourceManager.GetString("lbContainerQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kopiuj.
         /// </summary>
         public static string lbCopy {
@@ -556,6 +565,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Jakość materiał.
+        /// </summary>
+        public static string lbMaterialQ {
+            get {
+                return ResourceManager.GetString("lbMaterialQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nowy.
         /// </summary>
         public static string lbNew {
@@ -637,6 +655,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bez statusu ulokowane.
+        /// </summary>
+        public static string lbPickingstatusgRCheckBox {
+            get {
+                return ResourceManager.GetString("lbPickingstatusgRCheckBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Czas załadunku.
         /// </summary>
         public static string lbPickingtime {
@@ -700,7 +727,7 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Jakość.
+        ///   Looks up a localized string similar to Ilość.
         /// </summary>
         public static string lbQuality {
             get {

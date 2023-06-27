@@ -65,6 +65,10 @@ public partial class CarAdviceGrTruckMainTable
 
     public string? Sender { get; set; }
 
+    public string? ContainerStatus { get; set; }
+
+    public string? MaterialStatus { get; set; }
+
 
     public virtual ICollection<CarAdviceGrTruckItems> CarAdviceGrTruckItems { get; set; } = new List<CarAdviceGrTruckItems>();
 

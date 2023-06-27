@@ -17,7 +17,7 @@ else
 {
     <MudDataGrid T="CarAdviceGrTruckMainTable" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                  Height="40em" RowsPerPage="30" MultiSelection="false" Items="@ListGRCAMainTable" SortMode="SortMode.Multiple" Filterable="true"
-                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
+                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive" RowStyleFunc="@_rowStyleFunc">
         <ToolBarContent>
             <MudGrid >
                 <MudItem xs="2">
@@ -41,6 +41,9 @@ else
                         </PickerActions>
                     </MudDateRangePicker>
                 </MudItem>
+                <MudItem xs="3">
+                    <MudCheckBox Style="margin-top:20px!important" Size="Size.Small" Dense="true" @bind-Checked="CheckTest">@Loc["lbPickingstatusgRCheckBox"]</MudCheckBox>
+                </MudItem>
             </MudGrid>
         </ToolBarContent>
         <Columns>
@@ -56,15 +59,14 @@ else
                 <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.ETD" Title="@Loc["lbEtdDate"]" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.Invoices" Title="@Loc["lbInvoice"]" Sortable="true" Filterable="true" />
-                <PropertyColumn Property="x => x.PickingStatus" Title="@Loc["lbPickingstatus"]" Sortable="true" Filterable="false" />
+                <PropertyColumn Property="x => x.PickingStatus" Title="@Loc["lbPickingstatus"]" Sortable="true" Filterable="true" />
+                <PropertyColumn Property="x => x.Sender" Title="@Loc["lbSender"]" Sortable="true" Filterable="true" />
                 <PropertyColumn Property="x => x.AddDate" Title="@Loc["lbAdDate"]" Sortable="true" Filterable="true" />
                 <PropertyColumn Property="x => x.AddByUser" Title="@Loc["lbAddbyUser"]" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.Ata" Title="@Loc["lbAta"]" Sortable="true" Filterable="false" />
-
                 <PropertyColumn Property="x => x.TpvEnterTime" Title="@Loc["lbTPVEntrydate"]" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.TpvExitTime" Title="@Loc["lbTPVExitdate"]" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.RemarksWh" Title="@Loc["lbRemarkWH"]" Sortable="true" Filterable="false" />
-
                 <PropertyColumn Property="x => x.RemarkS" Title="@Loc["lbRemarksS"]" Sortable="true" Filterable="false" />
             }
         </Columns>
@@ -151,15 +153,44 @@ else
         get { return _checkTest; }
         set { _checkTest = value; HandleCheck(value); }
     }
+
+
     async void HandleCheck(bool IsChecked)
     {
-
-        //if (IsChecked)
-        //    await ReadData(true);
-        //if (!IsChecked)
-        //    await ReadData(false);
-
+        if (IsChecked)
+            await ReadData(true);
+        if (!IsChecked)
+            await ReadData(false);
     }
+
+    private Func<CarAdviceGrTruckMainTable, int, string> _rowStyleFunc => (x, i) =>
+     {
+         // Skan OK
+         if (x.PickingStatus == "Nie dojechał")
+             return "background-color:#e65e69";
+
+
+         //Picking
+         if (x.PickingStatus == "Rozładowany")
+             return "background-color:#fcba03";
+
+         //Picking
+         if (x.PickingStatus == "Ulokowane")
+             return "background-color:#22c738";
+
+         // Szaey -- Paper work Paper work
+
+         if (x.PickingStatus == "Oczekuje")
+             return "background-color:#CDCDCD";
+
+       
+         // Cancelled - czerwony
+         if (x.PickingStatus == "Cancelled")
+             return "background-color:#e65e69";
+
+         return "";
+
+     };
 
     private async void ExportToExcel()
     {
@@ -238,11 +269,16 @@ else
 
         string linkLoad = "";
 
-
-        linkLoad = "/api/CarAdviceGrTruckMainTable/GetGRbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
-
+        if (!NoSent)
+        {
+            linkLoad = "/api/CarAdviceGrTruckMainTable/GetGRbyDateAll/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+        }
+        else
+        {
+            linkLoad = "/api/CarAdviceGrTruckMainTable/GetGRbyDateNoLocated/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+        }
         ListGRCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceGrTruckMainTable>>(linkLoad);
-        // wczytanie kolumn
+        StateHasChanged();
 
     }
 

@@ -54,6 +54,10 @@ public partial class PurchasingContext : DbContext
 
     public virtual DbSet<CarAdviceGrDictionaryUnloadingPlace> CarAdviceGrDictionaryUnloadingPlace { get; set; }
 
+    public virtual DbSet<CarAdviceGrDictionaryMaterialQ> CarAdviceGrDictionaryMaterialQ { get; set; }
+
+    public virtual DbSet<CarAdviceGrDictionaryContainerQ> CarAdviceGrDictionaryContainerQ { get; set; }
+
     public virtual DbSet<CarAdviceGrMainPlanComum> CarAdviceGrMainPlanComum { get; set; }
 
     public virtual DbSet<CarAdviceGrTruckItems> CarAdviceGrTruckItems { get; set; }

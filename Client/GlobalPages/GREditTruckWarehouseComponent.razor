@@ -73,12 +73,23 @@
             <MudButton Variant="Variant.Filled" Size="Size.Small" Disabled="@readOnlyScurity" OnClick="NowButton1">@Loc["lbNow"] </MudButton>
         </MudStack>
     </MudItem>
-    <MudItem xs="3" sm="3">
-        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbReason"] @bind-Value="CAMainTable.FgDelayReason" SearchFunc="@SearchFGDelayReason"
+
+     <MudItem xs="2" sm="2">
+       
+        
+        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbContainerQ"] @bind-Value="CAMainTable.ContainerStatus" SearchFunc="@SearchConterQ"
                          Disabled="@readOnlyWH" ResetValueOnEmptyText="@resetValueOnEmptyText" />
 
     </MudItem>
-    <MudItem xs="3" sm="3">
+    <MudItem xs="2" sm="2">
+
+
+        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbMaterialQ"] @bind-Value="CAMainTable.MaterialStatus" SearchFunc="@SearchMaterialQ"
+        Disabled="@readOnlyWH" ResetValueOnEmptyText="@resetValueOnEmptyText" />
+
+    </MudItem>
+
+    <MudItem xs="2" sm="2">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbPickingstatus"] @bind-Value="CAMainTable.PickingStatus" SearchFunc="@SearchStatus"
                          Disabled="@readOnlyWH" ResetValueOnEmptyText="@resetValueOnEmptyText" />
 
@@ -247,6 +258,14 @@
     List<CarAdviceDictionaryReason> FG_DelayReasonList = new List<CarAdviceDictionaryReason>();
     private List<string> FG_DelayReason;
 
+
+    List<CarAdviceGrDictionaryContainerQ> CarAdviceGrDictionaryContainerQList = new List<CarAdviceGrDictionaryContainerQ>();
+    private List<string> carAdviceGrDictionaryContainerQ;
+
+    List<CarAdviceGrDictionaryMaterialQ> CarAdviceGrDictionaryMaterialQList = new List<CarAdviceGrDictionaryMaterialQ>();
+    private List<string> carAdviceGrDictionaryMaterialQ;
+
+
     List<CarAdviceDictionaryQuality> qualityList = new List<CarAdviceDictionaryQuality>();
     private List<string> quality;
 
@@ -384,6 +403,22 @@
         return null;
     }
 
+      private async Task<IEnumerable<string>> SearchConterQ(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+           
+        return carAdviceGrDictionaryContainerQ;
+        return carAdviceGrDictionaryContainerQ.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+        
+    }
+
+    private async Task<IEnumerable<string>> SearchMaterialQ(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return carAdviceGrDictionaryMaterialQ;
+        return carAdviceGrDictionaryMaterialQ.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
     private async Task<IEnumerable<string>> SearchFGDelayReason(string value)
     {
         if (string.IsNullOrEmpty(value))
@@ -434,11 +469,29 @@
         qualityList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryQuality>>(linkq);
         quality = qualityList.Select(c => c.Quality).ToList();
 
+
+
+        // MaterialQ
+
+        string mlinkq = "/api/CarAdviceGrDictionaryMaterialQ";
+        CarAdviceGrDictionaryMaterialQList = await httpClient.GetFromJsonAsync<List<CarAdviceGrDictionaryMaterialQ>>(mlinkq);
+        carAdviceGrDictionaryMaterialQ = CarAdviceGrDictionaryMaterialQList.Select(c => c.Status).ToList();
+
+
+        // ContainerQ
+
+        string clinkq = "/api/CarAdviceGrDictionaryContainerQ";
+        CarAdviceGrDictionaryContainerQList = await httpClient.GetFromJsonAsync<List<CarAdviceGrDictionaryContainerQ>>(clinkq);
+        carAdviceGrDictionaryContainerQ = CarAdviceGrDictionaryContainerQList.Select(c => c.Status).ToList();
+
+
+
+
         // FG_reason for delay
 
-        string linkRu = "/api/CarAdviceDictionaryReasons/GetCarAdviceDictionaryActiveReason";
-        FG_DelayReasonList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryReason>>(linkRu);
-        FG_DelayReason = FG_DelayReasonList.Select(c => c.Code).ToList();
+        //string linkRu = "/api/CarAdviceDictionaryReasons/GetCarAdviceDictionaryActiveReason";
+        //FG_DelayReasonList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryReason>>(linkRu);
+        //FG_DelayReason = FG_DelayReasonList.Select(c => c.Code).ToList();
 
 
         string linkUrl = "/api/CarAdviceGrTruckMainTable/" + zId;

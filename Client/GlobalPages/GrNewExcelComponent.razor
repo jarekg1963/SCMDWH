@@ -117,14 +117,10 @@ else
         List<ImportGrExcel> listGrExcel = new List<ImportGrExcel>();
         foreach (var excelItem in listImportGrExcel)
         {
-            ImportGrExcel grExcel = new ImportGrExcel();
-            //DateTime dataEtd = (DateTime)excelItem.DataEtd;
-            //TimeSpan hourEtd = (TimeSpan)excelItem.HourEtd;
-            //DateTime etdEccel = dataEtd.Add(hourEtd);
-
-         
+            ImportGrExcel grExcel = new ImportGrExcel();         
             grExcel.DataEtd = excelItem.DataEtd;
             grExcel.HourEtd = excelItem.HourEtd;
+            grExcel.Sender = excelItem.Sender;
             grExcel.ContainerNo = excelItem.ContainerNo;
             grExcel.PartNo = excelItem.PartNo;
             grExcel.Material = excelItem.Material;

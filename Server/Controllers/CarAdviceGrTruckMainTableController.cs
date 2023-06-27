@@ -118,8 +118,8 @@ namespace SCMDWH.Server.Controllers
 
 
         [HttpGet()]
-        [Route("GetGRbyDateNoSent/{startDate}/{endDate}")]
-        public async Task<ActionResult<IEnumerable<CarAdviceGrTruckMainTable>>> GetGRCarAdviceMainTablesDateSelectionNoSent(string startDate, string endDate)
+        [Route("GetGRbyDateNoLocated/{startDate}/{endDate}")]
+        public async Task<ActionResult<IEnumerable<CarAdviceGrTruckMainTable>>> GetGRCarAdviceMainTablesDateSelectionNolocated(string startDate, string endDate)
         {
             if (_context.CarAdviceGrTruckMainTable == null)
             {
@@ -138,7 +138,33 @@ namespace SCMDWH.Server.Controllers
             int eMc = Int32.Parse(endDate.Substring(0, 2));
             DateTime endDt = new DateTime(eYear, eMc, eDay);
 
-            return await _context.CarAdviceGrTruckMainTable.Where(d => d.ETD >= startDt && d.ETD <= endDt && d.PickingStatus != "Sent").Include(C => C.CarAdviceGrTruckItems)
+            return await _context.CarAdviceGrTruckMainTable.Where(d => d.ETD >= startDt && d.ETD <= endDt && d.PickingStatus != "ULOKOWANE").Include(C => C.CarAdviceGrTruckItems)
+                .OrderByDescending(c => c.ETD).ToListAsync();
+        }
+
+
+        [HttpGet()]
+        [Route("GetGRbyDateAll/{startDate}/{endDate}")]
+        public async Task<ActionResult<IEnumerable<CarAdviceGrTruckMainTable>>> GetGRCarAdviceMainTablesDateSelectionAll(string startDate, string endDate)
+        {
+            if (_context.CarAdviceGrTruckMainTable == null)
+            {
+                return NotFound();
+            }
+
+            // 10272022
+
+            int sYear = Int32.Parse(startDate.Substring(4, 4));
+            int sDay = Int32.Parse(startDate.Substring(2, 2));
+            int sMc = Int32.Parse(startDate.Substring(0, 2));
+            DateTime startDt = new DateTime(sYear, sMc, sDay);
+
+            int eYear = Int32.Parse(endDate.Substring(4, 4));
+            int eDay = Int32.Parse(endDate.Substring(2, 2));
+            int eMc = Int32.Parse(endDate.Substring(0, 2));
+            DateTime endDt = new DateTime(eYear, eMc, eDay);
+
+            return await _context.CarAdviceGrTruckMainTable.Where(d => d.ETD >= startDt && d.ETD <= endDt).Include(C => C.CarAdviceGrTruckItems)
                 .OrderByDescending(c => c.ETD).ToListAsync();
         }
 
