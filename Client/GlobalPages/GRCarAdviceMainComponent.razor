@@ -41,6 +41,9 @@ else
                         </PickerActions>
                     </MudDateRangePicker>
                 </MudItem>
+                                <MudItem xs="1">
+
+                                </MudItem>
                 <MudItem xs="3">
                     <MudCheckBox Style="margin-top:20px!important" Size="Size.Small" Dense="true" @bind-Checked="CheckTest">@Loc["lbPickingstatusgRCheckBox"]</MudCheckBox>
                 </MudItem>
@@ -59,8 +62,9 @@ else
                 <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.ETD" Title="@Loc["lbEtdDate"]" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.Invoices" Title="@Loc["lbInvoice"]" Sortable="true" Filterable="true" />
-                <PropertyColumn Property="x => x.PickingStatus" Title="@Loc["lbPickingstatus"]" Sortable="true" Filterable="true" />
+                <PropertyColumn Property="x => x.ContainerNo" Title="@Loc["lbContainer"]" Sortable="true" Filterable="true" />
                 <PropertyColumn Property="x => x.Sender" Title="@Loc["lbSender"]" Sortable="true" Filterable="true" />
+                <PropertyColumn Property="x => x.PickingStatus" Title="@Loc["lbPickingstatus"]" Sortable="true" Filterable="true" />
                 <PropertyColumn Property="x => x.AddDate" Title="@Loc["lbAdDate"]" Sortable="true" Filterable="true" />
                 <PropertyColumn Property="x => x.AddByUser" Title="@Loc["lbAddbyUser"]" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.Ata" Title="@Loc["lbAta"]" Sortable="true" Filterable="false" />
@@ -112,10 +116,10 @@ else
         <PagerContent>
             <MudGrid>
                 <MudItem xs="2">
-                    <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.Exposure"
+                 @*   <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.Exposure"
                                Style="text-transform:none ; margin-top:10px!important" OnClick="ExportToExcel" Size="Size.Small">
                         @Loc["lbExportExcel"]
-                    </MudButton>
+                    </MudButton>*@
                 </MudItem>
                 <MudItem xs="10">
                     <MudDataGridPager T="CarAdviceGrTruckMainTable" PageSizeOptions="new int[] { 20, 50, 100}" RowsPerPageString=@Loc["lbRowPerPage"] />
@@ -125,8 +129,6 @@ else
     </MudDataGrid>
 
 }
-
-
 
 
 @code {
@@ -172,21 +174,27 @@ else
 
          //Picking
          if (x.PickingStatus == "Rozładowany")
-             return "background-color:#fcba03";
+             return "background-color:#33b6d6";
 
          //Picking
          if (x.PickingStatus == "Ulokowane")
-             return "background-color:#22c738";
+             return "background-color:#db9b1a";
 
          // Szaey -- Paper work Paper work
 
          if (x.PickingStatus == "Oczekuje")
-             return "background-color:#CDCDCD";
+             return "background-color:#b0e37b";
 
-       
+
          // Cancelled - czerwony
          if (x.PickingStatus == "Cancelled")
              return "background-color:#e65e69";
+
+
+         if (x.PickingStatus == "W TRAKCIE")
+             return "background-color:#6bc70c";
+
+         
 
          return "";
 
@@ -205,11 +213,7 @@ else
 
     private async void EditGr(long iiid)
     {
-
         navigationManager.NavigateTo($"/editGrTuckWh/{iiid.ToString()}");
-
-
-
     }
 
     protected override async Task OnInitializedAsync()
@@ -240,25 +244,24 @@ else
             UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
             claims = user.Claims;
             string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
-
-            //if (wszystkieRole.Contains("SECURITY")) rolaSecurity = true;
-            //if (wszystkieRole.Contains("WH")) rolaWh = true;
         }
 
         // read users parameters
 
         string linkUserParameters = "/api/GlobalAppUsersParameters/" + UserName;
-
-
         userParametersGRDates = await httpClient.GetFromJsonAsync<GlobalAppUsersParameters>(linkUserParameters);
+
 
         if (userParametersGRDates == null)
         {
+            userParametersGRDates.DateMainCAFrom = DateTime.Now.AddMonths(-3);
+            userParametersGRDates.DateMainCATo = DateTime.Now;
             ldGRStart = DateTime.Now.AddMonths(-3);
             ldGREnd = DateTime.Now;
         }
         else
         {
+
             ldGRStart = userParametersGRDates.DateGRMainCAFrom;
             ldGREnd = userParametersGRDates.DateGRMainCATo;
         }
@@ -285,8 +288,17 @@ else
     private async Task SelectTimeFrameFromPicker()
     {
         _picker.Close();
-        userParametersGRDates.DateMainCAFrom = userParametersGRDates.DateMainCAFrom;
-        userParametersGRDates.DateMainCATo = userParametersGRDates.DateMainCATo;
+
+        if (userParametersGRDates.DateMainCAFrom.Year == 1)
+        {
+            userParametersGRDates.DateMainCAFrom = DateTime.Now.AddMonths(-3);
+            userParametersGRDates.DateMainCATo = DateTime.Now;
+        }
+        else
+        {
+            userParametersGRDates.DateMainCAFrom = userParametersGRDates.DateMainCAFrom;
+            userParametersGRDates.DateMainCATo = userParametersGRDates.DateMainCATo;
+        }
         userParametersGRDates.DateGRMainCAFrom = (DateTime)_dateRange.Start;
         userParametersGRDates.DateGRMainCATo = (DateTime)_dateRange.End;
         userParametersGRDates.UserName = UserName;
@@ -294,7 +306,10 @@ else
         await httpClient.PostAsJsonAsync<GlobalAppUsersParameters>(linkForPost, userParametersGRDates);
         DateTime dStart = (DateTime)_dateRange.Start;
         DateTime dEnd = (DateTime)_dateRange.End;
-        string linkzDates = "/api/CarAdviceGrTruckMainTable/GetGRbyDateNoSent/" + Helpers.ChangeDateToString(dStart) + "/" + Helpers.ChangeDateToString(dEnd);
+       
+        string linkzDates = "/api/CarAdviceGrTruckMainTable/GetGRbyDateAll/" + Helpers.ChangeDateToString(userParametersGRDates.DateGRMainCAFrom) 
+                + "/" + Helpers.ChangeDateToString(userParametersGRDates.DateGRMainCATo);
+       
         ListGRCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceGrTruckMainTable>>(linkzDates);
         StateHasChanged();
     }

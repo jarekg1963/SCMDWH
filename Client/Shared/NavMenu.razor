@@ -13,7 +13,14 @@
 	<MudNavMenu>
 		<MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">@Loc["lbHome"]</MudNavLink>
 		
-		
+
+		@if (rolaSOAdmin)
+		{
+		<MudNavGroup Title=@Loc["lbSo"] Icon="@Icons.Material.Filled.EmojiTransportation" @bind-Expanded=_isExpandedSO>
+			<MudNavLink Href="/ImportPOExcel" Icon="@Icons.Material.Filled.LibraryBooks">@Loc["lbReadExcelSO"]</MudNavLink>
+		</MudNavGroup>
+		}
+
 		<MudNavGroup Title=@Loc["lbCarAdvice"] Icon="@Icons.Material.Filled.EmojiTransportation" @bind-Expanded=_isExpanded>
 			
 			
@@ -93,8 +100,11 @@
 	private bool rolaFGOperator;
 	private bool rolaFGAdmin;
 	private bool rolaSecurity;
+	private bool rolaSOAdmin;
 
 	bool _isExpanded = false;
+
+	bool _isExpandedSO = false;
 
 	[CascadingParameter]
 	public Task<AuthenticationState> AuthState { get; set; }
@@ -116,6 +126,9 @@
 			rolaAdministrator = rolesForDisplay.Contains("Administrator");
 			rolaScmTools = rolesForDisplay.Contains("SCMTOOLS");
 			rolaSecurity = rolesForDisplay.Contains("SECURITY");
+			rolaSOAdmin = rolesForDisplay.Contains("SOAdmin");
+			
+			
 
 			// Nowe role do wsprowadzenia GR 
 

@@ -333,6 +333,9 @@
   <data name="lbQuality" xml:space="preserve">
     <value>Quality</value>
   </data>
+  <data name="lbReadExcelSO" xml:space="preserve">
+    <value>Read excel PO </value>
+  </data>
   <data name="lbReason" xml:space="preserve">
     <value>Reason</value>
   </data>
@@ -390,6 +393,9 @@
   <data name="lbSingIn" xml:space="preserve">
     <value>SIGN IN</value>
   </data>
+  <data name="lbSo" xml:space="preserve">
+    <value>SO</value>
+  </data>
   <data name="lbStatuscodes" xml:space="preserve">
     <value>Status codes</value>
   </data>
@@ -416,6 +422,9 @@
   </data>
   <data name="lbTruckTypes" xml:space="preserve">
     <value>Truck types list</value>
+  </data>
+  <data name="lbUploadFiles" xml:space="preserve">
+    <value>Upload file</value>
   </data>
   <data name="lbusername" xml:space="preserve">
     <value>User name</value>

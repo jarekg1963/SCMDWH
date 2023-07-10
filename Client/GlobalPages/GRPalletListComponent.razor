@@ -26,13 +26,15 @@
                     </PickerActions>
                 </MudDateRangePicker>
             </MudItem>
+            <MudItem xs="1">
+
+            </MudItem>
             <MudItem xs="3">
-           
+                <MudCheckBox Style="margin-top:20px!important" Size="Size.Small" Dense="true" @bind-Checked="CheckTest">@Loc["lbPickingstatusgRCheckBox"]</MudCheckBox>
             </MudItem>
         </MudGrid>
     </ToolBarContent>
                     
-
     <Columns>
    
         <TemplateColumn CellClass="d-flex justify-end" Title="Items" Filterable="false">
@@ -68,11 +70,26 @@
     public Task<AuthenticationState> AuthState { get; set; }
     private DateTime ldGRStart;
     private DateTime ldGREnd;
+    private bool _checkTest;
+
+
+    private bool CheckTest
+    {
+        get { return _checkTest; }
+        set { _checkTest = value; HandleCheck(value); }
+    }
+
+
+    async void HandleCheck(bool IsChecked)
+    {
+        if (IsChecked)
+            await ReadData(false);
+        if (!IsChecked)
+            await ReadData(true);
+    }
 
     private async void EditGr(long iiid)
     {
-
-
         CarAdviceGrTruckItems updateItem = new CarAdviceGrTruckItems();
         var parameters = new DialogParameters { ["idForEdit"] = iiid };
         var dialog = DialogService.Show<GREditItemComponent>("", parameters);
@@ -84,14 +101,14 @@
                 string strIdForDel = (string)result.Data.ToString().Substring(6);
                 string linkDel = "/api/CarAdviceGrTruckItemsControllery/" + strIdForDel;
                 var Responsedel = await httpClient.DeleteAsync(linkDel);
-                await ReadData();
+                await ReadData(true);
                 StateHasChanged();
                 return;
             }            
             updateItem = (CarAdviceGrTruckItems)result.Data;
             string link = "/api/CarAdviceGrTruckItemsControllery/" + updateItem.Id;
             var Response = await httpClient.PutAsJsonAsync<CarAdviceGrTruckItems>(link, updateItem);
-            await ReadData();
+            await ReadData(true);
             StateHasChanged();
         }
     }
@@ -100,7 +117,7 @@
     {
         try
         {
-            await ReadData();
+            await ReadData(false);
             StateHasChanged();
         }
         catch (Exception ex)
@@ -109,7 +126,7 @@
         }
     }
 
-    private async Task ReadData()
+    private async Task ReadData(bool zmStatus)
     {
         IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
         var authState = await AuthState;
@@ -123,9 +140,6 @@
             UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
             claims = user.Claims;
             string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
-
-            //if (wszystkieRole.Contains("SECURITY")) rolaSecurity = true;
-            //if (wszystkieRole.Contains("WH")) rolaWh = true;
         }
 
         // read users parameters
@@ -150,8 +164,15 @@
 
         _dateRange = new DateRange(ldGRStart, ldGREnd);
         string linkLoad = "";
-        linkLoad = "/api/CarAdviceGrTruckItemsControllery/GetbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
 
+        if (zmStatus)
+        {
+            linkLoad = "/api/CarAdviceGrTruckItemsControllery/GetbyDateSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+        }
+        else
+        {
+            linkLoad = "/api/CarAdviceGrTruckItemsControllery/GetbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+        }
         //!!!!!!!!!!!!!! -- poprawic inna tabela GR---------
         itemPaletList = await httpClient.GetFromJsonAsync<List<GrTruckItemsDTO>>(linkLoad);
 

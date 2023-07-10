@@ -119,7 +119,7 @@
     CarAdviceGrTruckMainTable CarAdviceGRMainTableNew = new CarAdviceGrTruckMainTable()
         {
             AddDate = DateTime.Now,
-            PickingStatus = "Oczekuje"
+            PickingStatus = "Nie dojechał"
         };
 
     List<CarAdviceGrTruckItems> truckItemList = new();
@@ -191,28 +191,60 @@
 
     private async void CloseSave()
     {
+        bool daneOkForWrite = false;
+
+        if (EtdTimeDate != null & EtdTimeTime != null  ) daneOkForWrite = true;
+
+        if (truckItemList.Count() == 0) daneOkForWrite = false;
+
+            @foreach (var trItem in truckItemList)
+            {
+
+                if (trItem.InvoiceNo == null)
+                {
+                daneOkForWrite = false;
+                break;
+                }
+
+            if (trItem.ContainerNo == null)
+            {
+                daneOkForWrite = false;
+                break;
+            }
+            }
+
+
+        if (!daneOkForWrite)
+        {
+            Snackbar.Add("Błedne Dane ", Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Info; config.VisibleStateDuration = 2000; });
+        }
+    else
+        {
+
+            string linkCu = "api/CarAdviceGrTruckMainTable/NewItemGr";
+            CarAdviceGRMainTableNew.CarAdviceGrTruckItems = truckItemList;
+            CarAdviceGRMainTableNew.Id = 0;
+
+
+            if (ATATimeDate != null)
+            {
+                DateTime EtdTimeDateNotNulable = (DateTime)ATATimeDate;
+                TimeSpan EtdTimeTimeNotNulable = (TimeSpan)ATATimeTime;
+                CarAdviceGRMainTableNew.Ata = EtdTimeDateNotNulable.Add(EtdTimeTimeNotNulable);
+            }
+
+            if (EtdTimeDate != null)
+            {
+                DateTime EtdTimeDateNotNulable = (DateTime)EtdTimeDate;
+                TimeSpan EtdTimeTimeNotNulable = (TimeSpan)EtdTimeTime;
+                CarAdviceGRMainTableNew.ETD = EtdTimeDateNotNulable.Add(EtdTimeTimeNotNulable);
+            }
+
+            await httpClient.PostAsJsonAsync(linkCu, CarAdviceGRMainTableNew);
+            MudDialog.Close(DialogResult.Ok(""));
+
+        }
       
-        string linkCu = "api/CarAdviceGrTruckMainTable/NewItemGr";
-        CarAdviceGRMainTableNew.CarAdviceGrTruckItems = truckItemList;
-        CarAdviceGRMainTableNew.Id = 0;
-
-        if (ATATimeDate != null)
-        {
-            DateTime EtdTimeDateNotNulable = (DateTime)ATATimeDate;
-            TimeSpan EtdTimeTimeNotNulable = (TimeSpan)ATATimeTime;
-            CarAdviceGRMainTableNew.Ata = EtdTimeDateNotNulable.Add(EtdTimeTimeNotNulable);
-        }
-
-        if (EtdTimeDate != null)
-        {
-            DateTime EtdTimeDateNotNulable = (DateTime)EtdTimeDate;
-            TimeSpan EtdTimeTimeNotNulable = (TimeSpan)EtdTimeTime;
-            CarAdviceGRMainTableNew.ETD = EtdTimeDateNotNulable.Add(EtdTimeTimeNotNulable);
-        }
-
-        await httpClient.PostAsJsonAsync(linkCu, CarAdviceGRMainTableNew);
-
-        MudDialog.Close(DialogResult.Ok(""));
     }
 
 }

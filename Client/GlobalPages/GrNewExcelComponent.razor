@@ -9,12 +9,40 @@
 @inject HttpClient httpClient
 @inject IStringLocalizer<CultureExample2> Loc
 @inject IDialogService DialogService;
-@inject IStringLocalizer<CultureExample2> Loc
 
-<hr />
+
+@*<hr />
 <InputFile OnChange="ReadExcelNpoi" class="form-control form-control-lg" id="formFileLg" type="file">Select excel file</InputFile>
 <hr />
+*@
 
+<br />
+
+<MudGrid Class="border-solid border-2 mud-border-default pa-4" Elevation="0">
+    <MudItem xs="2">
+        <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+            <ButtonTemplate>
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Default"
+                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                           for="@context">
+                    @Loc["lbUploadFiles"]
+                </MudButton>
+            </ButtonTemplate>
+        </MudFileUpload>
+    </MudItem>
+    <MudItem xs="6">
+        @if (files != null)
+        {
+            <MudListItem Icon="@Icons.Material.Filled.AttachFile">
+                @ImportedfileName <code>@Importedfilesize</code>
+            </MudListItem>
+        }
+    </MudItem>
+</MudGrid>
+
+<br />
 
 @if (listImportGrExcel == null)
 {
@@ -106,11 +134,53 @@ else
     private bool striped = true;
     private bool bordered = true;
     int counterId = 1;
+    private string ImportedfileName = "";
+    private string Importedfilesize = "";
+    IList<IBrowserFile> files = new List<IBrowserFile>();
 
     List<ImportGrExcel> listImportGrExcel = new List<ImportGrExcel>();
 
     string UserName = "";
 
+    private async void UploadFiles(IBrowserFile file)
+    {
+        ImportedfileName = file.Name;
+        Importedfilesize = file.Size.ToString();
+        files.Add(file);
+
+        listImportGrExcel = new();
+        var fileStream =file.OpenReadStream();
+        var ms = new MemoryStream();
+        await fileStream.CopyToAsync(ms);
+        ms.Position = 0;
+        ISheet sheet;
+        var xsswb = new XSSFWorkbook(ms);
+        sheet = xsswb.GetSheetAt(0);
+        IRow hr = sheet.GetRow(0);
+        for (var j = sheet.FirstRowNum + 1; j <= sheet.LastRowNum; j++)
+        {
+            var r = sheet.GetRow(j);
+            ImportGrExcel importExcel = new();
+            importExcel.Id = counterId;
+
+            importExcel.DataEtd = r.GetCell(0).DateCellValue;
+            importExcel.HourEtd = r.GetCell(5).DateCellValue.TimeOfDay;
+
+            importExcel.Sender = NpoiExtension.GetFormattedCellValue(r.GetCell(1));
+            importExcel.ContainerNo = NpoiExtension.GetFormattedCellValue(r.GetCell(2));
+            importExcel.PickingStatus = NpoiExtension.GetFormattedCellValue(r.GetCell(4));
+            importExcel.Material = NpoiExtension.GetFormattedCellValue(r.GetCell(6));
+            importExcel.InvoiceNo = NpoiExtension.GetFormattedCellValue(r.GetCell(7));
+            importExcel.PartNo = NpoiExtension.GetFormattedCellValue(r.GetCell(8));
+            importExcel.CarNumber = NpoiExtension.GetFormattedCellValue(r.GetCell(10));
+            importExcel.TotalPalletQty = (int)r.GetCell(11).NumericCellValue;
+            importExcel.TotalQty = (int)r.GetCell(12).NumericCellValue;
+            listImportGrExcel.Add(importExcel);
+            counterId++;
+        }
+        StateHasChanged();
+
+    }
 
     private async Task CloseSave()
     {
@@ -172,46 +242,47 @@ else
            return "";
        };
 
-    async Task ReadExcelNpoi(InputFileChangeEventArgs e)
-    {
-        listImportGrExcel = new();
-        var fileStream = e.File.OpenReadStream();
-        var ms = new MemoryStream();
-        await fileStream.CopyToAsync(ms);
-        ms.Position = 0;
-        ISheet sheet;
-        var xsswb = new XSSFWorkbook(ms);
-        sheet = xsswb.GetSheetAt(0);
-        IRow hr = sheet.GetRow(0);
-        for (var j = sheet.FirstRowNum + 1; j <= sheet.LastRowNum; j++)
-        {
-            var r = sheet.GetRow(j);
-            ImportGrExcel importExcel = new();
-            importExcel.Id = counterId;
+    //async Task ReadExcelNpoi(InputFileChangeEventArgs e)
+    //{
+    //    listImportGrExcel = new();
+    //    var fileStream = e.File.OpenReadStream();
+    //    var ms = new MemoryStream();
+    //    await fileStream.CopyToAsync(ms);
+    //    ms.Position = 0;
+    //    ISheet sheet;
+    //    var xsswb = new XSSFWorkbook(ms);
+    //    sheet = xsswb.GetSheetAt(0);
+    //    IRow hr = sheet.GetRow(0);
+    //    for (var j = sheet.FirstRowNum + 1; j <= sheet.LastRowNum; j++)
+    //    {
+    //        var r = sheet.GetRow(j);
+    //        ImportGrExcel importExcel = new();
+    //        importExcel.Id = counterId;
 
-            importExcel.DataEtd = r.GetCell(0).DateCellValue; 
-            importExcel.HourEtd = r.GetCell(5).DateCellValue.TimeOfDay; 
+    //        importExcel.DataEtd = r.GetCell(0).DateCellValue; 
+    //        importExcel.HourEtd = r.GetCell(5).DateCellValue.TimeOfDay; 
 
-            importExcel.Sender = NpoiExtension.GetFormattedCellValue(r.GetCell(1));
-            importExcel.ContainerNo = NpoiExtension.GetFormattedCellValue(r.GetCell(2));
-            importExcel.PickingStatus = NpoiExtension.GetFormattedCellValue(r.GetCell(4));
-            importExcel.Material = NpoiExtension.GetFormattedCellValue(r.GetCell(6));
-            importExcel.InvoiceNo = NpoiExtension.GetFormattedCellValue(r.GetCell(7));
-            importExcel.PartNo = NpoiExtension.GetFormattedCellValue(r.GetCell(8));
-            importExcel.CarNumber = NpoiExtension.GetFormattedCellValue(r.GetCell(10));
-            importExcel.TotalPalletQty = (int)r.GetCell(11).NumericCellValue;
-            importExcel.TotalQty = (int)r.GetCell(12).NumericCellValue;
+    //        importExcel.Sender = NpoiExtension.GetFormattedCellValue(r.GetCell(1));
+    //        importExcel.ContainerNo = NpoiExtension.GetFormattedCellValue(r.GetCell(2));
+    //        importExcel.PickingStatus = NpoiExtension.GetFormattedCellValue(r.GetCell(4));
+    //        importExcel.Material = NpoiExtension.GetFormattedCellValue(r.GetCell(6));
+    //        importExcel.InvoiceNo = NpoiExtension.GetFormattedCellValue(r.GetCell(7));
+    //        importExcel.PartNo = NpoiExtension.GetFormattedCellValue(r.GetCell(8));
+    //        importExcel.CarNumber = NpoiExtension.GetFormattedCellValue(r.GetCell(10));
+    //        importExcel.TotalPalletQty = (int)r.GetCell(11).NumericCellValue;
+    //        importExcel.TotalQty = (int)r.GetCell(12).NumericCellValue;
 
-            listImportGrExcel.Add(importExcel);
 
-            counterId++;
+    //        listImportGrExcel.Add(importExcel);
 
-            }
+    //        counterId++;
+
+    //        }
                              
-        //string linkpostca = "/api/CarAdviceGrTruckMainTable/ImportExcel/";
-        //var Response = await httpClient.PostAsJsonAsync<List<ImportGrExcel>>(linkpostca, listImportGrExcel);
+    //    //string linkpostca = "/api/CarAdviceGrTruckMainTable/ImportExcel/";
+    //    //var Response = await httpClient.PostAsJsonAsync<List<ImportGrExcel>>(linkpostca, listImportGrExcel);
 
-    }
+    //}
 
     protected async override void OnInitialized()
     {

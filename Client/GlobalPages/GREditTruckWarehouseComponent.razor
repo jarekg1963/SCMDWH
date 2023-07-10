@@ -43,10 +43,12 @@
     <MudItem xs="6" sm="2">
         <MudDatePicker Label=@Loc["lbAdDate"] @bind-Date="@CAMainTable.AddDate" DisableToolbar="true" ReadOnly="false" Editable="true" Margin="Margin.Normal" />
     </MudItem>
-    <MudItem xs="6" sm="1">
-    </MudItem>
+   
     <MudItem xs="6" sm="2">
-        <h6 > @CAMainTable.Invoices </h6>
+        <h6 style="margin-top:10px!important">@CAMainTable.Invoices </h6>
+    </MudItem>
+    <MudItem xs="3" sm="1">
+        <h6 style="margin-top:10px!important"> @CAMainTable.Sender</h6>
     </MudItem>
     <MudItem xs="12" sm="6">
         <MudAlert Severity="Severity.Normal" Style="background-color:#ebf5f7!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="1">@Loc["lbGeneralWarehouseInfoprmation"]</MudAlert>
@@ -96,7 +98,9 @@
     </MudItem>
    
     <MudItem xs="6" sm="3">
-        <MudTextField Label=@Loc["lbTruckType"] @bind-Value="@CAMainTable.TruckType" Variant="Variant.Text"  Disabled = "@readOnlyScurity"  Margin="Margin.Normal"></MudTextField>
+      @*  <MudTextField Label=@Loc["lbTruckType"] @bind-Value="@CAMainTable.TruckType" Variant="Variant.Text"  Disabled = "@readOnlyScurity"  Margin="Margin.Normal"></MudTextField>*@
+        <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbTruckType"] @bind-Value="CAMainTable.TruckType" SearchFunc="@SearchTuruckType"
+                         ResetValueOnEmptyText="@resetValueOnEmptyText" Disabled="@readOnlyScurity" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudAutocomplete Margin="Margin.Normal" Dense="true" T="string" Label=@Loc["lbQuality"] @bind-Value="CAMainTable.Quality" SearchFunc="@SearchQuality"
@@ -134,7 +138,11 @@
 
     </MudItem>
 
-    <MudItem xs="6" sm="6">
+    <MudItem xs="3" sm="3">        
+        <MudTimePicker Label="Czas rozpoczecia" Editable="true" @bind-Time="@zmStartUnloadingTime" />
+    </MudItem>
+    <MudItem xs="3" sm="3">
+        <MudTimePicker Label="Czas zakonczenia" Editable="true" @bind-Time="@zmFinishUnloadingTime" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudDatePicker Label=@Loc["lbTPVEntrydate"] @bind-Date="TPVEntryTimeDate" DisableToolbar="true" Disabled="@readOnlyScurity" Margin="Margin.Normal" />
@@ -142,7 +150,7 @@
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTimePicker Label=@Loc["lbTPVEntrytime"] AmPm="false" @bind-Time="TPVEntryTimeTime" Editable = "true" DisableToolbar="true" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-           
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton2">@Loc["lbNow"] </MudButton>
         </MudStack>
     </MudItem>
      <MudItem xs="6" sm="6">
@@ -153,7 +161,7 @@
     <MudItem xs="6" sm="3">
         <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
             <MudTimePicker Label=@Loc["lbTpvExitTime"] AmPm="false" @bind-Time="TPVExitTimeTime" Editable = "true" DisableToolbar="true" Disabled="@readOnlyScurity" ErrorText=@Loc["lberrorDateTime"] Margin="Margin.Normal" />
-            
+            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="NowButton3">@Loc["lbNow"] </MudButton>
         </MudStack>
     </MudItem>
     <MudItem xs="6" sm="6">
@@ -204,7 +212,7 @@
     </MudItem>
     <MudItem xs="2">
 
-     @*   <MudButton  Color="Color.Error" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="DeleteButton">@Loc["lbDelete"]</MudButton>*@
+        <MudButton  Color="Color.Error" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="DeleteButton">@Loc["lbDelete"]</MudButton>
     </MudItem>
     <MudItem xs="2">
         <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">@Loc["lbCancel"]</MudButton>
@@ -251,6 +259,9 @@
     DateTime? TPVExitTimeDate;
     TimeSpan? TPVExitTimeTime;
 
+    TimeSpan? zmStartUnloadingTime;
+    TimeSpan? zmFinishUnloadingTime;
+
     private bool resetValueOnEmptyText;
     List<CarAdviceGrDictionaryCarStatuses> StatusList = new List<CarAdviceGrDictionaryCarStatuses>();
     private List<string> lStatus;
@@ -269,12 +280,37 @@
     List<CarAdviceDictionaryQuality> qualityList = new List<CarAdviceDictionaryQuality>();
     private List<string> quality;
 
+    List<CarAdviceDictionaryTruckType> truckTypeList = new List<CarAdviceDictionaryTruckType>();
+    private List<string> trucktype;
+
+
+    private void NowButton3()
+    {
+        TPVExitTimeDate = DateTime.Today;
+        TPVExitTimeTime = DateTime.Now.TimeOfDay;
+        StateHasChanged();
+    }
+
     private void NowButton1()
     {
 
         AtaTimeDate = DateTime.Today;
         AtaTimeTime = DateTime.Now.TimeOfDay;
         StateHasChanged();
+    }
+
+    private void NowButton2()
+    {
+        TPVEntryTimeDate = DateTime.Today;
+        TPVEntryTimeTime = DateTime.Now.TimeOfDay;
+        StateHasChanged();
+    }
+
+    private async Task<IEnumerable<string>> SearchTuruckType(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return trucktype;
+        return trucktype.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
     private void NowButton4()
@@ -342,8 +378,24 @@
 
     private async Task SaveWh()
     {
-
         CAMainTable.EntryByS = UserName;
+
+
+        if (zmFinishUnloadingTime != null)
+        {
+            DateTime FUTimeDateNotNulable =  DateTime.Today;
+            TimeSpan FUTimeTimeNotNulable = (TimeSpan)zmFinishUnloadingTime;
+            CAMainTable.FinishUnloading = FUTimeDateNotNulable.Add(FUTimeTimeNotNulable);
+        }
+
+
+        if (zmStartUnloadingTime != null)
+        {
+            DateTime SUTimeDateNotNulable = DateTime.Today;
+            TimeSpan SUTimeTimeNotNulable = (TimeSpan)zmStartUnloadingTime;
+            CAMainTable.StartUnloading = SUTimeDateNotNulable.Add(SUTimeTimeNotNulable);
+        }
+
 
         if (EtdTimeDate != null)
         {
@@ -435,7 +487,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-
         var authState = await AuthState;
         var user = authState.User;
         if (!user.Identity.IsAuthenticated)
@@ -462,6 +513,11 @@
             if (rolaSecurity) readOnlyScurity = false;
         }
 
+        // truck type
+
+        string linktt = "/api/CarAdviceDictionaryTruckTypes/GetCarAdviceDictionaryActiveTruckType";
+        truckTypeList = await httpClient.GetFromJsonAsync<List<CarAdviceDictionaryTruckType>>(linktt);
+        trucktype = truckTypeList.Select(c => c.Truck).ToList();
 
         // quality
 
@@ -497,6 +553,23 @@
         string linkUrl = "/api/CarAdviceGrTruckMainTable/" + zId;
         CAMainTable =  await httpClient.GetFromJsonAsync<CarAdviceGrTruckMainTable>(linkUrl);
 
+        if (CAMainTable.StartUnloading == null)
+        {
+            zmStartUnloadingTime = null;
+        }
+        else
+        {
+            zmStartUnloadingTime = Convert.ToDateTime(CAMainTable.StartUnloading).TimeOfDay;
+        }
+
+        if (CAMainTable.FinishUnloading == null)
+        {
+            zmFinishUnloadingTime = null;
+        }
+        else
+        {
+            zmFinishUnloadingTime = Convert.ToDateTime(CAMainTable.FinishUnloading).TimeOfDay;
+        }
 
         if (CAMainTable.ETD == null)
         {

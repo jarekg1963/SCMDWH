@@ -69,6 +69,10 @@ public partial class CarAdviceGrTruckMainTable
 
     public string? MaterialStatus { get; set; }
 
+    public string? ContainerNo { get;set; }
+
+	public DateTime? StartUnloading { get; set; } 
+    public DateTime? FinishUnloading { get; set; }
 
     public virtual ICollection<CarAdviceGrTruckItems> CarAdviceGrTruckItems { get; set; } = new List<CarAdviceGrTruckItems>();
 

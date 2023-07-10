@@ -46,9 +46,11 @@ namespace SCMDWH.Server.Controllers
 
                 CarToAdd.ETD = DateInfo;
                 CarToAdd.Sender = ReferenceExcelLineFromGroup.Sender;
-                CarToAdd.PickingStatus = "Oczekuje";
+                CarToAdd.PickingStatus = "Nie dojechał";
                 CarToAdd.AddByUser = "rcis";
                 CarToAdd.AddDate = DateTime.Now;
+                CarToAdd.ContainerNo = ReferenceExcelLineFromGroup.ContainerNo;
+
                 foreach (ImportGrExcel item in ExcelGroup)
                 {
                     CarAdviceGrTruckItems itemToAdd = new();
@@ -108,7 +110,8 @@ namespace SCMDWH.Server.Controllers
             }
             try
             {
-                return await _context.CarAdviceGrTruckMainTable.Include(C => C.CarAdviceGrTruckItems).ToListAsync();
+                return await _context.CarAdviceGrTruckMainTable.Include(C => C.CarAdviceGrTruckItems).
+                    OrderByDescending(c => c.ETD).ToListAsync();
             }
             catch (Exception ex)
             {

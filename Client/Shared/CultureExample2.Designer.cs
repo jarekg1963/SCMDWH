@@ -736,6 +736,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import PO .
+        /// </summary>
+        public static string lbReadExcelSO {
+            get {
+                return ResourceManager.GetString("lbReadExcelSO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Przyczyna.
         /// </summary>
         public static string lbReason {
@@ -907,6 +916,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SO.
+        /// </summary>
+        public static string lbSo {
+            get {
+                return ResourceManager.GetString("lbSo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kody status.
         /// </summary>
         public static string lbStatuscodes {
@@ -984,6 +1002,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbTruckTypes {
             get {
                 return ResourceManager.GetString("lbTruckTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wczytaj plik.
+        /// </summary>
+        public static string lbUploadFiles {
+            get {
+                return ResourceManager.GetString("lbUploadFiles", resourceCulture);
             }
         }
         

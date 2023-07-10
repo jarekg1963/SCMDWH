@@ -51,7 +51,7 @@ namespace SCMDWH.Server.Controllers
             return globalAppUsersParameters;
         }
 
-       
+
 
 
         [HttpPut("{sUserName}")]
@@ -59,20 +59,20 @@ namespace SCMDWH.Server.Controllers
         {
             if (sUserName != globalAppUsersParameters.UserName)
             {
-                return BadRequest();
+                _context.GlobalAppUsersParameters.Add(globalAppUsersParameters);
             }
-
-            _context.Entry(globalAppUsersParameters).State = EntityState.Modified;
-
+            else
+            { 
+                _context.Entry(globalAppUsersParameters).State = EntityState.Modified;
+            }
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                
-            }
 
+            }
             return NoContent();
         }
 
@@ -94,8 +94,6 @@ namespace SCMDWH.Server.Controllers
                 _context.GlobalAppUsersParameters.Add(globalAppUsersParameters);
             }
 
-
-            
             await _context.SaveChangesAsync();
 
             return NoContent(); 
