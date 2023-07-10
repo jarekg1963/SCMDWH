@@ -22,7 +22,10 @@ namespace SCMDWH.Server.Controllers
             {
                 return BadRequest(ModelState);
             }
+            foreach (SoPoImportExcel excelItem in excelImportedList)
+            {
 
+            }
             return Ok(excelImportedList);
         }
 
