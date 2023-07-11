@@ -421,6 +421,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kontenery E-Shipping.
+        /// </summary>
+        public static string lbEshipingContainers {
+            get {
+                return ResourceManager.GetString("lbEshipingContainers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Awizowana data przyjazdu (ETD).
         /// </summary>
         public static string lbEtdDate {

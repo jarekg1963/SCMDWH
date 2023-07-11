@@ -237,6 +237,9 @@
   <data name="lberrorDateTime" xml:space="preserve">
     <value>Zly format daty!</value>
   </data>
+  <data name="lbEshipingContainers" xml:space="preserve">
+    <value>Kontenery E-Shipping</value>
+  </data>
   <data name="lbEtdDate" xml:space="preserve">
     <value>Awizowana data przyjazdu (ETD)</value>
   </data>

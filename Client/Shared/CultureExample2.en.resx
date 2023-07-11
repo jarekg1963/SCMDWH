@@ -234,6 +234,9 @@
   <data name="lberrorDateTime" xml:space="preserve">
     <value>Wrong time format</value>
   </data>
+  <data name="lbEshipingContainers" xml:space="preserve">
+    <value>E-Shipping containers</value>
+  </data>
   <data name="lbEtdDate" xml:space="preserve">
     <value>ETD date</value>
   </data>

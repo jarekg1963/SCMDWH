@@ -1,0 +1,139 @@
+﻿@page "/EshipingContainersPage"
+@using SCMDWH.Shared.Models;
+@using System.Security.Claims;
+@inject IStringLocalizer<CultureExample2> Loc
+@inject NavigationManager navigationManager
+@inject HttpClient httpClient
+
+
+@if (ListContainers is null)
+{
+    <p>Loading </p>
+}
+else
+{
+    <MudDataGrid T="EshippingContainers" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+                 Height="40em" RowsPerPage="30" MultiSelection="false" Items="@ListContainers" SortMode="SortMode.Multiple" Filterable="true"
+                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
+        <ToolBarContent>
+            <MudGrid>
+                <MudItem xs="2">
+                    <h5> Eshipping documents </h5>
+                </MudItem>
+            </MudGrid>
+        </ToolBarContent>
+        <Columns>
+            <PropertyColumn Property="x => x.Etd" Title="ETD" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Atd" Title="ATD" Sortable="true" Filterable="true" />
+
+            <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
+            <PropertyColumn Property="x => x.ShipmentId" Title="ShipmentId" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.ContainerNo" Title="ContainerNo" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DeliveryNote1" Title="DeliveryNote1" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DeliveryNote2" Title="DeliveryNote2" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Status" Title="Status" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.ProductType" Title="Product type" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Carrier" Title="Carrier" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DestName" Title="Dest.Name" Sortable="true" Filterable="true" />
+       
+            <PropertyColumn Property="x => x.Eta" Title="ETA" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Ata" Title="ETD" Sortable="true" Filterable="true" />
+        </Columns>
+
+        <PagerContent>
+            <MudGrid>
+                <MudItem xs="6">
+
+                </MudItem>
+                <MudItem xs="2">
+                    <MudDataGridPager T="EshippingContainers" PageSizeOptions="new int[] { 20, 50, 100}" RowsPerPageString=@Loc["lbRowPerPage"] />
+                </MudItem>
+            </MudGrid>
+        </PagerContent>
+    </MudDataGrid>
+
+}
+
+
+@code {
+    List<EshippingContainers> ListContainers = new List<EshippingContainers>();
+    [CascadingParameter]
+    public Error Error { get; set; }
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    private string UserName = "";
+    GlobalAppUsersParameters userParametersGRDates = new();
+    private DateTime ldGRStart;
+    private DateTime ldGREnd;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ReadData(false);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex);
+        }
+    }
+
+
+    private async Task ReadData(bool NoSent)
+    {
+        IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+            claims = user.Claims;
+            string wszystkieRole = user.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+        }
+
+        // read users parameters
+
+        string linkUserParameters = "/api/GlobalAppUsersParameters/" + UserName;
+        userParametersGRDates = await httpClient.GetFromJsonAsync<GlobalAppUsersParameters>(linkUserParameters);
+
+
+        if (userParametersGRDates == null)
+        {
+            userParametersGRDates.DateMainCAFrom = DateTime.Now.AddMonths(-3);
+            userParametersGRDates.DateMainCATo = DateTime.Now;
+            ldGRStart = DateTime.Now.AddMonths(-1);
+            ldGREnd = DateTime.Now.AddMonths(1);
+        }
+        else
+        {
+
+            ldGRStart = userParametersGRDates.DateGRMainCAFrom;
+            ldGREnd = userParametersGRDates.DateGRMainCATo;
+        }
+
+        // end users parameters
+
+        //_dateRange = new DateRange(ldGRStart, ldGREnd);
+
+        string linkLoad = "";
+
+        //if (!NoSent)
+        //{
+        ///api/EshippingContainers/GetbyDateNoSent/20230107/20230110
+        linkLoad = "/api/EshippingContainers/GetbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+        //}
+        //else
+        //{
+        //    linkLoad = "/api/CarAdviceGrTruckMainTable/GetGRbyDateNoLocated/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+        //}
+        ListContainers = await httpClient.GetFromJsonAsync<List<EshippingContainers>>(linkLoad);
+        StateHasChanged();
+
+    }
+
+}
