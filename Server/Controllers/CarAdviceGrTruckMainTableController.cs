@@ -42,8 +42,6 @@ namespace SCMDWH.Server.Controllers
                 DateTime DateInfo = (DateTime)ReferenceExcelLineFromGroup.DataEtd;
                 DateInfo = DateInfo.Add((TimeSpan)ReferenceExcelLineFromGroup.HourEtd);
 
-
-
                 CarToAdd.ETD = DateInfo;
                 CarToAdd.Sender = ReferenceExcelLineFromGroup.Sender;
                 CarToAdd.PickingStatus = "Nie dojechał";
@@ -53,14 +51,31 @@ namespace SCMDWH.Server.Controllers
 
                 foreach (ImportGrExcel item in ExcelGroup)
                 {
-                    CarAdviceGrTruckItems itemToAdd = new();
-                    itemToAdd.ContainerNo = item.ContainerNo;
-                    itemToAdd.InvoiceNo = item.InvoiceNo;
-                    itemToAdd.Material = item.Material;
-                    itemToAdd.TotalPalletQty = item.TotalPalletQty != null ? (int)item.TotalPalletQty : 0;
-                    itemToAdd.TotalQty = item.TotalQty != null ? (int)item.TotalQty : 0;
-                    itemToAdd.Remark = item.Remark;
-                    CarToAdd.CarAdviceGrTruckItems.Add(itemToAdd);
+                    if (item.InvoiceNo.Contains(","))
+                    {
+                        foreach (string subInvoiceNo in item.InvoiceNo.Split(","))
+                        {
+                            CarAdviceGrTruckItems itemToAdd = new();
+                            itemToAdd.ContainerNo = item.ContainerNo;
+                            itemToAdd.InvoiceNo = subInvoiceNo.Trim();
+                            itemToAdd.Material = item.Material;
+                            itemToAdd.TotalPalletQty = item.TotalPalletQty != null ? (int)item.TotalPalletQty : 0;
+                            itemToAdd.TotalQty = item.TotalQty != null ? (int)item.TotalQty : 0;
+                            itemToAdd.Remark = item.Remark;
+                            CarToAdd.CarAdviceGrTruckItems.Add(itemToAdd);
+                        }
+                    }
+                    else
+                    { 
+                        CarAdviceGrTruckItems itemToAdd = new();
+                        itemToAdd.ContainerNo = item.ContainerNo;
+                        itemToAdd.InvoiceNo = item.InvoiceNo;
+                        itemToAdd.Material = item.Material;
+                        itemToAdd.TotalPalletQty = item.TotalPalletQty != null ? (int)item.TotalPalletQty : 0;
+                        itemToAdd.TotalQty = item.TotalQty != null ? (int)item.TotalQty : 0;
+                        itemToAdd.Remark = item.Remark;
+                        CarToAdd.CarAdviceGrTruckItems.Add(itemToAdd);
+                    }
                 }
                 AllCarsToAdd.Add(CarToAdd);
             }
