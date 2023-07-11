@@ -37,6 +37,13 @@ builder.Services.AddDbContext<CarAdviceContext>
     (options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQLPurchasingConnection")));
 
+
+builder.Services.AddDbContext<TPVstockContext>
+    (options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TPVStockConnection")));
+
+
+
 builder.Services.AddSwaggerGen();
 
 //Repositories 

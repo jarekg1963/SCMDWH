@@ -173,10 +173,7 @@
         {
             linkLoad = "/api/CarAdviceGrTruckItemsControllery/GetbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
         }
-        //!!!!!!!!!!!!!! -- poprawic inna tabela GR---------
         itemPaletList = await httpClient.GetFromJsonAsync<List<GrTruckItemsDTO>>(linkLoad);
-
-
     }
 
 
