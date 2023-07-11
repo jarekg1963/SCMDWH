@@ -20,8 +20,6 @@ namespace SCMDWH.Server.Controllers
             _context = context;
         }
 
-
-
         // GET: api/CarAdviceDictionaryCountryCodes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EshippingContainers>>> GetEshippingContainers()
