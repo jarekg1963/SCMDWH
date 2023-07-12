@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "Server=172.17.80.101\SQLEXPRESS;Database=TPVSTOCK;User Id=luser;password=luser1;Trusted_Connection=False;Encrypt=false;MultipleActiveResultSets=false;" Microsoft.EntityFrameworkCore.SqlServer -Context TPVStockContext -OutputDir Data -Tables Products, ProductPallets, Recipients, EshippingContainers, DailyProductionPlanExcel, CMRdoc, CMRItems, Carriers -f

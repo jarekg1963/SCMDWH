@@ -11,11 +11,11 @@ namespace SCMDWH.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EshippingContainersController : ControllerBase
+    public class EshippingContainerController : ControllerBase
     {
-        private readonly TPVstockContext _context;
+        private readonly TPVStockContext _context;
 
-        public EshippingContainersController(TPVstockContext context)
+        public EshippingContainerController(TPVStockContext context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace SCMDWH.Server.Controllers
 
         [HttpGet()]
         [Route("GetbyDateNoSent/{startDate}/{endDate}")]
-        public async Task<ActionResult<IEnumerable<EshippingContainers>>> GetbyDateNoSent(string startDate, string endDate)
+        public async Task<ActionResult<IEnumerable<EshippingContainer>>> GetbyDateNoSent(string startDate, string endDate)
         {
             if (_context.EshippingContainers == null)
             {
@@ -52,7 +52,7 @@ namespace SCMDWH.Server.Controllers
 
         // GET: api/CarAdviceDictionaryCountryCodes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EshippingContainers>>> GetEshippingContainers()
+        public async Task<ActionResult<IEnumerable<EshippingContainer>>> GetEshippingContainers()
         {
             if (_context.EshippingContainers == null)
             {

@@ -38,7 +38,7 @@ builder.Services.AddDbContext<CarAdviceContext>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQLPurchasingConnection")));
 
 
-builder.Services.AddDbContext<TPVstockContext>
+builder.Services.AddDbContext<TPVStockContext>
     (options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TPVStockConnection")));
 

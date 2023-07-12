@@ -12,7 +12,7 @@
 }
 else
 {
-    <MudDataGrid T="EshippingContainers" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+    <MudDataGrid T="EshippingContainer" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                  Height="40em" RowsPerPage="30" MultiSelection="false" Items="@ListContainers" SortMode="SortMode.Multiple" Filterable="true"
                  FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
         <ToolBarContent>
@@ -46,7 +46,7 @@ else
 
                 </MudItem>
                 <MudItem xs="2">
-                    <MudDataGridPager T="EshippingContainers" PageSizeOptions="new int[] { 20, 50, 100}" RowsPerPageString=@Loc["lbRowPerPage"] />
+                    <MudDataGridPager T="EshippingContainer" PageSizeOptions="new int[] { 20, 50, 100}" RowsPerPageString=@Loc["lbRowPerPage"] />
                 </MudItem>
             </MudGrid>
         </PagerContent>
@@ -56,7 +56,7 @@ else
 
 
 @code {
-    List<EshippingContainers> ListContainers = new List<EshippingContainers>();
+    List<EshippingContainer> ListContainers = new List<EshippingContainer>();
     [CascadingParameter]
     public Error Error { get; set; }
     [CascadingParameter]
@@ -131,7 +131,7 @@ else
         //{
         //    linkLoad = "/api/CarAdviceGrTruckMainTable/GetGRbyDateNoLocated/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
         //}
-        ListContainers = await httpClient.GetFromJsonAsync<List<EshippingContainers>>(linkLoad);
+        ListContainers = await httpClient.GetFromJsonAsync<List<EshippingContainer>>(linkLoad);
         StateHasChanged();
 
     }
