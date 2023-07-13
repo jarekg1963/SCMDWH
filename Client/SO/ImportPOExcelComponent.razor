@@ -33,7 +33,51 @@
         }
     </MudItem>
 </MudGrid>
+<br />
 
+@if (listImportSOPOExcelAfterVerification is null)
+{
+    <p>Read file .. </p>
+}
+else
+{
+    <MudDataGrid T="SoPoImportExcel" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+                 Height="40em" RowsPerPage="30" MultiSelection="false" Items="@listImportSOPOExcelAfterVerification" SortMode="SortMode.Multiple" Filterable="true"
+                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
+        <ToolBarContent>
+            <MudGrid>
+                <MudItem xs="2">
+                    <h5> Eshipping documents </h5>
+                </MudItem>
+            </MudGrid>
+        </ToolBarContent>
+        <Columns>
+     
+
+            <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
+            <PropertyColumn Property="x => x.Product" Title="Product" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Qty" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.OrderNo" Title="DeliveryNote1" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DestinationSAPId" Title="DeliveryNote2" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.WkNo" Title="Status" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.IsOk" Title="Status" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.ValidationTestResults" Title="Status" Sortable="true" Filterable="true" />
+  
+        </Columns>
+
+        <PagerContent>
+            <MudGrid>
+                <MudItem xs="6">
+
+                </MudItem>
+                <MudItem xs="2">
+                    <MudDataGridPager T="SoPoImportExcel" PageSizeOptions="new int[] { 20, 50, 100}" RowsPerPageString=@Loc["lbRowPerPage"] />
+                </MudItem>
+            </MudGrid>
+        </PagerContent>
+    </MudDataGrid>
+
+}
 
 
 
@@ -88,16 +132,18 @@
         }
 
         string linkCu = "/api/SoPoImportExcel/ValidateSOPOExcel";
-        
-            var responseAfterVerification = await httpClient.PostAsJsonAsync(linkCu, listImportSOPOExcel);
-        
-        
+
+        var responseAfterVerification = await httpClient.PostAsJsonAsync(linkCu, listImportSOPOExcel);
+
+
         if (responseAfterVerification.IsSuccessStatusCode)
         {
             var stringData = await responseAfterVerification.Content.ReadAsStringAsync();
             listImportSOPOExcelAfterVerification = JsonConvert.DeserializeObject<List<SoPoImportExcel>>(stringData);
         }
-        
+
+        StateHasChanged();
+
         }
         
 
