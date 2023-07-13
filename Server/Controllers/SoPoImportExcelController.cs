@@ -42,7 +42,7 @@ namespace SCMDWH.Server.Controllers
                     excelItem.IsOk = false;
                     excelItem.ValidationTestResults += $"The OrderNo cannot be empty! ";
                 }
-                bool OrderNoTest = int.TryParse(excelItem.OrderNo.Trim(), out int OrderNoValue);
+                bool OrderNoTest = long.TryParse(excelItem.OrderNo.Trim(), out long OrderNoValue);
                 if (!OrderNoTest)
                 {
                     excelItem.IsOk = false;
@@ -64,7 +64,7 @@ namespace SCMDWH.Server.Controllers
                     excelItem.IsOk = false;
                     excelItem.ValidationTestResults += $"There is more than one entry for the same DestinationSAPId: {excelItem.DestinationSAPId.Trim()} - {TestReciptList.Count()} items with same SAP ID, Please maintain the data in the database!, ";
                 }
-                List<Product> TestProductsList = products.Where(P => P.ProductCode == excelItem.Product.Trim()).ToList();
+                List<Product> TestProductsList = products.Where(P => P.ProductCode == excelItem.Product.Trim().PadRight(30,' ')).ToList();
                 if (!TestProductsList.Any())
                 {
                     excelItem.IsOk = false;
