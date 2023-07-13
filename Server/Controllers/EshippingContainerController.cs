@@ -26,6 +26,7 @@ namespace SCMDWH.Server.Controllers
         [Route("GetbyDateNoSent/{startDate}/{endDate}")]
         public async Task<ActionResult<IEnumerable<EshippingContainer>>> GetbyDateNoSent(string startDate, string endDate)
         {
+            
             if (_context.EshippingContainers == null)
             {
                 return NotFound();
@@ -43,8 +44,19 @@ namespace SCMDWH.Server.Controllers
             int eMc = Int32.Parse(endDate.Substring(0, 2));
             DateTime endDt = new DateTime(eYear, eMc, eDay);
 
-            return await _context.EshippingContainers.Where(d => d.Etd >= startDt && d.Etd <= endDt )
-                .OrderByDescending(c => c.Etd).ToListAsync();
+
+            try
+            {
+                var eShippingList = await _context.EshippingContainers.Where(d => d.Etd >= startDt && d.Etd <= endDt)
+                    .OrderByDescending(c => c.Etd).ToListAsync();
+                return eShippingList;
+            }
+            catch (Exception ex) 
+            {
+            return BadRequest(ex.Message);
+            }
+
+          
         }
 
 

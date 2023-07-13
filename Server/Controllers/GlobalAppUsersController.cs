@@ -58,7 +58,6 @@ namespace SCMDWH.Server.Controllers
             {
                 return NotFound("App users context not found ");
             }
-
             try
             {
                  return await _context.GlobalAppUsers.ToListAsync();

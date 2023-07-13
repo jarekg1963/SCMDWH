@@ -75,14 +75,7 @@
             importExcel.Qty = (int)r.GetCell(2).NumericCellValue;
             importExcel.DestinationSAPId = NpoiExtension.GetFormattedCellValue(r.GetCell(3));
             string strIsCevaPo = NpoiExtension.GetFormattedCellValue(r.GetCell(4));
-            if (strIsCevaPo == "1" )
-            {
-                importExcel.IsCevaPo = true;
-            }
-            else
-            {
-                importExcel.IsCevaPo = false;
-            }
+           
 
             importExcel.Product = NpoiExtension.GetFormattedCellValue(r.GetCell(5));
             importExcel.WkNo = NpoiExtension.GetFormattedCellValue(r.GetCell(6));

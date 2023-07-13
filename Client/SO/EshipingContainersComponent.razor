@@ -34,8 +34,9 @@ else
             <PropertyColumn Property="x => x.Status" Title="Status" Sortable="true" Filterable="true" />
             <PropertyColumn Property="x => x.ProductType" Title="Product type" Sortable="true" Filterable="true" />
             <PropertyColumn Property="x => x.Carrier" Title="Carrier" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DestName" Title="Dest.Name" Sortable="true" Filterable="true" />
-       
+            <PropertyColumn Property="x => x.DestName" Title="Dest" Sortable="true" Filterable="true" />
+
+            <PropertyColumn Property="x => x.PalletQty" Title="PalletQty" Sortable="true" Filterable="true" />
             <PropertyColumn Property="x => x.Eta" Title="ETA" Sortable="true" Filterable="true" />
             <PropertyColumn Property="x => x.Ata" Title="ETD" Sortable="true" Filterable="true" />
         </Columns>
@@ -125,7 +126,12 @@ else
         //if (!NoSent)
         //{
         ///api/EshippingContainers/GetbyDateNoSent/20230107/20230110
-        linkLoad = "/api/EshippingContainers/GetbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+        ///
+
+         linkLoad = "/api/EshippingContainer/GetbyDateNoSent/" + Helpers.ChangeDateToString(ldGRStart) + "/" + Helpers.ChangeDateToString(ldGREnd);
+
+       // linkLoad = "/api/EshippingContainer/GetbyDateNoSent/07012023/07142023";
+                      
         //}
         //else
         //{
