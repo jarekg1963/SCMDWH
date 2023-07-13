@@ -1,6 +1,7 @@
 ﻿@page "/ImportPOExcel"
 @using NPOI.SS.UserModel;
 @using NPOI.XSSF.UserModel;
+@using Newtonsoft.Json;
 @using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.DTO;
 @inject IStringLocalizer<CultureExample2> Loc
@@ -41,6 +42,7 @@
     private string ImportedfileName = "";
     private string Importedfilesize = "";
     List<SoPoImportExcel> listImportSOPOExcel = new List<SoPoImportExcel>();
+    List<SoPoImportExcel> listImportSOPOExcelAfterVerification = new List<SoPoImportExcel>();
     int counterId = 1;
 
 
@@ -71,23 +73,35 @@
             var r = sheet.GetRow(j);
             SoPoImportExcel importExcel = new();
             importExcel.Id = counterId;
-            importExcel.OrderNo = NpoiExtension.GetFormattedCellValue(r.GetCell(1));
-            importExcel.Qty = (int)r.GetCell(2).NumericCellValue;
+            importExcel.OrderNo = NpoiExtension.GetFormattedCellValue(r.GetCell(2));
+            importExcel.Qty = (int)r.GetCell(1).NumericCellValue;
             importExcel.DestinationSAPId = NpoiExtension.GetFormattedCellValue(r.GetCell(3));
-            string strIsCevaPo = NpoiExtension.GetFormattedCellValue(r.GetCell(4));
-           
 
-            importExcel.Product = NpoiExtension.GetFormattedCellValue(r.GetCell(5));
-            importExcel.WkNo = NpoiExtension.GetFormattedCellValue(r.GetCell(6));
+
+
+            importExcel.Product = NpoiExtension.GetFormattedCellValue(r.GetCell(0));
+            importExcel.WkNo = NpoiExtension.GetFormattedCellValue(r.GetCell(4));
             importExcel.IsOk = false;
             importExcel.ValidationTestResults = "Not Tested yet";
             listImportSOPOExcel.Add(importExcel);
             counterId++;
         }
 
-        string linkCu = "/api/SOPoList/ImportSOPOExcel";
-        await httpClient.PostAsJsonAsync(linkCu, listImportSOPOExcel);
+        string linkCu = "/api/SoPoImportExcel/ValidateSOPOExcel";
+        
+            var responseAfterVerification = await httpClient.PostAsJsonAsync(linkCu, listImportSOPOExcel);
+        
+        
+        if (responseAfterVerification.IsSuccessStatusCode)
+        {
+            var stringData = await responseAfterVerification.Content.ReadAsStringAsync();
+            listImportSOPOExcelAfterVerification = JsonConvert.DeserializeObject<List<SoPoImportExcel>>(stringData);
+        }
+        
+        }
+        
+
 
     }
 
-}
+

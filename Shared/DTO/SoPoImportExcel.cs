@@ -13,7 +13,7 @@ namespace SCMDWH.Shared.DTO
         public int Qty { get; set; }
         public string DestinationSAPId { get; set;}
         public string Product { get; set;}
-        public string Remark { get; set; }
+        public string? Remark { get; set; }
         public string WkNo { get; set;}
         public bool IsOk { get; set; } = false;
         public string ValidationTestResults { get; set; } = "";

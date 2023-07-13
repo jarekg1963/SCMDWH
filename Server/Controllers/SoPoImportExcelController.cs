@@ -11,19 +11,23 @@ namespace SCMDWH.Server.Controllers
     public class SoPoImportExcelController : ControllerBase
     {
         private readonly PurchasingContext _context;
+        private readonly TPVStockContext tPVStockContext;
 
-        public SoPoImportExcelController(PurchasingContext context)
+        public SoPoImportExcelController(PurchasingContext context , TPVStockContext ctPVStockContext)
         {
+            tPVStockContext = ctPVStockContext;
             _context = context;
         }
         [HttpPost("ValidateSOPOExcel")]
         public async Task<ActionResult> ValidateSOPOExcel([FromBody] List<SoPoImportExcel> excelImportedList)
         {
+            Console.WriteLine("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMagda ");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            TPVStockContext tPVStockContext = new TPVStockContext();
+            //TPVStockContext tPVStockContext = new TPVStockContext();
             List<Recipient> recipients = tPVStockContext.Recipients.Where(R => R.Sapid != "").ToList();
             List<Product> products = tPVStockContext.Products.ToList();
             List<ProductPallet> productPalletList = tPVStockContext.ProductPallets.Where(P => P.DefaultPallet).ToList();
@@ -100,7 +104,7 @@ namespace SCMDWH.Server.Controllers
                     excelItem.IsOk = false;
                     excelItem.ValidationTestResults += $"The week number must be a valid integer, The entered value is: {excelItem.WkNo.Trim()}! ";
                 }
-                if(excelItem.IsOk)
+                if (excelItem.IsOk)
                 {
                     excelItem.ValidationTestResults += "All validation tests passed.";
                 }
