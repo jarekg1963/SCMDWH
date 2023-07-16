@@ -1,39 +1,41 @@
-﻿@page "/ImportPOExcel"
+﻿@page "/SOPoPrImportFromExcel"
 @using NPOI.SS.UserModel;
 @using NPOI.XSSF.UserModel;
 @using Newtonsoft.Json;
 @using SCMDWH.Client.Tools;
 @using SCMDWH.Shared.DTO;
+@using SCMDWH.Shared.Models;
 @inject IStringLocalizer<CultureExample2> Loc
 @inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject ISnackbar Snackbar;
 
 
-<br />
-
-<MudGrid Class="border-solid border-2 mud-border-default pa-4" Elevation="0">
-    <MudItem xs="2">
-        <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
-            <ButtonTemplate>
-                <MudButton HtmlTag="label"
-                           Variant="Variant.Filled"
-                           Color="Color.Default"
-                           StartIcon="@Icons.Material.Filled.CloudUpload"
-                           for="@context">
-                    @Loc["lbUploadFiles"]
-                </MudButton>
-            </ButtonTemplate>
-        </MudFileUpload>
-    </MudItem>
-    <MudItem xs="6">
-        @if (files != null)
-        {
-            <MudListItem Icon="@Icons.Material.Filled.AttachFile">
-                @ImportedfileName <code>@Importedfilesize</code>
-            </MudListItem>
-        }
-    </MudItem>
-</MudGrid>
-<br />
+    <br />
+    <MudGrid Class="border-solid border-2 mud-border-default pa-4" Elevation="0">
+        <MudItem xs="2">
+            <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+                <ButtonTemplate>
+                    <MudButton HtmlTag="label"
+                    Variant="Variant.Filled"
+                    Color="Color.Default"
+                    StartIcon="@Icons.Material.Filled.CloudUpload"
+                    for="@context">
+                        @Loc["lbUploadFiles"]
+                    </MudButton>
+                </ButtonTemplate>
+            </MudFileUpload>
+        </MudItem>
+        <MudItem xs="6">
+            @if (files != null)
+            {
+                <MudListItem Icon="@Icons.Material.Filled.AttachFile">
+                    @ImportedfileName <code>@Importedfilesize</code>
+                </MudListItem>
+            }
+        </MudItem>
+    </MudGrid>
+    <br />
 
 @if (listImportSOPOExcelAfterVerification is null)
 {
@@ -43,26 +45,28 @@ else
 {
     <MudDataGrid T="SoPoImportExcel" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                  Height="40em" RowsPerPage="30" MultiSelection="false" Items="@listImportSOPOExcelAfterVerification" SortMode="SortMode.Multiple" Filterable="true"
-                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
-        <ToolBarContent>
-            <MudGrid>
-                <MudItem xs="2">
-                    <h5> Eshipping documents </h5>
-                </MudItem>
-            </MudGrid>
-        </ToolBarContent>
+                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive" RowStyleFunc="@_rowStyleFunc">
+    
+          
+        <ColGroup>
+            <col style="width: 20px;" />
+            <col />
+        </ColGroup>
         <Columns>
-     
-
-            <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
+            <PropertyColumn Property="x => x.Id"  Title="Id" Sortable="true" Filterable="false" />
             <PropertyColumn Property="x => x.Product" Title="Product" Sortable="true" Filterable="true" />
             <PropertyColumn Property="x => x.Qty" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.OrderNo" Title="DeliveryNote1" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DestinationSAPId" Title="DeliveryNote2" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.WkNo" Title="Status" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.IsOk" Title="Status" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.ValidationTestResults" Title="Status" Sortable="true" Filterable="true" />
-  
+            <PropertyColumn Property="x => x.Remark" Title="PR " Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DestinationSAPId" Title="SAPID" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.WkNo" Title="WkNo" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.IsOk" Title="IsOk" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.ValidationTestResults" Title="ValidationTestResults" Sortable="true" Filterable="true" />
+            <TemplateColumn Title="">
+                <CellTemplate>
+                    <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>RowCellClicked(@context))">@context.Item.Remark</MudIconButton>
+                </CellTemplate>
+            </TemplateColumn>
+
         </Columns>
 
         <PagerContent>
@@ -75,28 +79,94 @@ else
                 </MudItem>
             </MudGrid>
         </PagerContent>
+        
     </MudDataGrid>
+    <br />
+    <MudGrid>
+        <MudItem xs="6">
 
+
+        </MudItem>
+        <MudItem xs="2">
+
+
+        </MudItem>
+        <MudItem xs="2">
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Small" OnClick="CancelButton">@Loc["lbCancel"]</MudButton>
+        </MudItem>
+
+        <MudItem xs="2">
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Size="Size.Small" OnClick="SaveSoPr">@Loc["lbSave"]</MudButton>
+        </MudItem>
+    </MudGrid>
 }
 
 
 
 
 @code {
+    bool hideFileLoader = false;
     private string ImportedfileName = "";
     private string Importedfilesize = "";
     List<SoPoImportExcel> listImportSOPOExcel = new List<SoPoImportExcel>();
     List<SoPoImportExcel> listImportSOPOExcelAfterVerification = new List<SoPoImportExcel>();
+
     int counterId = 1;
+    IList<IBrowserFile> files = new List<IBrowserFile>();
 
-
-    async Task ReadExcelNpoi(InputFileChangeEventArgs e)
+    private void RowCellClicked(CellContext<SoPoImportExcel> ItemForDelete)
     {
-
-
+        listImportSOPOExcelAfterVerification.Remove(ItemForDelete.Item);
+        StateHasChanged();
     }
 
-    IList<IBrowserFile> files = new List<IBrowserFile>();
+    private void CancelButton()
+    {
+        navigationManager.NavigateTo("/SOPoPrListPage");
+    }
+
+    private async void SaveSoPr()
+    {
+        if (listImportSOPOExcelAfterVerification.Count(c=>c.ValidationTestResults=="DUPLICAT") > 0)
+        {
+            Snackbar.Add("Duplitaty na liście !!! " , Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+        }
+        else
+        {
+            foreach (SoPoImportExcel excelToSave in listImportSOPOExcelAfterVerification)
+            {
+                SoModulePoList itemPrPo = new();
+                itemPrPo.Qty = excelToSave.Qty;
+                itemPrPo.DestinationSapid = excelToSave.DestinationSAPId;
+                itemPrPo.Product = excelToSave.Product;
+                itemPrPo.WkNo = Int32.Parse(excelToSave.WkNo);
+                itemPrPo.Remark = excelToSave.ValidationTestResults;
+                itemPrPo.Reference = excelToSave.Remark;
+                itemPrPo.InsertByUser = "rcis";
+                itemPrPo.InsertTime = DateTime.Now;
+                itemPrPo.LastUpdateTime = DateTime.Now;
+
+                string linkCu = "api/SoModulePoList/";
+
+                try
+                {
+                    var response =  await httpClient.PostAsJsonAsync(linkCu, itemPrPo);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+
+            navigationManager.NavigateTo("/SOPoPrListPage", true);
+        }
+        
+    }
+
+
+
+ 
     private async void UploadFiles(IBrowserFile file)
     {
         ImportedfileName = file.Name;
@@ -120,9 +190,6 @@ else
             importExcel.OrderNo = NpoiExtension.GetFormattedCellValue(r.GetCell(2));
             importExcel.Qty = (int)r.GetCell(1).NumericCellValue;
             importExcel.DestinationSAPId = NpoiExtension.GetFormattedCellValue(r.GetCell(3));
-
-
-
             importExcel.Product = NpoiExtension.GetFormattedCellValue(r.GetCell(0));
             importExcel.WkNo = NpoiExtension.GetFormattedCellValue(r.GetCell(4));
             importExcel.IsOk = false;
@@ -142,12 +209,37 @@ else
             listImportSOPOExcelAfterVerification = JsonConvert.DeserializeObject<List<SoPoImportExcel>>(stringData);
         }
 
+        hideFileLoader = true;
+
         StateHasChanged();
 
         }
         
+    private Func<SoPoImportExcel, int, string> _rowStyleFunc => (x, i) =>
+     {
+         if (x.ValidationTestResults == "DUPLICAT")
+             return "background-color:#fc2403";
+     return "";
+
+     };
+}
 
 
+<style>
+
+
+   .column-header .sortable-column-header {
+        font-size:medium !important;
     }
 
+    .mud-data-grid .mud-table-cell {
+        font-size: small !important;
+    }
 
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+    }
+</style>

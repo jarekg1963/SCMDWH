@@ -64,10 +64,63 @@ public partial class PurchasingContext : DbContext
 
     public virtual DbSet<CarAdviceGrTruckMainTable> CarAdviceGrTruckMainTable { get; set; }
 
+    public virtual DbSet<SoModulePoList> SoModulePoList { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Polish_CI_AS");
+
+
+        modelBuilder.Entity<SoModulePoList>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_SoModulePrList");
+
+            entity.Property(e => e.DestinationCountryCode)
+                .IsRequired()
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasDefaultValueSql("('')");
+            entity.Property(e => e.DestinationName)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasDefaultValueSql("('')");
+            entity.Property(e => e.DestinationSapid)
+                .IsRequired()
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasDefaultValueSql("('')")
+                .HasColumnName("DestinationSAPId");
+            entity.Property(e => e.InsertByUser)
+                .IsRequired()
+                .HasMaxLength(30);
+            entity.Property(e => e.InsertTime)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.LastUpdateTime)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.OrderNo)
+                .IsRequired()
+                .HasMaxLength(30)
+                .HasDefaultValueSql("('')");
+            entity.Property(e => e.OriginalAgreedDeliveryDate).HasColumnType("datetime");
+            entity.Property(e => e.Product)
+                .IsRequired()
+                .HasMaxLength(30)
+                .HasDefaultValueSql("('')");
+            entity.Property(e => e.Reference)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasDefaultValueSql("('')");
+            entity.Property(e => e.Remark)
+                .IsRequired()
+                .HasMaxLength(200);
+            entity.Property(e => e.Status)
+                .IsRequired()
+                .HasMaxLength(30)
+                .HasDefaultValueSql("('')");
+        });
 
         modelBuilder.Entity<CarAdviceGrDictionaryCarStatuses>(entity =>
         {

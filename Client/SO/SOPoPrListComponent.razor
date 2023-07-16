@@ -1,0 +1,162 @@
+﻿@page "/SOPoPrListPage"
+@using SCMDWH.Client.Dictionary;
+@using SCMDWH.Client.GlobalPages;
+@using SCMDWH.Shared.DTO;
+@using SCMDWH.Shared.Models;
+@using SCMDWH.Client.JGHttpClient;
+@inject IStringLocalizer<CultureExample2> Loc
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IDialogService DialogService
+@inject JGHttpClient http;
+@inject ISnackbar Snackbar
+
+@if (listImportSOPOPr is null)
+{
+    <p>Read file .. </p>
+}
+else
+{
+    <MudDataGrid T="SoModulePoList" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+                 Height="40em" RowsPerPage="30" MultiSelection="false" Items="@listImportSOPOPr" SortMode="SortMode.Multiple" Filterable="true"
+                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
+
+        <ToolBarContent>
+            <MudGrid>
+              
+                <MudItem xs="2">
+                    <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ImportExport"
+                               Style="text-transform:none ; margin-top:25px!important" OnClick="ImportFromExcel" Size="Size.Small">
+                        Excel
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="2">
+                  
+                </MudItem>
+                <MudItem xs="3">
+                   
+                </MudItem>
+                <MudItem xs="1">
+
+                </MudItem>
+                <MudItem xs="2">
+                  
+                </MudItem>
+            </MudGrid>
+        </ToolBarContent>
+        <Columns>
+            <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
+            <PropertyColumn Property="x => x.OrderNo" Title="OrderNo" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Qty" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DestinationSapid" Title="SAPID" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DestinationCountryCode" Title="DestinationCountryCode" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DestinationName" Title="DestinationName" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Product" Title="Product" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.WkNo" Title="WkNo" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.OriginalAgreedDeliveryDate" Title="OriginalAgreedDeliveryDate" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Status" Title="Status " Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.MissingQty" Title="Status " Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Remark" Title="PR " Sortable="true" Filterable="true" />
+            <TemplateColumn Title="">
+                <CellTemplate>
+                    <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>RowCellClicked(@context))">@context.Item.Remark</MudIconButton>
+                    <MudIconButton Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>Edit(@context))">@context.Item.Remark</MudIconButton>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+        <PagerContent>
+            <MudGrid>
+                <MudItem xs="6">
+
+                </MudItem>
+                <MudItem xs="2">
+                    <MudDataGridPager T="SoModulePoList" PageSizeOptions="new int[] { 20, 50, 100}" RowsPerPageString=@Loc["lbRowPerPage"] />
+                </MudItem>
+            </MudGrid>
+            <hr />
+          
+        </PagerContent>
+    </MudDataGrid>
+   
+}
+
+@code {
+
+    // listImportSOPOPr
+
+    List<SoModulePoList> listImportSOPOPr = new List<SoModulePoList>();
+
+    private void AddNew()
+    {
+        navigationManager.NavigateTo($"/SOAddEditPrPoPage/0");
+    }
+    //------------------------------------------------------------------------
+    private void Edit(CellContext<SoModulePoList> ItemForEdit)
+    {
+       navigationManager.NavigateTo($"/SOAddEditPrPoPage/{ItemForEdit.Item.Id}");
+        //navigationManager.NavigateTo($"/aaaapage/{ItemForEdit.Item.Id}");
+    }
+
+
+    private async void RowCellClicked(CellContext<SoModulePoList> ItemForDelete)
+    {
+        var parameters = new DialogParameters();
+        string strDelete = Loc["lbDelete"];
+        parameters.Add("ButtonText", strDelete);
+        parameters.Add("Color", Color.Error);
+        var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.ExtraSmall };
+        var dialog = DialogService.Show<DialogDictionaryDeleteComponent>(strDelete, parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            try
+            {
+                string link = "/api/SoModulePoList/" + ItemForDelete.Item.Id;
+                var Response = await httpClient.DeleteAsync(link);
+                await ReadData();
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+               Snackbar.Add("Error !!!  " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+            }
+
+        }
+
+        StateHasChanged();
+    }
+    private void ImportFromExcel()
+    {
+        navigationManager.NavigateTo("/SOPoPrImportFromExcel");
+    }
+    private async Task ReadData()
+    {
+        string link = "/api/SoModulePoList";
+        listImportSOPOPr = await httpClient.GetFromJsonAsync<List<SoModulePoList>>(link);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await ReadData();
+    }
+
+}
+
+
+<style>
+
+
+    .column-header .sortable-column-header {
+        font-size: small !important;
+    }
+
+    .mud-data-grid .mud-table-cell {
+        font-size: small !important;
+    }
+
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+    }
+</style>

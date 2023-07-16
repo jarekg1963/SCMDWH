@@ -339,6 +339,9 @@
   <data name="lbPleaseSelectRow" xml:space="preserve">
     <value>Najpierw wybierz wysyłkę!</value>
   </data>
+  <data name="lbPoPrList" xml:space="preserve">
+    <value>Lista Pr / PO</value>
+  </data>
   <data name="lbPrintWH" xml:space="preserve">
     <value>Wydruk</value>
   </data>

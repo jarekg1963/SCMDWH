@@ -727,6 +727,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lista Pr / PO.
+        /// </summary>
+        public static string lbPoPrList {
+            get {
+                return ResourceManager.GetString("lbPoPrList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wydruk.
         /// </summary>
         public static string lbPrintWH {

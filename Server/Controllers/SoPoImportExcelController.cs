@@ -21,8 +21,7 @@ namespace SCMDWH.Server.Controllers
         [HttpPost("ValidateSOPOExcel")]
         public async Task<ActionResult> ValidateSOPOExcel([FromBody] List<SoPoImportExcel> excelImportedList)
         {
-            Console.WriteLine("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMagda ");
-
+           
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -34,7 +33,6 @@ namespace SCMDWH.Server.Controllers
             //Jak powstanie model SO Items to wczytać wszystkie
             foreach (SoPoImportExcel excelItem in excelImportedList)
             {
-                //Walidować duplikaty (czy numer PO nie jest w bazie danych) jak jest to błąd
                 excelItem.IsOk = true;
                 excelItem.ValidationTestResults = "";
                 if (excelItem.OrderNo.Trim() == string.Empty)
@@ -47,6 +45,13 @@ namespace SCMDWH.Server.Controllers
                 {
                     excelItem.IsOk = false;
                     excelItem.ValidationTestResults += $"The Order number must be a valid integer, The entered value is: {excelItem.OrderNo.Trim()}! ";
+                }
+                else
+                {
+                    // Kulawa Podminka POrder z reference - do zmiany  Remark <-> Reference w bazie
+                    excelItem.Remark = excelItem.OrderNo.Trim();
+                    excelItem.OrderNo = "";
+                    // koniec podmianki 
                 }
                 if (excelItem.Qty <= 0)
                 {
@@ -104,10 +109,25 @@ namespace SCMDWH.Server.Controllers
                     excelItem.IsOk = false;
                     excelItem.ValidationTestResults += $"The week number must be a valid integer, The entered value is: {excelItem.WkNo.Trim()}! ";
                 }
+                // duplicate verification // sprawdzić duplkaty w polu exelItem.remark z bazą reference 
+
+                string prForVerification = excelItem.Remark;
+
+                if ( _context.SoModulePoList.FirstOrDefault( c=>c.Reference ==  prForVerification ) != null ) 
+                {
+                    excelItem.IsOk = false;
+                    excelItem.ValidationTestResults = "DUPLICAT";
+                }
+
+
                 if (excelItem.IsOk)
                 {
                     excelItem.ValidationTestResults += "All validation tests passed.";
                 }
+                
+
+
+
             }
             return Ok(excelImportedList);
         }
