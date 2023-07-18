@@ -4,6 +4,8 @@
 @using SCMDWH.Shared.DTO;
 @using SCMDWH.Shared.Models;
 @using SCMDWH.Client.JGHttpClient;
+@using System.Security.Claims;
+@using SCMDWH.Shared.Tools;
 @inject IStringLocalizer<CultureExample2> Loc
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
@@ -19,11 +21,11 @@ else
 {
     <MudDataGrid T="SoModulePoList" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                  Height="40em" RowsPerPage="30" MultiSelection="false" Items="@listImportSOPOPr" SortMode="SortMode.Multiple" Filterable="true"
-                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive">
+                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive" >
 
         <ToolBarContent>
             <MudGrid>
-              
+
                 <MudItem xs="2">
                     <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ImportExport"
                                Style="text-transform:none ; margin-top:25px!important" OnClick="ImportFromExcel" Size="Size.Small">
@@ -31,60 +33,197 @@ else
                     </MudButton>
                 </MudItem>
                 <MudItem xs="2">
-                  
+                    <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ViewColumn"
+                               Style="text-transform:none ; margin-top:25px!important" OnClick="ShowColumsForSelection" Size="Size.Small">
+                        @Loc["lbColumns"]
+                    </MudButton>
                 </MudItem>
                 <MudItem xs="3">
-                   
+                    <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.AddToDrive"
+                               Style="text-transform:none ; margin-top:25px!important" OnClick="AddNew" Size="Size.Small">
+                        @Loc["lbNew"]
+                    </MudButton>
                 </MudItem>
                 <MudItem xs="1">
 
                 </MudItem>
                 <MudItem xs="2">
-                  
+
                 </MudItem>
             </MudGrid>
         </ToolBarContent>
         <Columns>
-            <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
-            <PropertyColumn Property="x => x.OrderNo" Title="OrderNo" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.Qty" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DestinationSapid" Title="SAPID" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DestinationCountryCode" Title="DestinationCountryCode" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DestinationName" Title="DestinationName" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.Product" Title="Product" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.WkNo" Title="WkNo" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.OriginalAgreedDeliveryDate" Title="OriginalAgreedDeliveryDate" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.Status" Title="Status " Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.MissingQty" Title="Status " Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.Remark" Title="PR " Sortable="true" Filterable="true" />
-            <TemplateColumn Title="">
-                <CellTemplate>
-                    <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>RowCellClicked(@context))">@context.Item.Remark</MudIconButton>
+            @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
+            {
+                @foreach (var ii in listGridColums)
+                {
+                    @switch (ii.fieldName)
+                    {
+                        case "Id":
+                            <PropertyColumn Property="x => x.Id" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "OrderNo":
+                            <PropertyColumn Property="x => x.OrderNo" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Qty":
+                            <PropertyColumn Property="x => x.Qty" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationSAPId":
+                            <PropertyColumn Property="x => x.DestinationSapid" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationCountryCode":
+                            <PropertyColumn Property="x => x.DestinationCountryCode" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationName":
+                            <PropertyColumn Property="x => x.DestinationName" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Product":
+                            <PropertyColumn Property="x => x.Product" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "WkNo":
+                            <PropertyColumn Property="x => x.WkNo" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "OriginalAgreedDeliveryDate":
+                            <PropertyColumn Property="x => x.OriginalAgreedDeliveryDate" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Status":
+                            <PropertyColumn Property="x => x.Status" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "MissingQty":
+                            <PropertyColumn Property="x => x.MissingQty" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Remark":
+                            <PropertyColumn Property="x => x.Remark" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Reference":
+                            <PropertyColumn Property="x => x.Reference" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "InsertByUser":
+                            <PropertyColumn Property="x => x.InsertByUser" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "LastUpdateTime":
+                            <PropertyColumn Property="x => x.LastUpdateTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                @foreach (var ii in listGridColums)
+                {
+                    @switch (ii.fieldName)
+                    {
+                        case "Id":
+                            <PropertyColumn Property="x => x.Id" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "OrderNo":
+                            <PropertyColumn Property="x => x.OrderNo" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Qty":
+                            <PropertyColumn Property="x => x.Qty" Title="@ii.plHeader" fieldName="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationSAPId":
+                            <PropertyColumn Property="x => x.DestinationSapid" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationCountryCode":
+                            <PropertyColumn Property="x => x.DestinationCountryCode" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationName":
+                            <PropertyColumn Property="x => x.DestinationName" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Product":
+                            <PropertyColumn Property="x => x.Product" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "WkNo":
+                            <PropertyColumn Property="x => x.WkNo" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "OriginalAgreedDeliveryDate":
+                            <PropertyColumn Property="x => x.OriginalAgreedDeliveryDate" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Status":
+                            <PropertyColumn Property="x => x.Status" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "MissingQty":
+                            <PropertyColumn Property="x => x.MissingQty" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Remark":
+                            <PropertyColumn Property="x => x.Remark" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Reference":
+                            <PropertyColumn Property="x => x.Reference" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "InsertByUser":
+                            <PropertyColumn Property="x => x.InsertByUser" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "LastUpdateTime":
+                            <PropertyColumn Property="x => x.LastUpdateTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                    }
+                }
+            }
+            <TemplateColumn Title="" Sortable="false" Filterable="false">
+                <CellTemplate >                   
                     <MudIconButton Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>Edit(@context))">@context.Item.Remark</MudIconButton>
+                    <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>RowCellClicked(@context))">@context.Item.Remark</MudIconButton>
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
         <PagerContent>
             <MudGrid>
                 <MudItem xs="6">
-
                 </MudItem>
                 <MudItem xs="2">
                     <MudDataGridPager T="SoModulePoList" PageSizeOptions="new int[] { 20, 50, 100}" RowsPerPageString=@Loc["lbRowPerPage"] />
                 </MudItem>
             </MudGrid>
-            <hr />
-          
         </PagerContent>
     </MudDataGrid>
-   
+
 }
 
 @code {
 
-    // listImportSOPOPr
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
 
     List<SoModulePoList> listImportSOPOPr = new List<SoModulePoList>();
+    private string UserName = "";
+
+    List<gridColums> listGridColums = new();
+    List<CarAdviceMainPlanColumn> columsForDisplayListDb = new List<CarAdviceMainPlanColumn>();
+
+    private bool hiddenId = false;
+    private bool hiddenOrderNo = false;
+    private bool hiddenQty = false;
+    private bool hiddenDestinationSAPId = false;
+    private bool hiddenDestinationCountryCode = false;
+    private bool hiddenDestinationName = false;
+    private bool hiddenProduct = false;
+    private bool hiddenWkNo = false;
+    private bool hiddenOriginalAgreedDeliveryDate = false;
+    private bool hiddenStatus = false;
+    private bool hiddenMissingQty = false;
+    private bool hiddenRemark = false;
+    private bool hiddenReference = false;
+    private bool hiddenInsertByUser = false;
+    private bool hiddenLastUpdateTime = false;
+
+
+
+    private async Task ShowColumsForSelection()
+    {
+        var parameters = new DialogParameters { ["Username"] = UserName };
+        var dialog = DialogService.Show<SODialogColumnSelection>("", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            navigationManager.NavigateTo("/SOPoPrListPage", true);
+            StateHasChanged();
+        }
+    }
+
+
 
     private void AddNew()
     {
@@ -93,10 +232,19 @@ else
     //------------------------------------------------------------------------
     private void Edit(CellContext<SoModulePoList> ItemForEdit)
     {
-       navigationManager.NavigateTo($"/SOAddEditPrPoPage/{ItemForEdit.Item.Id}");
-        //navigationManager.NavigateTo($"/aaaapage/{ItemForEdit.Item.Id}");
+        navigationManager.NavigateTo($"/SOAddEditPrPoPage/{ItemForEdit.Item.Id}");
     }
-
+    private bool verificationColumsVisibility(string comumnName)
+    {
+        if (columsForDisplayListDb.Count(c => c.MainScreenColumn == comumnName && c.Hidden == true) != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     private async void RowCellClicked(CellContext<SoModulePoList> ItemForDelete)
     {
@@ -118,7 +266,7 @@ else
             }
             catch (Exception ex)
             {
-               Snackbar.Add("Error !!!  " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
+                Snackbar.Add("Error !!!  " + ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 500; });
             }
 
         }
@@ -131,11 +279,62 @@ else
     }
     private async Task ReadData()
     {
+        columsForDisplayListDb.Clear();
+        string linkcoluser = "/api/CarAdviceMainPlanColums/SOPRListComumByUser/" + UserName;
+
+        columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<CarAdviceMainPlanColumn>>(linkcoluser);
+
+        foreach (var columienka in columsForDisplayListDb)
+        {
+            listGridColums.Add(new gridColums()
+                {
+                    fieldName = columienka.MainScreenColumn,
+                    fieldTitle = columienka.MainScreenColumn,
+                    filedfirterable = true,
+                    filedSortable = true,
+                    filedHiden = columienka.Hidden,
+                    plHeader = columienka.plHeader
+                });
+        }
+
+        #region setupColumsVisibility
+        hiddenId = verificationColumsVisibility("hiddenId");
+        hiddenId = verificationColumsVisibility("hiddedOrderNo");
+        hiddenId = verificationColumsVisibility("hiddedQty");
+        hiddenId = verificationColumsVisibility("hiddedDestinationSAPId");
+        hiddenId = verificationColumsVisibility("hiddedDestinationCountryCode");
+        hiddenId = verificationColumsVisibility("hiddedDestinationName");
+        hiddenId = verificationColumsVisibility("hiddedProduct");
+        hiddenId = verificationColumsVisibility("hiddedWkNo");
+        hiddenId = verificationColumsVisibility("hiddedOriginalAgreedDeliveryDate");
+        hiddenId = verificationColumsVisibility("hiddedStatus");
+        hiddenId = verificationColumsVisibility("hiddedMissingQty");
+        hiddenId = verificationColumsVisibility("hiddedRemark");
+        hiddenId = verificationColumsVisibility("hiddedReference");
+        hiddenId = verificationColumsVisibility("hiddedInsertByUser");
+        hiddenId = verificationColumsVisibility("hiddedLastUpdateTime");
+
+
+        #endregion setupColumsVisibility
+
+
         string link = "/api/SoModulePoList";
         listImportSOPOPr = await httpClient.GetFromJsonAsync<List<SoModulePoList>>(link);
     }
     protected override async Task OnInitializedAsync()
     {
+        IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+        }
+
         await ReadData();
     }
 
@@ -143,14 +342,8 @@ else
 
 
 <style>
-
-
-    .column-header .sortable-column-header {
-        font-size: small !important;
-    }
-
-    .mud-data-grid .mud-table-cell {
-        font-size: small !important;
+    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
+        font-size: xx-small !important;
     }
 
     .mud-table-cell {
@@ -159,4 +352,14 @@ else
         text-transform: uppercase !important;
         text-align: left !important;
     }
+
+    @@media (min-width: 1080px) {
+        .example {
+            width: 1080px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+    }
 </style>
+
+

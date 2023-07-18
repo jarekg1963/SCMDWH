@@ -1,15 +1,220 @@
 ﻿@page "/SOAddEditPrPoPage/{prpoId}"
+@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<CultureExample2> Loc
+
+@using System.ComponentModel.DataAnnotations
+@using System.Security.Claims;
 
 
-<p>ww</p>
-<p>ww</p>
-<p>ww</p>
-<p>ww</p>
+<EditForm Model="@soModulePoForUpdateNew" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
 
-<h3>IIII DDDD  @prpoId</h3>
+<MudGrid>
+    <MudItem xs="12">
+            <MudAlert Severity="Severity.Normal" Style="background-color:#fadcd4!important" Dense="true" ContentAlignment="HorizontalAlignment.Center" Elevation="2">Edit  - @prpoId</MudAlert>
+        </MudItem>
+        <br />
+    <MudItem xs="2">
+        <MudTextField @bind-Value="@soModulePoForUpdateNew.OrderNo"
+                          Label=@Loc["lbOrderNo"]
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Material.Filled.AddComment" For="@(() => soModulePoForUpdateNew.OrderNo)"/>
+            
+    </MudItem>
+        <MudItem xs="2">
+            <MudDatePicker Label="ssss" @bind-Date="@soModulePoForUpdateNew.OriginalAgreedDeliveryDate" DisableToolbar="true" ReadOnly="false" Editable="true" Margin="Margin.Normal" />
+        </MudItem>
+    <MudItem xs="2">
+            <MudTextField @bind-Value="@soModulePoForUpdateNew.WkNo"
+                          Label=@Loc["lbWeek"]
+                          Variant="Variant.Outlined"
+                          Adornment="Adornment.End"
+                          AdornmentIcon="@Icons.Material.Filled.CalendarViewWeek" />
+    </MudItem>
+    <MudItem xs="3">
+        <MudTextField @bind-Value="@soModulePoForUpdateNew.Product"
+                          Label=@Loc["lbProduct"]
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Material.Filled.Propane" />
+    </MudItem>
+    <MudItem xs="2">
+        <MudTextField @bind-Value="@soModulePoForUpdateNew.Qty"
+                          Label=@Loc["lbQty"]
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Material.Filled.HighQuality" />
+    </MudItem>
+    <MudItem xs="3">
+            <MudTextField @bind-Value="@soModulePoForUpdateNew.DestinationSapid"
+                          Label=@Loc["lbDestinationSapId"]
+                          Variant="Variant.Outlined"
+                          Adornment="Adornment.End"
+                          AdornmentIcon="@Icons.Material.Filled.Home" />
+    </MudItem>
+    <MudItem xs="3">
+        <MudTextField @bind-Value="@soModulePoForUpdateNew.Reference"
+                          Label="PR"
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Material.Filled.PushPin" />
+    </MudItem>
+    <MudItem xs="3">
+            <MudTextField @bind-Value="@soModulePoForUpdateNew.Status"
+                          Label="Status"
+                          Variant="Variant.Outlined"
+                          Adornment="Adornment.End"
+                          AdornmentIcon="@Icons.Material.Filled.TransferWithinAStation" />
+    </MudItem>
+    <MudItem xs="3">
+        <MudTextField @bind-Value="@soModulePoForUpdateNew.DestinationCountryCode"
+                          Label="Dest.Country Code"
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Material.Filled.HomeWork" />
+    </MudItem>
+        <MudItem xs="12">
+            <MudTextField @bind-Value="@soModulePoForUpdateNew.Remark"
+                          Label=@Loc["lbRemark"]
+                          Variant="Variant.Outlined"
+                          Adornment="Adornment.End"
+                          AdornmentIcon="@Icons.Material.Filled.RememberMe" />
+        </MudItem>
+    <MudItem xs="3">
+        <MudTextField @bind-Value="@soModulePoForUpdateNew.DestinationName"
+                          Label=@Loc["lbDestinationName"]
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Material.Filled.Queue" />
+    </MudItem>
+        <MudItem xs="3">
+            <MudTextField @bind-Value="@soModulePoForUpdateNew.MissingQty"
+                          Label=@Loc["lbMissingQty"]
+                          Variant="Variant.Outlined"
+                          Adornment="Adornment.End"
+                          AdornmentIcon="@Icons.Material.Filled.QuestionAnswer" />
+        </MudItem>
+        <MudItem xs="6">
+        </MudItem>
+</MudGrid>
+</EditForm>
+<br />
+<MudGrid>
+    <MudItem xs="8">
+    </MudItem>
+    <MudItem xs="2">
+        <MudButton Variant="Variant.Filled" Color="Color.Inherit" OnClick="Back" FullWidth="true">@Loc["lbCancel"]</MudButton>
+    </MudItem>
+    <MudItem xs="2">
+        @if (prpoId == "0")
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Inherit" OnClick="HandleValidSubmit" FullWidth="true">@Loc["lbAddnewitem"]</MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Inherit" OnClick="HandleValidSubmit" FullWidth="true">@Loc["lbSave"]</MudButton>
+        }
+    </MudItem>
+</MudGrid>
 
 @code {
     [Parameter]
     public string prpoId { get; set; }
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    private string UserName = "";
+
+    SoModulePoList soModulePoForUpdateNew = new();
+
+    private async Task Add()
+    {
+        soModulePoForUpdateNew.InsertByUser = UserName;
+        soModulePoForUpdateNew.InsertTime = DateTime.Now;
+        soModulePoForUpdateNew.LastUpdateTime = DateTime.Now;
+
+
+        try
+        {
+            string link = "/api/SoModulePoList/";
+            var Response = await httpClient.PostAsJsonAsync<SoModulePoList>(link, soModulePoForUpdateNew);
+             navigationManager.NavigateTo("/SOPoPrListPage", true);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1500; });
+        }
+    }
+
+    private async Task Update()
+    {
+
+        try
+        {
+            string link = "/api/SoModulePoList/" + prpoId;
+            var Response = await httpClient.PutAsJsonAsync<SoModulePoList>(link, soModulePoForUpdateNew);
+            navigationManager.NavigateTo("/SOPoPrListPage", true);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error, config => { config.ShowCloseIcon = false; config.Icon = Icons.Rounded.Error; config.VisibleStateDuration = 1500; });
+        }
+    }
+
+    private void Back()
+    {
+        navigationManager.NavigateTo("/SOPoPrListPage");
+    }
+
+    private async void HandleValidSubmit()
+    {
+       
+
+        if (prpoId == "0")
+            {
+               await Add();
+            }
+            else
+            {
+                await Update();
+            }
+              
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+          
+
+
+        }
+
+
+        if (prpoId != "0")
+        {
+           
+            string link = "/api/SoModulePoList/" + prpoId;
+            soModulePoForUpdateNew = await httpClient.GetFromJsonAsync<SoModulePoList>(link);
+          
+        }
+
+    }
 
 }

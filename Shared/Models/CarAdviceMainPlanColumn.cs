@@ -21,5 +21,8 @@ namespace SCMDWH.Shared.Models
         public int? ColumnWidth { get; set; }
 
         public string? plHeader { get; set; }
+
+        public string? TableName { get; set; }
+
     }
 }

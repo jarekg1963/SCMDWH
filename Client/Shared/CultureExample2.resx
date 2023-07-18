@@ -195,6 +195,12 @@
   <data name="lbDestination" xml:space="preserve">
     <value>Kraj</value>
   </data>
+  <data name="lbDestinationName" xml:space="preserve">
+    <value>Dest. name</value>
+  </data>
+  <data name="lbDestinationSapId" xml:space="preserve">
+    <value>Dest. Sap Id</value>
+  </data>
   <data name="lbDictionary" xml:space="preserve">
     <value>Słowniki FG</value>
   </data>
@@ -291,11 +297,20 @@
   <data name="lbMaterialQ" xml:space="preserve">
     <value>Jakość materiał</value>
   </data>
+  <data name="lbMissingQty" xml:space="preserve">
+    <value>Missing qty.</value>
+  </data>
   <data name="lbNew" xml:space="preserve">
     <value>Nowy</value>
   </data>
   <data name="lbNow" xml:space="preserve">
     <value>Teraz</value>
+  </data>
+  <data name="lbOrderNo" xml:space="preserve">
+    <value>Numer PO</value>
+  </data>
+  <data name="lbOriginalDeliveryDate" xml:space="preserve">
+    <value>Delivery date</value>
   </data>
   <data name="lbPalletList" xml:space="preserve">
     <value>Lista palet</value>
@@ -345,6 +360,12 @@
   <data name="lbPrintWH" xml:space="preserve">
     <value>Wydruk</value>
   </data>
+  <data name="lbProduct" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="lbQty" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
   <data name="lbQuality" xml:space="preserve">
     <value>Ilość</value>
   </data>
@@ -356,6 +377,9 @@
   </data>
   <data name="lbReference" xml:space="preserve">
     <value>Numer referencyjny</value>
+  </data>
+  <data name="lbRemark" xml:space="preserve">
+    <value>Remarks</value>
   </data>
   <data name="lbRemarksS" xml:space="preserve">
     <value>Uwagi ochrony</value>
@@ -452,6 +476,9 @@
   </data>
   <data name="lbWarehouseinformation" xml:space="preserve">
     <value>Magazyn dane wysyłki</value>
+  </data>
+  <data name="lbWeek" xml:space="preserve">
+    <value>Week</value>
   </data>
   <data name="lbWorkOrder" xml:space="preserve">
     <value>Zelecenia produkcyjne</value>

@@ -32,6 +32,18 @@ namespace SCMDWH.Server.Controllers
             return await _context.CarAdviceMainPlanComum.ToListAsync();
         }
 
+
+        [HttpGet("SOPRListComumByUser/{sUserName}")]
+        public async Task<ActionResult<List<CarAdviceMainPlanColumn>>> SOPRListComumByUser(string sUserName)
+        {
+            if (_context.CarAdviceMainPlanComum == null)
+            {
+                return NotFound();
+            }
+            return await _context.CarAdviceMainPlanComum.OrderBy(o => o.OrderColumn).Where(c => c.UserName == sUserName && c.TableName == "SoPoPr").ToListAsync();
+        }
+
+
         [HttpGet("MainPlanComumByUser/{sUserName}")]
         public async Task<ActionResult<List<CarAdviceMainPlanColumn>>> MainPlanComumByUser(string sUserName)
         {
@@ -39,7 +51,7 @@ namespace SCMDWH.Server.Controllers
             {
                 return NotFound();
             }
-            return await _context.CarAdviceMainPlanComum.OrderBy(o=>o.OrderColumn).Where(c=>c.UserName == sUserName).ToListAsync();
+            return await _context.CarAdviceMainPlanComum.OrderBy(o=>o.OrderColumn).Where(c=>c.UserName == sUserName && c.TableName == "CaFG").ToListAsync();
         }
 
 

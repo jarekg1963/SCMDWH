@@ -295,6 +295,24 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dest. name.
+        /// </summary>
+        public static string lbDestinationName {
+            get {
+                return ResourceManager.GetString("lbDestinationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dest. Sap Id.
+        /// </summary>
+        public static string lbDestinationSapId {
+            get {
+                return ResourceManager.GetString("lbDestinationSapId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Słowniki FG.
         /// </summary>
         public static string lbDictionary {
@@ -583,6 +601,15 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing qty..
+        /// </summary>
+        public static string lbMissingQty {
+            get {
+                return ResourceManager.GetString("lbMissingQty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nowy.
         /// </summary>
         public static string lbNew {
@@ -597,6 +624,24 @@ namespace SCMDWH.Client.Shared {
         public static string lbNow {
             get {
                 return ResourceManager.GetString("lbNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numer PO.
+        /// </summary>
+        public static string lbOrderNo {
+            get {
+                return ResourceManager.GetString("lbOrderNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delivery date.
+        /// </summary>
+        public static string lbOriginalDeliveryDate {
+            get {
+                return ResourceManager.GetString("lbOriginalDeliveryDate", resourceCulture);
             }
         }
         
@@ -745,6 +790,24 @@ namespace SCMDWH.Client.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Product.
+        /// </summary>
+        public static string lbProduct {
+            get {
+                return ResourceManager.GetString("lbProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity.
+        /// </summary>
+        public static string lbQty {
+            get {
+                return ResourceManager.GetString("lbQty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ilość.
         /// </summary>
         public static string lbQuality {
@@ -777,6 +840,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbReference {
             get {
                 return ResourceManager.GetString("lbReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remarks.
+        /// </summary>
+        public static string lbRemark {
+            get {
+                return ResourceManager.GetString("lbRemark", resourceCulture);
             }
         }
         
@@ -1065,6 +1137,15 @@ namespace SCMDWH.Client.Shared {
         public static string lbWarehouseinformation {
             get {
                 return ResourceManager.GetString("lbWarehouseinformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Week.
+        /// </summary>
+        public static string lbWeek {
+            get {
+                return ResourceManager.GetString("lbWeek", resourceCulture);
             }
         }
         

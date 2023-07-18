@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace SCMDWH.Shared.Models
     {
         public long Id { get; set; }
 
+        //[Required(ErrorMessage = "Order Nr is required.")]
         public string? OrderNo { get; set; }
 
         public int Qty { get; set; }

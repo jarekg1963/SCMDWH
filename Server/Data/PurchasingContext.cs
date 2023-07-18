@@ -24,6 +24,7 @@ public partial class PurchasingContext : DbContext
 
     public DbSet<GlobalAppUsersParameters> GlobalAppUsersParameters { get; set; }
 
+
     public DbSet<SCMDWH.Shared.Models.CarAdviceDictionaryCarriers> CarAdviceDictionaryCarriers { get; set; } = default!;
 
     public DbSet<SCMDWH.Shared.Models.CarAdviceDictionaryCustomers> CarAdviceDictionaryCustomers { get; set; } = default!;
@@ -65,6 +66,8 @@ public partial class PurchasingContext : DbContext
     public virtual DbSet<CarAdviceGrTruckMainTable> CarAdviceGrTruckMainTable { get; set; }
 
     public virtual DbSet<SoModulePoList> SoModulePoList { get; set; }
+
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

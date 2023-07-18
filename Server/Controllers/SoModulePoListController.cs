@@ -45,6 +45,47 @@ namespace SCMDWH.Server.Controllers
             return CreatedAtAction("SoModulePoList", new { id = soModulePoList.Id }, soModulePoList);
         }
 
+
+        // GET: api/SoModulePoList/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SoModulePoList>> GetSoModulePoList(long id)
+        {
+            if (_context.SoModulePoList == null)
+            {
+                return NotFound();
+            }
+            var soModulePoList = await _context.SoModulePoList.FindAsync(id);
+
+            if (soModulePoList == null)
+            {
+                return NotFound();
+            }
+
+            return soModulePoList;
+        }
+
+
+
+        // PUT: api/SoModulePoList/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutSoModulePoList(long id, SoModulePoList soModulePoList)
+        {
+            if (id != soModulePoList.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(soModulePoList).State = EntityState.Modified;
+
+          
+                await _context.SaveChangesAsync();
+           
+
+            return NoContent();
+        }
+
+
         // DELETE: api/SoModulePoList/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSoModulePoList(long id)

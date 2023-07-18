@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using SCMDWH.Shared.Models;
 
+
 namespace SCMDWH.Server.Logging
 {
 

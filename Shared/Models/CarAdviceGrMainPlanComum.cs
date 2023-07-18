@@ -21,4 +21,6 @@ public partial class CarAdviceGrMainPlanComum
     public int? ColumnWidth { get; set; }
 
     public string PlHeader { get; set; }
+
+    public string? TableName { get; set; }
 }
