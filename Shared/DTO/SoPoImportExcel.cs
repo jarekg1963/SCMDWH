@@ -17,6 +17,9 @@ namespace SCMDWH.Shared.DTO
         public string WkNo { get; set;}
         public bool IsOk { get; set; } = false;
         public string ValidationTestResults { get; set; } = "";
+        public string DestinationCountryCode { get; set; } = "";
+        public string DestinationName { get; set; } = "";
+        public bool IsCevaPo { get; set; } = false;
 
     }
 }
