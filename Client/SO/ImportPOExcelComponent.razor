@@ -37,9 +37,11 @@
     </MudGrid>
     <br />
 
+
 @if (listImportSOPOExcelAfterVerification is null)
 {
     <p>Read file .. </p>
+  
 }
 else
 {
@@ -105,7 +107,7 @@ else
 
 
 @code {
-    bool hideFileLoader = false;
+    bool hideFileLoader = true;
     private string ImportedfileName = "";
     private string Importedfilesize = "";
     List<SoPoImportExcel> listImportSOPOExcel = new List<SoPoImportExcel>();
@@ -161,14 +163,16 @@ else
 
             navigationManager.NavigateTo("/SOPoPrListPage", true);
         }
-        
+
     }
 
 
 
- 
+
     private async void UploadFiles(IBrowserFile file)
     {
+       
+       
         ImportedfileName = file.Name;
         Importedfilesize = file.Size.ToString();
         //files.Add(file);
@@ -182,6 +186,7 @@ else
         var xsswb = new XSSFWorkbook(ms);
         sheet = xsswb.GetSheetAt(0);
         IRow hr = sheet.GetRow(0);
+        hideFileLoader = false;
         for (var j = sheet.FirstRowNum + 1; j <= sheet.LastRowNum; j++)
         {
             var r = sheet.GetRow(j);

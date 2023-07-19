@@ -106,10 +106,13 @@
 <MudGrid>
     <MudItem xs="8">
     </MudItem>
-    <MudItem xs="2">
+
+    <MudItem xs="1">
         <MudButton Variant="Variant.Filled" Color="Color.Inherit" OnClick="Back" FullWidth="true">@Loc["lbCancel"]</MudButton>
     </MudItem>
-    <MudItem xs="2">
+    <MudItem xs="1">
+    </MudItem>
+    <MudItem xs="1">
         @if (prpoId == "0")
         {
             <MudButton Variant="Variant.Filled" Color="Color.Inherit" OnClick="HandleValidSubmit" FullWidth="true">@Loc["lbAddnewitem"]</MudButton>
@@ -136,8 +139,6 @@
         soModulePoForUpdateNew.InsertByUser = UserName;
         soModulePoForUpdateNew.InsertTime = DateTime.Now;
         soModulePoForUpdateNew.LastUpdateTime = DateTime.Now;
-
-
         try
         {
             string link = "/api/SoModulePoList/";
