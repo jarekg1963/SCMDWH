@@ -90,13 +90,13 @@ namespace SCMDWH.Server.Controllers
                 {
                     IsOk = false;
                     SoModulePoListItem.Remark += $"DestinationSAPId: {SoModulePoListItem.DestinationSapid.Trim()} Not Exist in WMS DB! ";
-                    if (TestReciptList.Count() == 1)
-                    {
-                        Recipient recipient = TestReciptList[0];
-                        SoModulePoListItem.DestinationCountryCode = recipient.Country;
-                        SoModulePoListItem.DestinationName = recipient.Name;
-                        SoModulePoListItem.IsCevaPo = recipient.Sapid.Equals("0005010290");
-                    }
+                }
+                if (TestReciptList.Count() == 1)
+                {
+                    Recipient recipient = TestReciptList[0];
+                    SoModulePoListItem.DestinationCountryCode = recipient.Country;
+                    SoModulePoListItem.DestinationName = recipient.Name;
+                    SoModulePoListItem.IsCevaPo = recipient.Sapid.Equals("0005010290");
                 }
                 if (TestReciptList.Count() > 1)
                 {
