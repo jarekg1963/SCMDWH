@@ -74,7 +74,7 @@ namespace SCMDWH.Server.Controllers
                     IsOk = false;
                     SoModulePoListItem.Remark += $"The Reference cannot be empty! ";
                 }
-                bool OrderNoTest = long.TryParse(SoModulePoListItem.OrderNo.Trim(), out long OrderNoValue);
+               // bool OrderNoTest = long.TryParse(SoModulePoListItem.OrderNo.Trim(), out long OrderNoValue);
                 //if (!OrderNoTest)
                 //{
                 //    IsOk = false;
