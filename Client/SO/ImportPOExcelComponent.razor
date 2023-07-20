@@ -147,7 +147,9 @@ else
                 itemPrPo.InsertByUser = "rcis";
                 itemPrPo.InsertTime = DateTime.Now;
                 itemPrPo.LastUpdateTime = DateTime.Now;
-
+                itemPrPo.IsCevaPo = excelToSave.IsCevaPo;
+                itemPrPo.DestinationCountryCode = excelToSave.DestinationCountryCode;
+                itemPrPo.DestinationName = excelToSave.DestinationName;
                 string linkCu = "api/SoModulePoList/";
 
                 try
