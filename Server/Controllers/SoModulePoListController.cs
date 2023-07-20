@@ -75,11 +75,11 @@ namespace SCMDWH.Server.Controllers
                     SoModulePoListItem.Remark += $"The Reference cannot be empty! ";
                 }
                 bool OrderNoTest = long.TryParse(SoModulePoListItem.OrderNo.Trim(), out long OrderNoValue);
-                if (!OrderNoTest)
-                {
-                    IsOk = false;
-                    SoModulePoListItem.Remark += $"The Order number must be a valid integer, The entered value is: {SoModulePoListItem.Reference.Trim()}! ";
-                }
+                //if (!OrderNoTest)
+                //{
+                //    IsOk = false;
+                //    SoModulePoListItem.Remark += $"The Order number must be a valid integer, The entered value is: {SoModulePoListItem.Reference.Trim()}! ";
+                //}
                 if (SoModulePoListItem.Qty <= 0)
                 {
                     IsOk = false;

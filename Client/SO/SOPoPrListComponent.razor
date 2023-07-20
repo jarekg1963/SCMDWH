@@ -22,7 +22,6 @@ else
     <MudDataGrid T="SoModulePoList" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                  Height="40em" RowsPerPage="30" MultiSelection="false" Items="@listImportSOPOPr" SortMode="SortMode.Multiple" Filterable="true"
                  FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive" >
-
         <ToolBarContent>
             <MudGrid>
 
@@ -38,14 +37,18 @@ else
                         @Loc["lbColumns"]
                     </MudButton>
                 </MudItem>
-                <MudItem xs="3">
+                <MudItem xs="2">
                     <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.AddToDrive"
                                Style="text-transform:none ; margin-top:25px!important" OnClick="AddNew" Size="Size.Small">
                         @Loc["lbNew"]
                     </MudButton>
                 </MudItem>
                 <MudItem xs="1">
-
+                    <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.AddToDrive"
+                               Style="text-transform:none ; margin-top:25px!important" OnClick="UpdateList" Size="Size.Small">
+                        @*@Loc["lbNew"]*@
+                        Update
+                    </MudButton>
                 </MudItem>
                 <MudItem xs="2">
 
@@ -208,6 +211,12 @@ else
     private bool hiddenInsertByUser = false;
     private bool hiddenLastUpdateTime = false;
 
+
+    private void UpdateList()
+    {
+        string linkver = "/api/SoModulePoList/ValidateSoModulePoList";
+        var resposne = httpClient.PostAsJsonAsync<List<SoModulePoList>>(linkver, listImportSOPOPr);
+    }
 
 
     private async Task ShowColumsForSelection()
