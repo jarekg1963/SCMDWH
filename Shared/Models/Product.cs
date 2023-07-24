@@ -21,7 +21,7 @@ public partial class Product
 
     public string CustomerNo { get; set; } = null!;
 
-    public bool Active { get; set; }
+    public bool? Active { get; set; }
 
     public string Remarks { get; set; } = null!;
 

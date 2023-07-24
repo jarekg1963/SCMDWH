@@ -24,6 +24,7 @@ public partial class ProductPallet
     public int LayerPerPallet { get; set; }
 
     public int PalletStackWhinPallet { get; set; }
+
     public int TotalPalletQtyOnDefaultTruck { get; set; }
 
     public byte[] Tstamp { get; set; } = null!;

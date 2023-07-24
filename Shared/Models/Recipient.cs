@@ -53,7 +53,7 @@ public partial class Recipient
 
     public string Stamp { get; set; } = null!;
 
-    public bool Recipient1 { get; set; }
+    public bool? Recipient1 { get; set; }
 
     public bool Sender { get; set; }
 

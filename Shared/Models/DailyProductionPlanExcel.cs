@@ -39,7 +39,7 @@ public partial class DailyProductionPlanExcel
 
     public string EndH { get; set; } = null!;
 
-    public bool WoNumberValidated { get; set; }
+    public bool? WoNumberValidated { get; set; }
 
     public string Team { get; set; } = null!;
 
