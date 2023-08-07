@@ -69,7 +69,7 @@ else
                             <PropertyColumn Property="x => x.OrderNo" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
                             break;
                         case "Qty":
-                            <PropertyColumn Property="x => x.Qty" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            <PropertyColumn Property="x => x.Qty" CellStyleFunc="@_cellStyleFunc" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
                             break;
                         case "DestinationSAPId":
                             <PropertyColumn Property="x => x.DestinationSapid" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
@@ -138,7 +138,7 @@ else
                             <PropertyColumn Property="x => x.Product" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
                             break;
                         case "WkNo":
-                            <PropertyColumn Property="x => x.WkNo" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            <PropertyColumn Property="x => x.WkNo"  Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
                             break;
                         case "OriginalAgreedDeliveryDate":
                             <PropertyColumn Property="x => x.OriginalAgreedDeliveryDate" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
@@ -210,6 +210,14 @@ else
     private bool hiddenReference = false;
     private bool hiddenInsertByUser = false;
     private bool hiddenLastUpdateTime = false;
+
+
+    private Func<SoModulePoList, string> _cellStyleFunc => x =>
+       {
+           string style = "";
+           style += "text-align:end!important";
+           return style;
+       };
 
 
     private void UpdateList()
