@@ -196,7 +196,7 @@ namespace SCMDWH.Server.Controllers
                 return NotFound();
             }
 
-            _context.SoModulePoList.Remove(soModulePoList);
+			_context.SoModulePoList.Remove(soModulePoList);
             await _context.SaveChangesAsync();
 
             return NoContent();

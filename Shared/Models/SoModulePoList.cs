@@ -26,6 +26,8 @@ namespace SCMDWH.Shared.Models
 
         public string Product { get; set; }
 
+        public string? Customer { get; set; }
+
         public int WkNo { get; set; }
 
         public DateTime? OriginalAgreedDeliveryDate { get; set; }

@@ -1,0 +1,133 @@
+﻿@page "/SOMainPage"
+@using System.Security.Claims;
+@using SCMDWH.Shared.Models;
+@inject NavigationManager navigationManager
+@inject HttpClient httpClient
+@inject IStringLocalizer<CultureExample2> Loc
+@inject IDialogService DialogService;
+
+<h3>SoMainComponent</h3>
+
+@if (ListView is null)
+{
+    <p>Read file .. </p>
+}
+else
+{
+    <MudDataGrid T="View_SoModuleGroupData" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
+                 Height="40em" RowsPerPage="30" MultiSelection="false" Items="@ListView" SortMode="SortMode.Multiple" Filterable="true"
+                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive" RowStyleFunc="@_rowStyleFunc">
+
+             <ToolBarContent>
+             <MudGrid>
+
+             <MudItem xs="2">
+
+             </MudItem>
+
+             </MudGrid>
+             </ToolBarContent>
+
+
+
+             <Columns>
+            <TemplateColumn Title="" Sortable="false" Filterable="false">
+                <CellTemplate>
+                    <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.CallToAction" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>RowCellClicked(@context))">@context.Item.Remark</MudIconButton>
+                </CellTemplate>
+            </TemplateColumn>
+            <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
+            <PropertyColumn Property="x => x.PoListId" Title="PoListId" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TruckId" Title="TruckId" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.WkNo" Title="WkNo" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Customer" Title="Customer" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Product" Title="Product" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TPVModelName" Title="TPVModelName" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TotalQty" Title="TotalQty" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TruckRatio" Title="TruckRatio" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.OrderNo" Title="OrderNo" Sortable="true" Filterable="true"  />
+            <PropertyColumn Property="x => x.DestinationSAPId" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DestinationName" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DestinationCountryCode" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.SR1" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DN1" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.SR2" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DN2" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.ItemStatus" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Remark" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.CalculatedActualEarliestReadyToPickUpTime" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TimeOfLastCalculatedTime" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TruckCalculatedActualEarliestPickUpTime" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.AdvisedDateTime" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Consignment" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TruckRatio" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TruckStatus" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TruckRemark" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.InsertByUser" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.InsertTime" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.LastCalculatedTimeTrigerBy" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.LastUpdateByUser" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.LastUpdateTime" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.LineBgColorDefinedByUser" Title="Quantity" Sortable="true" Filterable="true" />
+
+             </Columns>
+                 
+    </MudDataGrid>
+}
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    private string UserName = "";
+    List<View_SoModuleGroupData> ListView = new();
+
+    private async void RowCellClicked(CellContext<View_SoModuleGroupData> ItemForDelete)
+    {
+     
+        var parameters = new DialogParameters { ["Id"] = ItemForDelete.Item.Id.ToString() };
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+    
+        DialogService.Show<DialogSoMainActionsComponent>("Simple Dialog", options);
+     
+
+    }
+
+    private Func<View_SoModuleGroupData, int, string> _rowStyleFunc => (x, i) =>
+    {
+        if (x.LineBgColorDefinedByUser != null || x.LineBgColorDefinedByUser != "")
+        {
+            return "background-color:" + x.LineBgColorDefinedByUser;
+        }
+        else
+        {
+            return "";
+        }
+
+        
+
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+        var authState = await AuthState;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            UserName = user.FindFirst(d => d.Type == ClaimTypes.Name)?.Value;
+        }
+
+        await ReadData();
+    }
+
+    private async Task ReadData()
+    {
+
+        string link = "/api/View_SoModuleGroupData";
+        ListView = await httpClient.GetFromJsonAsync<List<View_SoModuleGroupData>>(link);
+    }
+}

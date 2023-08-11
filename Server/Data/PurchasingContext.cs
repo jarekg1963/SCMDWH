@@ -67,6 +67,8 @@ public partial class PurchasingContext : DbContext
 
     public virtual DbSet<SoModulePoList> SoModulePoList { get; set; }
 
+    public virtual DbSet<View_SoModuleGroupData> View_SoModuleGroupDatas { get; set; }
+
 
 
 

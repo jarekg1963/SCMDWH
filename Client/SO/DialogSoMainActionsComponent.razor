@@ -1,0 +1,28 @@
+﻿
+
+<MudCard style="width:600px">
+    <MudCardContent>
+        <h3>DialogSoMainActionsComponent: @prpoId</h3>
+
+    </MudCardContent>
+    <MudCardActions>
+        <MudItem xs="6">
+        </MudItem>
+        <MudItem xs="4">
+            <MudButton Variant="Variant.Filled" >Cancel</MudButton>
+        </MudItem>
+        <MudItem xs="2">
+            <MudButton Variant="Variant.Filled"> Save</MudButton>
+        </MudItem>
+    </MudCardActions>
+</MudCard>
+
+
+
+@code {
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string prpoId { get; set; }
+}
