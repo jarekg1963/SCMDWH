@@ -1,22 +1,22 @@
-﻿
+﻿@using MudBlazor.Utilities
+@using SCMDWH.Shared.DTO;
+@using SCMDWH.Shared.Models;
+@using System.Web;
+@inject HttpClient httpClient
 
-<MudCard style="width:600px">
-    <MudCardContent>
-        <h3>DialogSoMainActionsComponent: @prpoId</h3>
 
-    </MudCardContent>
-    <MudCardActions>
-        <MudItem xs="6">
-        </MudItem>
-        <MudItem xs="4">
-            <MudButton Variant="Variant.Filled" >Cancel</MudButton>
-        </MudItem>
-        <MudItem xs="2">
-            <MudButton Variant="Variant.Filled"> Save</MudButton>
-        </MudItem>
-    </MudCardActions>
-</MudCard>
+<MudDialog>
+    <DialogContent>
+        Dialog Content : @pId
 
+        <MudColorPicker PickerVariant="PickerVariant.Static" ColorPickerView="ColorPickerView.Palette" Palette="CustomPalette" @bind-Text="_colorValue" />
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="SaveData">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
 
 
 @code {
@@ -24,5 +24,38 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter]
-    public string prpoId { get; set; }
+    public string pId { get; set; }
+
+
+    public IEnumerable<MudColor> CustomPalette { get; set; } = new MudColor[]
+      {
+        "#F44336", "#E91E63", "#9C27B0", "#673AB7", "#3F51B5",
+        "#28f76d","#f4f728", "#f7c528", "#28f7ea","#82bdf2"
+      };
+
+    private string _colorValue;
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async void SaveData()
+    {
+
+        ColorForTuck colorForTuck = new();
+
+        colorForTuck.truckId =  long.Parse(pId);
+        colorForTuck.truckColour = _colorValue;
+
+        Console.WriteLine(_colorValue);
+
+
+
+        string linkSave = "/api/View_SoModuleGroupData/UpdateColour/";
+
+        var Response = await httpClient.PostAsJsonAsync<ColorForTuck>(linkSave, colorForTuck);
+
+         MudDialog.Close(DialogResult.Ok( " any result you need to pass back " ));
+    }
 }

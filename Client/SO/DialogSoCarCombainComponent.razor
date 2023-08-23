@@ -1,0 +1,176 @@
+﻿@using MudBlazor.Utilities;
+@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient
+
+<style>
+    .mud-list-item-gutters {
+        padding-left: 0px!important;
+        padding-right: 0px!important;
+    }
+
+    .mud-list-item-text {
+        flex: 1 1 auto;
+        min-width: 0;
+        margin-top: 0px!important;
+        margin-bottom: 0px!important;
+    }
+</style>
+
+
+<div class="d-flex flex-column mud-width-full mud-height-full">
+    <MudDropContainer  T="DropItem" Items="@_dropzoneItems" @ref="_container" ItemsSelector="@((item,dropzone) => item.Selector == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+        <ChildContent >
+            @for (int i = 1; i < 3; i++)
+            {
+                var dropzone = i.ToString();
+            <MudPaper Class="ma-4 flex-grow-1" >
+                    <MudList Clickable="true" Class="d-flex flex-column mud-height-full " >
+                        <MudListSubheader>Drop Zone @dropzone</MudListSubheader>
+                        <MudDropZone T="DropItem" Identifier="@dropzone" Class="flex-grow-1" AllowReorder="true" />
+                    </MudList>
+                </MudPaper>
+            }
+        </ChildContent>
+        <ItemRenderer>
+            <MudListItem Text="@($"{context.Name}")" />
+        </ItemRenderer>
+    </MudDropContainer>
+    <MudGrid>
+        <MudItem xs="6"></MudItem>
+
+        <MudItem xs="2">
+            <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Secondary">Cancel</MudButton>
+        </MudItem>
+        <MudItem xs="2">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SaveData">Ok</MudButton>
+        </MudItem>
+    </MudGrid>
+
+
+</div>
+
+
+
+
+@code {
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string pId { get; set; }
+
+    View_SoModuleGroupData carSelected = new();
+
+    private MudDropContainer<DropItem> _container;
+    private List<DropItem> _dropzoneItems = new();
+    private DropItem defaultCar = new();
+    private List<View_SoModuleGroupData> carListForCosolidation = new();
+
+
+    private void ItemUpdated(MudItemDropInfo<DropItem> dropItem)
+    {
+        dropItem.Item.Selector = dropItem.DropzoneIdentifier;
+
+        var indexOffset = dropItem.DropzoneIdentifier switch
+        {
+            "2" => _dropzoneItems.Count(x => x.Selector == "1"),
+            _ => 0
+        };
+
+        _dropzoneItems.UpdateOrder(dropItem, item => item.Order, indexOffset);
+    }
+
+
+
+    protected override async void OnInitialized()
+    {
+        string linkDisp = "/api/View_SoModuleGroupData/" + pId;
+        carSelected = await httpClient.GetFromJsonAsync<View_SoModuleGroupData>(linkDisp);
+        DropItem defaultCar = new DropItem() { Order = 1, Name = carSelected.OrderNo + "-" + carSelected.Product + "-" + carSelected.TruckRatio, Selector = "1" };
+        _dropzoneItems.Add(defaultCar);
+
+        string linkDispAll = "/api/View_SoModuleGroupData/";
+        carListForCosolidation = await httpClient.GetFromJsonAsync<List<View_SoModuleGroupData>>(linkDispAll);
+
+        foreach (var cc in carListForCosolidation)
+        {
+
+            string dateAd = cc.AdvisedDateTime.ToString("MM/dd/yyyy");
+
+            _dropzoneItems.Add(new DropItem { Name = cc.OrderNo + "-" + cc.Product + "-" + cc.TruckRatio, Selector = "2" });
+        }
+
+
+        // _dropzoneItems = _serverData
+        // 	.OrderBy(x => x.Order)
+        // 	.Select(item => new DropItem
+        // 		{
+        // 			Order = item.Order,
+        // 			Name = item.Name,
+        // 			Selector = item.Selector
+        // 		})
+        // 	.ToList();
+        RefreshContainer();
+    }
+
+
+
+
+    private List<DropItem> _serverData = new()
+        {
+            new DropItem() { Order = 0, Name = "Item 1", Selector = "1" },
+            new DropItem() { Order = 1, Name = "Item 2", Selector = "1" },
+            new DropItem() { Order = 2, Name = "Item 3", Selector = "1" },
+            new DropItem() { Order = 3, Name = "Item 4", Selector = "1" },
+            new DropItem() { Order = 4, Name = "Item 5", Selector = "1" },
+            new DropItem() { Order = 5, Name = "Item 6", Selector = "1" },
+            new DropItem() { Order = 6, Name = "Item 7", Selector = "2" },
+            new DropItem() { Order = 7, Name = "Item 8", Selector = "2" },
+            new DropItem() { Order = 8, Name = "Item 9", Selector = "2" },
+            new DropItem() { Order = 9, Name = "Item 10", Selector = "2" },
+        };
+
+    private void RefreshContainer()
+    {
+        //update the binding to the container
+        StateHasChanged();
+
+        //the container refreshes the internal state
+        _container.Refresh();
+    }
+
+    private void LoadServerData()
+    {
+        _dropzoneItems = _serverData
+            .OrderBy(x => x.Order)
+            .Select(item => new DropItem
+                {
+                    Order = item.Order,
+                    Name = item.Name,
+                    Selector = item.Selector
+                })
+            .ToList();
+        RefreshContainer();
+    }
+
+
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async void SaveData()
+    {
+
+    }
+
+
+    public class DropItem
+    {
+        public string Name { get; init; }
+        public string Selector { get; set; }
+        public int Order { get; set; }
+    }
+
+}

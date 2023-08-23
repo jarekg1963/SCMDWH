@@ -6,7 +6,6 @@
 @inject IStringLocalizer<CultureExample2> Loc
 @inject IDialogService DialogService;
 
-<h3>SoMainComponent</h3>
 
 @if (ListView is null)
 {
@@ -17,23 +16,18 @@ else
     <MudDataGrid T="View_SoModuleGroupData" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                  Height="40em" RowsPerPage="30" MultiSelection="false" Items="@ListView" SortMode="SortMode.Multiple" Filterable="true"
                  FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive" RowStyleFunc="@_rowStyleFunc">
-
              <ToolBarContent>
              <MudGrid>
-
              <MudItem xs="2">
-
              </MudItem>
-
              </MudGrid>
              </ToolBarContent>
-
-
-
              <Columns>
             <TemplateColumn Title="" Sortable="false" Filterable="false">
                 <CellTemplate>
                     <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.CallToAction" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>RowCellClicked(@context))">@context.Item.Remark</MudIconButton>
+                  @*   <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Summarize" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>CarCombain(@context))">@context.Item.Remark</MudIconButton> *@
+                    <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Summarize" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>DetailViewSo(@context))">@context.Item.Remark</MudIconButton>
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
@@ -46,32 +40,30 @@ else
             <PropertyColumn Property="x => x.TotalQty" Title="TotalQty" Sortable="true" Filterable="true" />
             <PropertyColumn Property="x => x.TruckRatio" Title="TruckRatio" Sortable="true" Filterable="true" />
             <PropertyColumn Property="x => x.OrderNo" Title="OrderNo" Sortable="true" Filterable="true"  />
-            <PropertyColumn Property="x => x.DestinationSAPId" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DestinationName" Title="Quantity" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DestinationSAPId" Title="DestinationSAPId" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DestinationName" Title="DestinationName" Sortable="true" Filterable="true" />
             <PropertyColumn Property="x => x.DestinationCountryCode" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.SR1" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DN1" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.SR2" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DN2" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.ItemStatus" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.Remark" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.CalculatedActualEarliestReadyToPickUpTime" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TimeOfLastCalculatedTime" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TruckCalculatedActualEarliestPickUpTime" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.AdvisedDateTime" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.Consignment" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TruckRatio" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TruckStatus" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TruckRemark" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.InsertByUser" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.InsertTime" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.LastCalculatedTimeTrigerBy" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.LastUpdateByUser" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.LastUpdateTime" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.LineBgColorDefinedByUser" Title="Quantity" Sortable="true" Filterable="true" />
-
+            <PropertyColumn Property="x => x.SR1" Title="SR1" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DN1" Title="DN1" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.SR2" Title="SR2" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.DN2" Title="DN2" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.ItemStatus" Title="ItemStatus" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Remark" Title="Remark" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.CalculatedActualEarliestReadyToPickUpTime" Title="ToPickUpTime" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TimeOfLastCalculatedTime" Title="CalculatedTime" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TruckCalculatedActualEarliestPickUpTime" Title="EarliestPickUpTime" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.AdvisedDateTime" Title="AdvisedDateTime" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.Consignment" Title="Consignment" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TruckRatio" Title="TruckRatio" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TruckStatus" Title="TruckStatus" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.TruckRemark" Title="TruckRemark" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.InsertByUser" Title="InsertByUser" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.InsertTime" Title="InsertTime" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.LastCalculatedTimeTrigerBy" Title="LastCalculatedTime" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.LastUpdateByUser" Title="UpdateByUser" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.LastUpdateTime" Title="UpdateTime" Sortable="true" Filterable="true" />
+            <PropertyColumn Property="x => x.LineBgColorDefinedByUser" Title="ColorDefined" Sortable="true" Filterable="true" />
              </Columns>
-                 
     </MudDataGrid>
 }
 
@@ -81,15 +73,33 @@ else
     private string UserName = "";
     List<View_SoModuleGroupData> ListView = new();
 
-    private async void RowCellClicked(CellContext<View_SoModuleGroupData> ItemForDelete)
+    private async Task CarCombain(@CellContext<View_SoModuleGroupData> ItemForDelete)
     {
-     
-        var parameters = new DialogParameters { ["Id"] = ItemForDelete.Item.Id.ToString() };
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-    
-        DialogService.Show<DialogSoMainActionsComponent>("Simple Dialog", options);
-     
+        //DialogSoCarCombainComponent
+        string parId = ItemForDelete.Item.Id.ToString();
+        var parameters = new DialogParameters();
+        parameters.Add("pId", parId);
+        var dialog = DialogService.Show<DialogSoCarCombainComponent>("Operations ", parameters);
+    }
 
+    private async Task DetailViewSo(@CellContext<View_SoModuleGroupData> ItemEdit)
+    {
+        string parId = ItemEdit.Item.Id.ToString();
+
+        navigationManager.NavigateTo("/SoViewDatailPage/" + parId);
+
+    }
+
+    private async Task RowCellClicked(CellContext<View_SoModuleGroupData> ItemForDelete)
+    {
+        string parId = ItemForDelete.Item.Id.ToString();
+        var parameters = new DialogParameters();
+        parameters.Add("pId", parId);
+        var dialog = DialogService.Show<DialogSoMainActionsComponent>("Operations ", parameters);
+        // wait modal to close
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        { await ReadData(); }
     }
 
     private Func<View_SoModuleGroupData, int, string> _rowStyleFunc => (x, i) =>
@@ -103,7 +113,7 @@ else
             return "";
         }
 
-        
+
 
     };
 
@@ -129,5 +139,27 @@ else
 
         string link = "/api/View_SoModuleGroupData";
         ListView = await httpClient.GetFromJsonAsync<List<View_SoModuleGroupData>>(link);
+        StateHasChanged();
     }
 }
+
+<style>
+    .mud-data-grid .mud-table-cell .column-header .sortable-column-header {
+        font-size: xx-small !important;
+    }
+
+    .mud-table-cell {
+        padding: 0px !important;
+        font-size: small !important;
+        text-transform: uppercase !important;
+        text-align: left !important;
+    }
+
+    @@media (min-width: 1080px) {
+        .example {
+            width: 1080px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+    }
+</style>

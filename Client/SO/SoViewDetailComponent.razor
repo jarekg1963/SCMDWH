@@ -1,0 +1,508 @@
+﻿@page "/SoViewDatailPage/{pId}"
+@using SCMDWH.Shared.Models;
+@using System.Text.Json.Serialization;
+@inject HttpClient httpClient
+@inject ISnackbar Snackbar
+@inject NavigationManager navigationManager
+
+<MudPaper Class="pa-6 ma-2" Elevation="1">
+
+    <MudPaper Class="pa-6 ma-2" Elevation="3" Style="background-color:aliceblue">
+
+        <MudGrid>
+
+            <MudItem xs="6" sm="2">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.Product </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.TPVModelName </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.OrderNo </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="1">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.TotalQty </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="1">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.TruckRatio </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="1">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.DestinationSAPId </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="3">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.DestinationName </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="1">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.DestinationCountryCode </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.Customer </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.TruckCalculatedActualEarliestPickUpTime </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.AdvisedDateTime </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="1">
+                <MudField Label="Standard" Variant="Variant.Text">@soViewDetail.TotalTruckRatio </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="1" Style="background-color:antiquewhite!important">
+                
+                    <MudTextField @bind-Value="@soViewDetail.Id" Label="Id" Variant="Variant.Text" ReadOnly="true"></MudTextField>
+               
+            </MudItem>
+            <MudItem xs="6" sm="1" Style="background-color:antiquewhite!important">
+               
+                    <MudTextField @bind-Value="@soViewDetail.TruckId" Label="Truck Id" Variant="Variant.Text" ReadOnly="true"></MudTextField>
+             
+            </MudItem>
+            <MudItem xs="6" sm="2" Style="background-color:antiquewhite!important">
+              
+                    <MudTextField @bind-Value="@soViewDetail.TotalQty" Label="Qty" Variant="Variant.Text" ReadOnly="true"></MudTextField>
+       
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+    <MudPaper Class="pa-6 ma-2" Elevation="3" Style="background-color:#e1e2cc">
+        <MudGrid>
+            <MudItem xs="6" sm="2">
+                <MudTextField @bind-Value="@soViewDetail.Consignment" Label="Consignment" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudTextField @bind-Value="@soViewDetail.SR1" Label="SR1" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudTextField @bind-Value="@soViewDetail.DN1" Label="DN1" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudTextField @bind-Value="@soViewDetail.SR2" Label="SR2" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudTextField @bind-Value="@soViewDetail.DN2" Label="DN2" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudDatePicker Label="AdvisedDateTime" @bind-Date="@AdvisedDateTime" DisableToolbar="true" ReadOnly="false" Editable="true" Margin="Margin.Normal" />
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+
+    @* Cancel truck  *@
+    @if (truckOperation == 1)
+    {
+        <MudPaper Class="pa-6 ma-2" Elevation="3">
+            <MudGrid>
+                <MudItem xs="6" sm="3">
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="@soViewDetail.TruckId" Label="TruckId" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="@soViewDetail.TotalQty" Label="Qty" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1"> 
+                    <MudIcon Icon="@Icons.Material.Filled.ArrowForward" Size="Size.Large" />
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="newTruckId" Label="New TruckId" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="newQty" Label="New Qty" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    }
+
+    @* Move to another  truck  *@
+    @if (truckOperation == 2)
+    {
+        <MudPaper Class="pa-6 ma-2" Elevation="3">
+            <MudGrid>
+                <MudItem xs="6" sm="3">
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="@soViewDetail.TruckId" Label="TruckId" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="@soViewDetail.TotalQty" Label="Qty" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudIcon Icon="@Icons.Material.Filled.ArrowForward" Size="Size.Large" />
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="newTruckId" Label="New TruckId" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="2">
+                    <div class="d-flex">
+                        <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Default" Class="mr-2">Truck </MudButton>
+
+                    </div>
+                    <MudDialog @bind-IsVisible="visible">
+                        <DialogContent>
+                            <MudTable Items="@truckList" Hover="true" Breakpoint="Breakpoint.Sm" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" T="SoModuleTruckList">
+                                <HeaderContent>
+                                    <MudTh>Nr</MudTh>
+                                    <MudTh>Sign</MudTh>
+                                    <MudTh>Name</MudTh>
+                                    <MudTh>Position</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Nr">@context.Id</MudTd>
+                                    <MudTd DataLabel="Sign">@context.Consignment</MudTd>
+                                    <MudTd DataLabel="Name">@context.LineBgColorDefinedByUser</MudTd>
+                                    <MudTd DataLabel="Position">@context.AdvisedDateTime</MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        </DialogContent>
+                    </MudDialog>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="newQty" Label="New Qty" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    }
+
+    @* Move to another  truck  *@
+    @if (truckOperation == 3)
+    {
+        <MudPaper Class="pa-6 ma-2" Elevation="3">
+            <MudGrid>
+                <MudItem xs="6" sm="1">
+
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="@soViewDetail.TruckId" Label="TruckId" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="@soViewDetail.TotalQty" Label="Qty" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudIcon Icon="@Icons.Material.Filled.ArrowForward" Size="Size.Large" />
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="newTruckId" Label="New TruckId" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <div class="d-flex">
+                        <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Default" Class="mr-2">Truck </MudButton>
+                    </div>
+                    <MudDialog @bind-IsVisible="visible">
+                        <DialogContent>
+                            <MudTable Items="@truckList" Hover="true" Breakpoint="Breakpoint.Sm" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" T="SoModuleTruckList">
+                                <HeaderContent>
+                                    <MudTh>Nr</MudTh>
+                                    <MudTh>Sign</MudTh>
+                                    <MudTh>Name</MudTh>
+                                    <MudTh>Position</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Nr">@context.Id</MudTd>
+                                    <MudTd DataLabel="Sign">@context.Consignment</MudTd>
+                                    <MudTd DataLabel="Name">@context.LineBgColorDefinedByUser</MudTd>
+                                    <MudTd DataLabel="Position">@context.AdvisedDateTime</MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        </DialogContent>
+                    </MudDialog>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="newQty" TextChanged="OnValueChangeHandler" Label="New Qty" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudIcon Icon="@Icons.Material.Filled.CompareArrows" Size="Size.Large" />
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="newLeftTruckId" Label="New TruckId" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <div class="d-flex">
+                        <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Default" Class="mr-2">Truck </MudButton>
+                    </div>
+                    <MudDialog @bind-IsVisible="visible">
+                        <DialogContent>
+                            <MudTable Items="@truckList" Hover="true" Breakpoint="Breakpoint.Sm" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" T="SoModuleTruckList">
+                                <HeaderContent>
+                                    <MudTh>Nr</MudTh>
+                                    <MudTh>Sign</MudTh>
+                                    <MudTh>Name</MudTh>
+                                    <MudTh>Position</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Nr">@context.Id</MudTd>
+                                    <MudTd DataLabel="Sign">@context.Consignment</MudTd>
+                                    <MudTd DataLabel="Name">@context.LineBgColorDefinedByUser</MudTd>
+                                    <MudTd DataLabel="Position">@context.AdvisedDateTime</MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        </DialogContent>
+                    </MudDialog>
+                </MudItem>
+                <MudItem xs="6" sm="1">
+                    <MudTextField @bind-Value="newQtyLeft" Label="New Qty" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    }
+    <hr />
+    @if (!hide3Buttons)
+    {
+        <MudGrid>
+            <MudItem xs="6" sm="3">
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudButton Variant="Variant.Filled" OnClick="CancelTruck">Cancel truck</MudButton>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudButton Variant="Variant.Filled" OnClick="ChangeTruck">Change</MudButton>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudButton Variant="Variant.Filled" OnClick="SplitTruck">Split</MudButton>
+            </MudItem>
+            <MudItem xs="6" sm="3"></MudItem>
+        </MudGrid>
+    }
+    else
+    {
+        <MudGrid>
+            <MudItem xs="6" sm="4">
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="CancelSubButton">Cancel</MudButton>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="OkSubButton">Ok</MudButton>
+            </MudItem>
+        </MudGrid>
+    }
+</MudPaper>
+
+@if (!hideMainButtons)
+{
+    <MudGrid>
+        <MudItem xs="6" sm="8">
+        </MudItem>
+        <MudItem xs="6" sm="2">
+            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="CancelEditScreen">Cancel</MudButton>
+        </MudItem>
+        <MudItem xs="6" sm="2">
+            <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="OkSButtonSaveAndClose">SAVE</MudButton>
+        </MudItem>
+    </MudGrid>
+}
+
+
+@code {
+    [Parameter]
+    public string pId { get; set; }
+    DateTime? AdvisedDateTime;
+    View_SoModuleGroupData soViewDetail = new();
+    List<SoModuleTruckList> truckList = new();
+    SoModuleItemList itemForUpdated = new();
+
+    private bool visible;
+    bool hideMainButtons = false;
+
+    private void OpenDialog() => visible = true;
+
+    private int truckId = 0;
+    private long newTruckId = 0;
+    private int qty = 0;
+    private int newQty = 0;
+
+    private int newLeftTruckId = -99;
+    private int newQtyLeft = 0;
+    private bool hide3Buttons;
+
+    private bool showTruckOperation;
+    private bool showSplitTruck;
+
+
+    // 1 - Cancel
+    //2 -- move to another
+    // 3 split
+    private int truckOperation = 0;
+
+    //-------------TEST
+
+    private int selectedRowNumber = -1;
+    private MudTable<SoModuleTruckList> mudTable;
+    private List<string> clickedEvents = new();
+
+    private void RowClickEvent(TableRowClickEventArgs<SoModuleTruckList> tableRowClickEventArgs)
+    {
+
+
+        newTruckId = tableRowClickEventArgs.Item.Id;
+
+
+        visible = false;
+        StateHasChanged();
+    }
+
+    private string SelectedRowClassFunc(SoModuleTruckList element, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            selectedRowNumber = -1;
+            clickedEvents.Add("Selected Row: None");
+            return string.Empty;
+        }
+        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
+        {
+            selectedRowNumber = rowNumber;
+            clickedEvents.Add($"Selected Row: {rowNumber}");
+
+            string sel = element.Id.ToString();
+
+            return sel;
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
+    //-------------TEST
+
+    private void CancelEditScreen()
+    {
+        navigationManager.NavigateTo("/SOMainPage");
+    }
+
+
+    protected async Task OnValueChangeHandler(string newValue)
+    {
+        Snackbar.Add($"Changed to: {newValue}", Severity.Info, config => { config.VisibleStateDuration = 1000; });
+        newQtyLeft = (int)soViewDetail.TotalQty - newQty;
+        StateHasChanged();
+    }
+
+
+    private void CancelSubButton()
+    {
+        hideMainButtons = false;
+        newQty = 0;
+        newLeftTruckId = 0;
+        newQtyLeft = 0;
+        showTruckOperation = false;
+        hide3Buttons = false;
+        StateHasChanged();
+    }
+
+    private async Task OkSButtonSaveAndClose()
+    {
+
+        if (truckOperation == 3)
+        {
+            // update ilosci i truck ID
+            string stLink = "api/SoModuleItemList/" + pId;
+            itemForUpdated.TruckId = newTruckId;
+            itemForUpdated.TotalQty = newQty;
+            itemForUpdated.Remark = "Splited ";
+            var resp = await httpClient.PutAsJsonAsync<SoModuleItemList>(stLink, itemForUpdated);
+            // Złozenie nowego z pozostała ilością
+            string stLinkPost = "api/SoModuleItemList/";
+            itemForUpdated.TruckId = newLeftTruckId;
+            itemForUpdated.TotalQty = newQtyLeft;
+            var resp1 = await httpClient.PostAsJsonAsync<SoModuleItemList>(stLinkPost, itemForUpdated);
+        }
+        else
+        {
+            string stLink = "api/SoModuleItemList/" + pId;
+            itemForUpdated.TruckId = newTruckId;
+            var resp = httpClient.PutAsJsonAsync<SoModuleItemList>(stLink, itemForUpdated);
+        }
+        navigationManager.NavigateTo("/SOMainPage", true);
+    }
+
+    private void OkSubButton()
+    {
+        hideMainButtons = false;
+        showTruckOperation = false;
+        hide3Buttons = false;
+
+
+    }
+
+    private void CancelTruck()
+    {
+        hideMainButtons = true;
+        truckOperation = 1;
+        hide3Buttons = true;
+        newQty = (int)soViewDetail.TotalQty;
+        truckId = -99;
+        newTruckId = -99;
+        showTruckOperation = true;
+        StateHasChanged();
+    }
+
+    private void ChangeTruck()
+    {
+        hideMainButtons = true;
+        hide3Buttons = true;
+        truckOperation = 2;
+        newTruckId = 0;
+        newQty = (int)soViewDetail.TotalQty;
+        showTruckOperation = true;
+        StateHasChanged();
+
+    }
+
+    private void SplitTruck()
+    {
+        hideMainButtons = true;
+        hide3Buttons = true;
+        truckOperation = 3;
+        showSplitTruck = true;
+        showTruckOperation = true;
+      
+        newLeftTruckId = -99;
+        newQty = (int)soViewDetail.TotalQty;
+        StateHasChanged();
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        hide3Buttons = false;
+
+        string linkItem = "/api/SoModuleItemList/" + pId;
+        itemForUpdated = await httpClient.GetFromJsonAsync<SoModuleItemList>(linkItem);
+        string linkTruckList = "api/SoModuleTruckList";
+        truckList = await httpClient.GetFromJsonAsync<List<SoModuleTruckList>>(linkTruckList);
+        string linkp = "/api/View_SoModuleGroupData/" + pId;
+        soViewDetail = await httpClient.GetFromJsonAsync<View_SoModuleGroupData>(linkp);
+        AdvisedDateTime = Convert.ToDateTime(soViewDetail.AdvisedDateTime).Date;
+        StateHasChanged();
+    }
+
+
+
+}
+
+
+
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+
+    .mud-input-control.mud-input-control-margin-normal {
+        margin-top: 2px !important;
+    }
+</style>
