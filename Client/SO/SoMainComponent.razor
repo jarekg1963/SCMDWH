@@ -1,6 +1,7 @@
 ﻿@page "/SOMainPage"
 @using System.Security.Claims;
 @using SCMDWH.Shared.Models;
+@using SCMDWH.Shared.Tools;
 @inject NavigationManager navigationManager
 @inject HttpClient httpClient
 @inject IStringLocalizer<CultureExample2> Loc
@@ -16,54 +17,263 @@ else
     <MudDataGrid T="View_SoModuleGroupData" ColumnResizeMode="ResizeMode.Container" Dense="true" Hover="true" Bordered="true" Striped="true" FixedHeader="true" FixedFooter="true"
                  Height="40em" RowsPerPage="30" MultiSelection="false" Items="@ListView" SortMode="SortMode.Multiple" Filterable="true"
                  FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive" RowStyleFunc="@_rowStyleFunc">
-             <ToolBarContent>
-             <MudGrid>
-             <MudItem xs="2">
-             </MudItem>
-             </MudGrid>
-             </ToolBarContent>
-             <Columns>
+        <ToolBarContent>
+            <MudGrid>
+                <MudItem xs="2">
+                    <MudButton Target="_blank" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ViewColumn"
+                               Style="text-transform:none ; margin-top:25px!important" OnClick="ShowColumsForSelection" Size="Size.Small">
+                        @Loc["lbColumns"]
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </ToolBarContent>
+        <Columns>
             <TemplateColumn Title="" Sortable="false" Filterable="false">
                 <CellTemplate>
-                    <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.CallToAction" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>RowCellClicked(@context))">@context.Item.Remark</MudIconButton>
-                  @*   <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Summarize" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>CarCombain(@context))">@context.Item.Remark</MudIconButton> *@
-                    <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Summarize" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>DetailViewSo(@context))">@context.Item.Remark</MudIconButton>
+                    <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.CallToAction" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>RowCellClicked(@context))"></MudIconButton>
+                    <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Summarize" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>DetailViewSo(@context))"></MudIconButton>
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Property="x => x.Id" Title="Id" Sortable="true" Filterable="false" />
-            <PropertyColumn Property="x => x.PoListId" Title="PoListId" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TruckId" Title="TruckId" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.WkNo" Title="WkNo" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.Customer" Title="Customer" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.Product" Title="Product" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TPVModelName" Title="TPVModelName" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TotalQty" Title="TotalQty" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TruckRatio" Title="TruckRatio" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.OrderNo" Title="OrderNo" Sortable="true" Filterable="true"  />
-            <PropertyColumn Property="x => x.DestinationSAPId" Title="DestinationSAPId" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DestinationName" Title="DestinationName" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DestinationCountryCode" Title="Quantity" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.SR1" Title="SR1" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DN1" Title="DN1" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.SR2" Title="SR2" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.DN2" Title="DN2" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.ItemStatus" Title="ItemStatus" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.Remark" Title="Remark" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.CalculatedActualEarliestReadyToPickUpTime" Title="ToPickUpTime" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TimeOfLastCalculatedTime" Title="CalculatedTime" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TruckCalculatedActualEarliestPickUpTime" Title="EarliestPickUpTime" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.AdvisedDateTime" Title="AdvisedDateTime" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.Consignment" Title="Consignment" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TruckRatio" Title="TruckRatio" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TruckStatus" Title="TruckStatus" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.TruckRemark" Title="TruckRemark" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.InsertByUser" Title="InsertByUser" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.InsertTime" Title="InsertTime" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.LastCalculatedTimeTrigerBy" Title="LastCalculatedTime" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.LastUpdateByUser" Title="UpdateByUser" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.LastUpdateTime" Title="UpdateTime" Sortable="true" Filterable="true" />
-            <PropertyColumn Property="x => x.LineBgColorDefinedByUser" Title="ColorDefined" Sortable="true" Filterable="true" />
-             </Columns>
+            <TemplateColumn Title="IdPO" Sortable="true" Filterable="true">
+                <CellTemplate>
+                    <MudIconButton Color="Color.Primary" Size="Size.Small" IconSize="Size.Small" @onclick="@(()=>ShowPoDetails(@context))">@context.Item.PoListId</MudIconButton>
+                </CellTemplate>
+            </TemplateColumn>
+
+
+            @if (@CultureInfo.CurrentCulture.Name == "pl-PL")
+            {
+                @foreach (var ii in listGridColums)
+                {
+                    @switch (ii.fieldName)
+                    {
+                        case "TruckId":
+                            <PropertyColumn Property="x => x.TruckId" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "WkNo":
+                            <PropertyColumn Property="x => x.WkNo" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Customer":
+                            <PropertyColumn Property="x => x.Customer" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Product":
+                            <PropertyColumn Property="x => x.Product" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TPVModelName":
+                            <PropertyColumn Property="x => x.TPVModelName" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TotalQty":
+                            <PropertyColumn Property="x => x.TotalQty" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TruckRatio":
+                            <PropertyColumn Property="x => x.TruckRatio" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "OrderNo":
+                            <PropertyColumn Property="x => x.OrderNo" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationSAPId":
+                            <PropertyColumn Property="x => x.DestinationSAPId" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationName":
+                            <PropertyColumn Property="x => x.DestinationName" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationCountryCode":
+                            <PropertyColumn Property="x => x.DestinationCountryCode" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "SR1":
+                            <PropertyColumn Property="x => x.SR1" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DN1":
+                            <PropertyColumn Property="x => x.DN1" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "SR2":
+                            <PropertyColumn Property="x => x.SR2" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DN2":
+                            <PropertyColumn Property="x => x.DN2" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "ItemStatus":
+                            <PropertyColumn Property="x => x.ItemStatus" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Remark":
+                            <PropertyColumn Property="x => x.Remark" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "CalculatedActualEarliestReadyToPickUpTime":
+                            <PropertyColumn Property="x => x.CalculatedActualEarliestReadyToPickUpTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TimeOfLastCalculatedTime":
+                            <PropertyColumn Property="x => x.TimeOfLastCalculatedTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TruckCalculatedActualEarliestPickUpTime":
+                            <PropertyColumn Property="x => x.TruckCalculatedActualEarliestPickUpTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "AdvisedDateTime":
+                            <PropertyColumn Property="x => x.AdvisedDateTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Consignment":
+                            <PropertyColumn Property="x => x.Consignment" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TruckStatus":
+                            <PropertyColumn Property="x => x.TruckStatus" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TruckRemark":
+                            <PropertyColumn Property="x => x.TruckRemark" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "InsertByUser":
+                            <PropertyColumn Property="x => x.InsertByUser" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "InsertTime":
+                            <PropertyColumn Property="x => x.InsertTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "LastCalculatedTimeTrigerBy":
+                            <PropertyColumn Property="x => x.LastCalculatedTimeTrigerBy" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "LastUpdateByUser":
+                            <PropertyColumn Property="x => x.LastUpdateByUser" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "LastUpdateTime":
+                            <PropertyColumn Property="x => x.LastUpdateTime" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "LineBgColorDefinedByUser":
+                            <PropertyColumn Property="x => x.LineBgColorDefinedByUser" Title="@ii.plHeader" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                @foreach (var ii in listGridColums)
+                {
+                    @switch (ii.fieldName)
+                    {
+                        case "TruckId":
+                            <PropertyColumn Property="x => x.TruckId" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "WkNo":
+                            <PropertyColumn Property="x => x.WkNo" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Customer":
+                            <PropertyColumn Property="x => x.Customer" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Product":
+                            <PropertyColumn Property="x => x.Product" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TPVModelName":
+                            <PropertyColumn Property="x => x.TPVModelName" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TotalQty":
+                            <PropertyColumn Property="x => x.TotalQty" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TruckRatio":
+                            <PropertyColumn Property="x => x.TruckRatio" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "OrderNo":
+                            <PropertyColumn Property="x => x.OrderNo" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationSAPId":
+                            <PropertyColumn Property="x => x.DestinationSAPId" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationName":
+                            <PropertyColumn Property="x => x.DestinationName" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DestinationCountryCode":
+                            <PropertyColumn Property="x => x.DestinationCountryCode" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "SR1":
+                            <PropertyColumn Property="x => x.SR1" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DN1":
+                            <PropertyColumn Property="x => x.DN1" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "SR2":
+                            <PropertyColumn Property="x => x.SR2" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "DN2":
+                            <PropertyColumn Property="x => x.DN2" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "ItemStatus":
+                            <PropertyColumn Property="x => x.ItemStatus" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Remark":
+                            <PropertyColumn Property="x => x.Remark" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "CalculatedActualEarliestReadyToPickUpTime":
+                            <PropertyColumn Property="x => x.CalculatedActualEarliestReadyToPickUpTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TimeOfLastCalculatedTime":
+                            <PropertyColumn Property="x => x.TimeOfLastCalculatedTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TruckCalculatedActualEarliestPickUpTime":
+                            <PropertyColumn Property="x => x.TruckCalculatedActualEarliestPickUpTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "AdvisedDateTime":
+                            <PropertyColumn Property="x => x.AdvisedDateTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "Consignment":
+                            <PropertyColumn Property="x => x.Consignment" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TruckStatus":
+                            <PropertyColumn Property="x => x.TruckStatus" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "TruckRemark":
+                            <PropertyColumn Property="x => x.TruckRemark" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "InsertByUser":
+                            <PropertyColumn Property="x => x.InsertByUser" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "InsertTime":
+                            <PropertyColumn Property="x => x.InsertTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "LastCalculatedTimeTrigerBy":
+                            <PropertyColumn Property="x => x.LastCalculatedTimeTrigerBy" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "LastUpdateByUser":
+                            <PropertyColumn Property="x => x.LastUpdateByUser" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "LastUpdateTime":
+                            <PropertyColumn Property="x => x.LastUpdateTime" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                        case "LineBgColorDefinedByUser":
+                            <PropertyColumn Property="x => x.LineBgColorDefinedByUser" Title="@ii.fieldName" Hidden="ii.filedHiden" Sortable="true" />
+                            break;
+                    }
+
+        }
+            }
+
+            @*     // <PropertyColumn Property="x => x.TruckId" Title="TruckId" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.WkNo" Title="WkNo" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.Customer" Title="Customer" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.Product" Title="Product" Sortable="true" Filterable="true" />
+        // <PropertyColumn Property="x => x.TPVModelName" Title="TPVModelName" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.TotalQty" Title="TotalQty" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.TruckRatio" Title="TruckRatio" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.OrderNo" Title="OrderNo" Sortable="true" Filterable="true"  />
+        //  <PropertyColumn Property="x => x.DestinationSAPId" Title="DestinationSAPId" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.DestinationName" Title="DestinationName" Sortable="true" Filterable="true" />
+        //   <PropertyColumn Property="x => x.DestinationCountryCode" Title="Quantity" Sortable="true" Filterable="true" />
+        //   <PropertyColumn Property="x => x.SR1" Title="SR1" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.DN1" Title="DN1" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.SR2" Title="SR2" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.DN2" Title="DN2" Sortable="true" Filterable="true" />
+        //   <PropertyColumn Property="x => x.ItemStatus" Title="ItemStatus" Sortable="true" Filterable="true" />
+        //   <PropertyColumn Property="x => x.Remark" Title="Remark" Sortable="true" Filterable="true" />
+        //   <PropertyColumn Property="x => x.CalculatedActualEarliestReadyToPickUpTime" Title="ToPickUpTime" Sortable="true" Filterable="true" />
+        //   <PropertyColumn Property="x => x.TimeOfLastCalculatedTime" Title="CalculatedTime" Sortable="true" Filterable="true" />
+        //   <PropertyColumn Property="x => x.TruckCalculatedActualEarliestPickUpTime" Title="EarliestPickUpTime" Sortable="true" Filterable="true" />
+        //   <PropertyColumn Property="x => x.AdvisedDateTime" Title="AdvisedDateTime" Sortable="true" Filterable="true" />
+        //   <PropertyColumn Property="x => x.Consignment" Title="Consignment" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.TruckRatio" Title="TruckRatio" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.TruckStatus" Title="TruckStatus" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.TruckRemark" Title="TruckRemark" Sortable="true" Filterable="true" />
+        //  <PropertyColumn Property="x => x.InsertByUser" Title="InsertByUser" Sortable="true" Filterable="true" />
+        //   <PropertyColumn Property="x => x.InsertTime" Title="InsertTime" Sortable="true" Filterable="true" />
+        //    <PropertyColumn Property="x => x.LastCalculatedTimeTrigerBy" Title="LastCalculatedTime" Sortable="true" Filterable="true" />
+        <PropertyColumn Property="x => x.LastUpdateByUser" Title="UpdateByUser" Sortable="true" Filterable="true" />
+        <PropertyColumn Property="x => x.LastUpdateTime" Title="UpdateTime" Sortable="true" Filterable="true" />
+        <PropertyColumn Property="x => x.LineBgColorDefinedByUser" Title="ColorDefined" Sortable="true" Filterable="true" /> *@
+        </Columns>
     </MudDataGrid>
 }
 
@@ -72,6 +282,69 @@ else
     public Task<AuthenticationState> AuthState { get; set; }
     private string UserName = "";
     List<View_SoModuleGroupData> ListView = new();
+
+    #region deklarationColumns
+    private bool hiddenId;
+    private bool hiddenPoListId;
+    private bool hiddenTruckId;
+    private bool hiddenWkNo;
+    private bool hiddenCustomer;
+    private bool hiddenProduct;
+    private bool hiddenTPVModelName;
+    private bool hiddenTotalQty;
+    private bool hiddenTruckRatio;
+    private bool hiddenOrderNo;
+    private bool hiddenDestinationSAPId;
+    private bool hiddenDestinationName;
+    private bool hiddenDestinationCountryCode;
+    private bool hiddenSR1;
+    private bool hiddenDN1;
+    private bool hiddenSR2;
+    private bool hiddenDN2;
+    private bool hiddenItemStatus;
+    private bool hiddenRemark;
+    private bool hiddenCalculatedActualEarliestReadyToPickUpTime;
+    private bool hiddenTimeOfLastCalculatedTime;
+    private bool hiddenTruckCalculatedActualEarliestPickUpTime;
+    private bool hiddenAdvisedDateTime;
+    private bool hiddenConsignment;
+    private bool hiddenTotalTruckRatio;
+    private bool hiddenTruckStatus;
+    private bool hiddenTruckRemark;
+    private bool hiddenInsertByUser;
+    private bool hiddenInsertTime;
+    private bool hiddenLastCalculatedTimeTrigerBy;
+    private bool hiddenLastUpdateByUser;
+    private bool hiddenLastUpdateTime;
+    private bool hiddenLineBgColorDefinedByUser;
+    #endregion deklarationColumns
+
+
+    List<gridColums> listGridColums = new();
+    List<SoModuleGroupColumn> columsForDisplayListDb = new List<SoModuleGroupColumn>();
+
+    private async Task ShowColumsForSelection()
+    {
+        var parameters = new DialogParameters { ["Username"] = UserName };
+        var dialog = DialogService.Show<DialogSOMainSelectionComponent>("", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            navigationManager.NavigateTo("/caradvice", true);
+            StateHasChanged();
+        }
+    }
+
+    private void ShowPoDetails(@CellContext<View_SoModuleGroupData> rowDetails)
+    {
+
+        string parIdPo = rowDetails.Item.PoListId.ToString();
+        var parameters = new DialogParameters();
+        parameters.Add("IdPO", parIdPo);
+        var dialog = DialogService.Show<DialogPoDatilsComponent>("", parameters);
+
+    }
 
     private async Task CarCombain(@CellContext<View_SoModuleGroupData> ItemForDelete)
     {
@@ -112,9 +385,6 @@ else
         {
             return "";
         }
-
-
-
     };
 
     protected override async Task OnInitializedAsync()
@@ -139,7 +409,73 @@ else
 
         string link = "/api/View_SoModuleGroupData";
         ListView = await httpClient.GetFromJsonAsync<List<View_SoModuleGroupData>>(link);
+
+
+        columsForDisplayListDb.Clear();
+        string linkcoluser = "/api/SoMainColumn/SOMainUser/" + UserName;
+
+        columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<SoModuleGroupColumn>>(linkcoluser);
+
+        foreach (var columienka in columsForDisplayListDb)
+        {
+            listGridColums.Add(new gridColums()
+                {
+                    fieldName = columienka.MainScreenColumn,
+                    fieldTitle = columienka.MainScreenColumn,
+                    filedfirterable = true,
+                    filedSortable = true,
+                    filedHiden = columienka.Hidden,
+                    plHeader = columienka.PlHeader
+                });
+
+        }
+
+        hiddenId = verificationColumsVisibility("Id");
+        hiddenPoListId = verificationColumsVisibility("hiddenPoListId");
+        hiddenTruckId = verificationColumsVisibility("hiddenTruckId");
+        hiddenWkNo = verificationColumsVisibility("hiddenWkNo");
+        hiddenCustomer = verificationColumsVisibility("hiddenCustomer");
+        hiddenProduct = verificationColumsVisibility("hiddenProduct");
+        hiddenTPVModelName = verificationColumsVisibility("hiddenTPVModelName");
+        hiddenTotalQty = verificationColumsVisibility("hiddenTotalQty");
+        hiddenTruckRatio = verificationColumsVisibility("hiddenTruckRatio");
+        hiddenOrderNo = verificationColumsVisibility("hiddenOrderNo");
+        hiddenDestinationSAPId = verificationColumsVisibility("hiddenDestinationSAPId");
+        hiddenDestinationName = verificationColumsVisibility("hiddenDestinationName");
+        hiddenDestinationCountryCode = verificationColumsVisibility("hiddenDestinationCountryCode");
+        hiddenSR1 = verificationColumsVisibility("hiddenSR1");
+        hiddenDN1 = verificationColumsVisibility("hiddenDN1");
+        hiddenSR2 = verificationColumsVisibility("hiddenSR2");
+        hiddenDN2 = verificationColumsVisibility("hiddenDN2");
+        hiddenItemStatus = verificationColumsVisibility("hiddenItemStatus");
+        hiddenRemark = verificationColumsVisibility("hiddenRemark");
+        hiddenCalculatedActualEarliestReadyToPickUpTime = verificationColumsVisibility("hiddenCalculatedActualEarliestReadyToPickUpTime");
+        hiddenTimeOfLastCalculatedTime = verificationColumsVisibility("hiddenTimeOfLastCalculatedTime");
+        hiddenTruckCalculatedActualEarliestPickUpTime = verificationColumsVisibility("hiddenTruckCalculatedActualEarliestPickUpTime");
+        hiddenAdvisedDateTime = verificationColumsVisibility("hiddenAdvisedDateTime");
+        hiddenConsignment = verificationColumsVisibility("hiddenConsignment");
+        hiddenTotalTruckRatio = verificationColumsVisibility("hiddenTotalTruckRatio");
+        hiddenTruckStatus = verificationColumsVisibility("hiddenTruckStatus");
+        hiddenTruckRemark = verificationColumsVisibility("hiddenTruckRemark");
+        hiddenInsertByUser = verificationColumsVisibility("hiddenInsertByUser");
+        hiddenInsertTime = verificationColumsVisibility("hiddenInsertTime");
+        hiddenLastCalculatedTimeTrigerBy = verificationColumsVisibility("hiddenLastCalculatedTimeTrigerBy");
+        hiddenLastUpdateByUser = verificationColumsVisibility("hiddenLastUpdateByUser");
+        hiddenLastUpdateTime = verificationColumsVisibility("hiddenLastUpdateTime");
+        hiddenLineBgColorDefinedByUser = verificationColumsVisibility("hiddenLineBgColorDefinedByUser");
+
         StateHasChanged();
+    }
+    private bool verificationColumsVisibility(string comumnName)
+    {
+        if (columsForDisplayListDb.Count(c => c.MainScreenColumn == comumnName && c.Hidden == true) != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

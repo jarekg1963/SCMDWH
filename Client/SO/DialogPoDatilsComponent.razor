@@ -1,0 +1,88 @@
+﻿@using SCMDWH.Shared.Models;
+@inject HttpClient httpClient
+
+
+<MudCard>
+    <MudCardContent>
+        <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Center">PO details</MudAlert>
+        <MudPaper Class="pa-16 ma-2" Elevation="3">
+       
+            <MudGrid>
+
+            <MudItem xs="6" sm="2">
+                <MudField Label="OrderNo" Variant="Variant.Text">@detailPo.OrderNo </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="1">
+                <MudField Label="Qty" Variant="Variant.Text">@detailPo.Qty </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="DestinationSapid" Variant="Variant.Text">@detailPo.DestinationSapid </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="1">
+                <MudField Label="Code" Variant="Variant.Text">@detailPo.DestinationCountryCode </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="4">
+                <MudField Label="DestinationName" Variant="Variant.Text">@detailPo.DestinationName </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="Product" Variant="Variant.Text">@detailPo.Product </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="Customer" Variant="Variant.Text">@detailPo.Customer </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="1">
+                <MudField Label="WK" Variant="Variant.Text">@detailPo.WkNo </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="Delivery date" Variant="Variant.Text">@detailPo.OriginalAgreedDeliveryDate </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="Status" Variant="Variant.Text">@detailPo.Status </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="1">
+                <MudField Label="MissingQty" Variant="Variant.Text">@detailPo.MissingQty </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="2">
+                <MudField Label="Reference" Variant="Variant.Text">@detailPo.Reference </MudField>
+            </MudItem>
+            <MudItem xs="6" sm="12">
+                <MudField Label="Remark" Variant="Variant.Text">@detailPo.Remark </MudField>
+            </MudItem>
+        </MudGrid>
+        </MudPaper>
+    </MudCardContent>
+    <MudCardActions>
+      
+                <MudButton OnClick="Cancel" Style="margin-right:10px!important" Variant="Variant.Filled" Color="Color.Secondary">Cancel</MudButton>
+           
+
+    </MudCardActions>
+</MudCard>
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string IdPO { get; set; }
+
+    SoModulePoList detailPo = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        string linkItem = "/api/SoModulePoList/" + IdPO;
+        detailPo = await httpClient.GetFromJsonAsync<SoModulePoList>(linkItem);
+    }
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+}
+
+<style>
+    .mud-dialog-width-sm {
+        max-width: 1000px!important;
+    }
+    
+</style>

@@ -734,13 +734,9 @@ else
         }
         ListCAMainTable = await httpClient.GetFromJsonAsync<List<CarAdviceMainTable>>(linkLoad);
         string linkcoluser = "/api/CarAdviceMainPlanColums/MainPlanComumByUser/" + UserName;
-
         /// read colums for display main plan screen
-
         columsForDisplayListDb.Clear();
-
         columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<CarAdviceMainPlanColumn>>(linkcoluser);
-
         foreach (var columienka in columsForDisplayListDb)
         {
             listGridColums.Add(new gridColums() { fieldName = columienka.MainScreenColumn,fieldTitle = columienka.MainScreenColumn, 

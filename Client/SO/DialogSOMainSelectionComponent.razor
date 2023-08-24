@@ -4,32 +4,24 @@
 @inject HttpClient httpClient;
 @inject IStringLocalizer<CultureExample2> Loc
 
-<style>
-	.StylItemow {
-		padding-top: 0px !important;
-		padding-bottom: 0px !important;
-		font-size: 1rem !important;
-	}
-</style>
-
 <div class="d-flex flex-column mud-width-full mud-height-full">
-	
+
 	<MudDropContainer T="DropItem" Items="@newdata" @ref="_container" ItemsSelector="@((item,dropzone) => item.Selector == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
-		<ChildContent  >
+		<ChildContent>
 			<MudPaper Class="ma-2 flex-grow-1">
-				<MudList  Clickable="true" Class="d-flex flex-column mud-height-full">
-					<MudListSubheader Style="font-weight:bold !important; background-color:lightgray" >@Loc["lbVisible"]</MudListSubheader>
-					<MudDropZone  T="DropItem" Identifier="1" Class="flex-grow-1" AllowReorder="true" />
+				<MudList Clickable="true" Class="d-flex flex-column mud-height-full">
+					<MudListSubheader Style="font-weight:bold !important; background-color:lightgray">@Loc["lbVisible"]</MudListSubheader>
+					<MudDropZone T="DropItem" Identifier="1" Class="flex-grow-1" AllowReorder="true" />
 				</MudList>
 			</MudPaper>
 			<MudPaper Class="ma-2 flex-grow-1">
 				<MudList Clickable="true" Class="d-flex flex-column mud-height-full">
 					<MudListSubheader Style="font-weight:bold !important; background-color:lightgray">@Loc["lbHiddens"]</MudListSubheader>
-					<MudDropZone T="DropItem" Identifier="2" Class="flex-grow-1"  AllowReorder="true" />
+					<MudDropZone T="DropItem" Identifier="2" Class="flex-grow-1" AllowReorder="true" />
 				</MudList>
 			</MudPaper>
 		</ChildContent>
-		<ItemRenderer >
+		<ItemRenderer>
 			<MudListItem Class="StylItemow" Text="@($"{context.Name} ({context.Order})")" />
 		</ItemRenderer>
 	</MudDropContainer>
@@ -47,17 +39,16 @@
 </div>
 
 
-
 @code {
 	[Parameter]
 	public string UserName { get; set; }
-	List<CarAdviceMainPlanColumn> columsForDisplayListDb = new List<CarAdviceMainPlanColumn>();
-	List<DropItem> newdata = new List<DropItem>();
 
 	[CascadingParameter]
 	MudDialogInstance MudDialog { get; set; }
 
 	private MudDropContainer<DropItem> _container;
+	List<SoModuleGroupColumn> columsForDisplayListDb = new List<SoModuleGroupColumn>();
+	List<DropItem> newdata = new List<DropItem>();
 
 
 	private async Task SaveData()
@@ -65,7 +56,7 @@
 		int i = 1;
 		foreach (var itemForupdate in newdata.OrderBy(o => o.Order))
 		{
-			CarAdviceMainPlanColumn columnForUpdate = new();
+			SoModuleGroupColumn columnForUpdate = new();
 
 			if (CultureInfo.CurrentCulture.Name == "en-US")
 			{
@@ -74,7 +65,7 @@
 
 			if (CultureInfo.CurrentCulture.Name == "pl-PL")
 			{
-				columnForUpdate = columsForDisplayListDb.FirstOrDefault(c => c.plHeader == itemForupdate.Name);
+				columnForUpdate = columsForDisplayListDb.FirstOrDefault(c => c.PlHeader == itemForupdate.Name);
 			}
 
 			columnForUpdate.Hidden = itemForupdate.Selector == "2";
@@ -82,15 +73,14 @@
 			columnForUpdate.OrderColumn = i;
 			i++;
 
-			string linkcoluser = "/api/CarAdviceMainPlanColums/" + columnForUpdate.Id;
-			var res = await httpClient.PutAsJsonAsync<CarAdviceMainPlanColumn>(linkcoluser, columnForUpdate);
+			string linkcoluser = "/api/SoMainColumn/" + columnForUpdate.Id;
+			var res = await httpClient.PutAsJsonAsync<SoModuleGroupColumn>(linkcoluser, columnForUpdate);
 			//await Task.Delay(50);
 
 		}
-		MudDialog.Close(DialogResult.Ok("OK"));
+		// MudDialog.Close(DialogResult.Ok("OK"));
 
 	}
-
 
 	private void ItemUpdated(MudItemDropInfo<DropItem> dropItem)
 	{
@@ -107,8 +97,8 @@
 
 	protected async override Task OnInitializedAsync()
 	{
-		string linkcoluser = "/api/CarAdviceMainPlanColums/MainPlanComumByUser/" + UserName;
-		columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<CarAdviceMainPlanColumn>>(linkcoluser);
+		string linkcoluser = "/api/SoMainColumn/SOMainUser/" + UserName;
+		columsForDisplayListDb = await httpClient.GetFromJsonAsync<List<SoModuleGroupColumn>>(linkcoluser);
 		if (CultureInfo.CurrentCulture.Name == "en-US")
 		{
 			int i = 1;
@@ -127,9 +117,9 @@
 			foreach (var item in columsForDisplayListDb)
 			{
 				if (item.Hidden)
-					newdata.Add(new DropItem() { Order = i, Name = item.plHeader, Selector = "2" });
+					newdata.Add(new DropItem() { Order = i, Name = item.PlHeader, Selector = "2" });
 				if (!item.Hidden)
-					newdata.Add(new DropItem() { Order = i, Name = item.plHeader, Selector = "1" });
+					newdata.Add(new DropItem() { Order = i, Name = item.PlHeader, Selector = "1" });
 				i++;
 			}
 		}
@@ -137,7 +127,6 @@
 		RefreshContainer();
 	}
 
-	
 
 	private void RefreshContainer()
 	{
@@ -147,11 +136,19 @@
 		//the container refreshes the internal state
 		_container.Refresh();
 	}
-	
 
-    private void CancelData()
-    {
-        MudDialog.Close(DialogResult.Cancel());
-    }
+
+	private void CancelData()
+	{
+		MudDialog.Close(DialogResult.Cancel());
+	}
 
 }
+
+<style>
+	.StylItemow {
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+		font-size: 1rem !important;
+	}
+</style>

@@ -74,6 +74,7 @@ public partial class PurchasingContext : DbContext
     public virtual DbSet<SoModuleItemList> SoModuleItemsList { get; set; }
 
 
+    public virtual DbSet<SoModuleGroupColumn> SoModuleGroupColumn { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
